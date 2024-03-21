@@ -1,0 +1,28 @@
+.select-bar-container{
+    display: flex;
+    align-items: center;
+
+    #select{
+        position:relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        svg{
+            width: 8px;
+            height: 8px;
+            margin-top: 4px;
+            align-self: center;
+        }
+
+        ul{
+            position: absolute;
+            z-index: 1;
+            top: 190%;
+            left: 0;
+            width: 100%;
+            max-height: 0;
+            overflow: hidden;
+        }
+    }
+}

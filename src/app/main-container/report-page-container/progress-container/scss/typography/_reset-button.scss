@@ -1,0 +1,7 @@
+.control-button-container .reset-button-container::ng-deep{
+   
+    &.active{
+        color: $dark-blue;
+        &:hover, &:active{ color: $white;}
+    }
+}

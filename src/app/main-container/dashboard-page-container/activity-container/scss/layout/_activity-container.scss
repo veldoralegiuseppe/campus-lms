@@ -1,0 +1,45 @@
+.activity-container{
+    display: grid;
+    grid-template-rows: [title-area-start] .5fr [title-area-end search-area-start] 1fr [search-area-end table-area-start] auto [table-area-end pagination-start] auto [pagination-end];
+    grid-template-columns: [title-area-start search-area-start table-area-start pagination-start] 1fr [title-area-end search-area-end table-area-end pagination-end];
+    row-gap: $page-containers-row-gap;
+
+    .title-container{
+        grid-column: title-area-start/title-area-end;
+        grid-row: title-area-start/title-area-end;
+    }
+ 
+    .search-container{
+        display: flex;
+        flex-direction: column;
+        grid-column: search-area-start/search-area-end;
+        grid-row: search-area-start/search-area-end;
+        .checkbox-container{
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: row;
+            ::ng-deep{
+                .checkbox-border{
+                    width: 18px !important;
+                    height: 18px !important;
+                }
+            }
+            .dad::ng-deep{
+                margin-right: 6rem;
+            }
+            .checkbox{
+                margin-right: 5rem;
+            }
+        }
+    }
+
+    .table-container{
+        grid-column: table-area-start/table-area-end;
+        grid-row: table-area-start/table-area-end;
+    }
+
+    .pagination{
+        grid-column: pagination-start/pagination-end;
+        grid-row: pagination-start/pagination-end;
+    }
+}

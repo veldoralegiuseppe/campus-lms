@@ -1,0 +1,34 @@
+<ng-container>
+
+    <!-- Header -->
+    <ng-template [ngIf]="index === 0 && !user?.loading">
+        <div class="header selector">{{user?.selector}}</div>
+        <div [ngClass]="['nome','header']">{{user?.nome}}</div>
+        <div [ngClass]="['cognome','header']">{{user?.cognome}}</div>
+        <div [ngClass]="['corso', 'header']">{{user?.corso}}</div>
+        <div [ngClass]="['sessione','header']">{{user?.sessione}}</div>
+        <div [ngClass]="['classe', 'header']">{{user?.classe}}</div>
+        <div [ngClass]="['email', 'header']">{{user?.email}}</div>
+    </ng-template>
+
+    <!-- Animazione di caricamento -->
+    <ng-template [ngIf]="index === 0 && user?.loading">
+        <div [ngClass]="['loading-bar']">
+            <div class="wrapper">
+                <div class="load-pointer"></div>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template [ngIf]="index > 0 && (user?.loading === undefined || !user?.loading)">
+        <app-checkbox-v2 (checkedEventEmitter)="onChecked()" [ngClass]="['body', 'selector']"></app-checkbox-v2>
+        <div [ngClass]="['nome','body']">{{user?.nome}}</div>
+        <div [ngClass]="['cognome','body']">{{user?.cognome}}</div>
+        <div [ngClass]="['corso', 'body']">{{user?.corso}}</div>
+        <div [ngClass]="['sessione', 'body']">{{user?.sessione}}</div>
+        <div [ngClass]="['classe','body']">{{user?.classe}}</div>
+        <div [ngClass]="['email','body']">{{user?.email}}</div>
+    </ng-template>
+
+</ng-container>

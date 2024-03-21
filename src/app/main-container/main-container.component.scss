@@ -1,0 +1,14 @@
+// GLOBAL VARIABLES
+@import "../../scss/abstract/variables";
+
+// GLOBAL MIXINS
+@import "../../scss/abstract/mixins";
+
+// ABSTRACT
+@import "./scss/abstract/mixins";
+
+// COMPONENT
+@import "./scss/component/layout";
+
+// LAYOUT
+@import "./scss/layout/layout";

@@ -1,0 +1,55 @@
+:host{
+    display: contents;
+}
+
+.tipo{
+    grid-column: tipo-start/tipo-end;
+}
+
+.corso{
+    grid-column: corso-start/corso-end;
+}
+
+.ora{
+    grid-column: ora-start/ora-end;
+}
+
+.classe{
+    grid-column: classe-start/classe-end;
+}
+
+.sessione{
+    grid-column: sessione-start/sessione-end;
+}
+
+.link{
+    grid-column: link-start/link-end;
+}
+
+.loading-bar{
+    height: 6px;
+    display: flex;
+    align-items: center;
+    grid-column: tipo-start/link-end;
+
+    .wrapper{ width: 100%; }
+
+    .load-pointer{
+        height: 3px;
+        width: 55%;
+    }
+}
+
+div.body{
+    &.selector .loading{
+        width: 2.5rem
+    }
+
+    .loading{
+        border-radius: 5px;
+        height: 2.5rem;
+        width: 55%;
+    }
+}
+
+

@@ -1,0 +1,14 @@
+<label class="checkbox-container">
+    <input
+      class="checkbox-input"
+      type="checkbox"
+      checked = "{{checked}}"
+      (click)="toggle()"
+    />
+    <span class="label">{{label}}</span>
+    <div class="checkbox-border" id="checkbox">
+      <div class="checkbox-filling" *ngIf="checked"></div>
+    </div>
+    <ng-content> </ng-content>
+  </label>
+  

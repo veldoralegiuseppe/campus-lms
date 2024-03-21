@@ -1,0 +1,11 @@
+// GLOBAL VARIABLE
+@import "../../../../../scss/abstract/variables";
+
+// PARENT VARIABLE
+@import "../scss/abstract/variables";
+
+// COMPONENT
+@import "./scss/component/activity-table-row";
+
+// LAYOUT
+@import "./scss/layout/activity-table-row";

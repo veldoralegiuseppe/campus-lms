@@ -1,0 +1,42 @@
+.datepicker-container {
+    width: 16rem;
+    height: 3.5rem;
+    display: flex;   
+    align-items: center;
+ 
+    
+    input[type=text]{
+        width: 80%;
+    }
+
+    span{
+        width: 20%;
+        &.icon-container{
+            height: 100%;
+            align-items: center;
+            position: relative;
+            display: flex;
+            justify-content: end;
+
+            input[type=date]{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+
+            @supports (-moz-appearance:none) {
+                input[type=date]{
+                    width: 142%;
+                }
+            }
+        }
+    }
+ 
+    svg{
+     justify-self: end;
+     margin-right: 5px;
+     width: 2rem;
+     height: 1.8rem;
+    }
+ }
+ 

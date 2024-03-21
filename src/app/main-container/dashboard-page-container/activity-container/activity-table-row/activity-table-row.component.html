@@ -1,0 +1,32 @@
+<ng-container>
+
+    <!-- Header -->
+    <ng-template [ngIf]="index === 0 && !loading">
+        <div [ngClass]="['tipo','header']">{{activity?.tipo}}</div>
+        <div [ngClass]="['corso', 'header']">{{activity?.corso}}</div>
+        <div [ngClass]="['ora', 'header']">{{activity?.ora}}</div>
+        <div [ngClass]="['classe', 'header']">{{activity?.classe}}</div>
+        <div [ngClass]="['sessione','header']">{{activity?.sessione}}</div>
+        <div [ngClass]="['link', 'header']">{{activity?.link}}</div>
+    </ng-template>
+
+    <!-- Animazione di caricamento -->
+    <ng-template [ngIf]="index === 0 && loading">
+        <div [ngClass]="['loading-bar']">
+            <div class="wrapper">
+                <div class="load-pointer"></div>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template [ngIf]="index > 0 && (loading === undefined || !loading)">
+        <div [ngStyle]="{'border-bottom-left-radius': isLastRow! ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['tipo','body']">{{activity?.tipo}}</div>
+        <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['corso', 'body']">{{activity?.corso}}</div>
+        <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['ora', 'body']">{{activity?.ora}}</div>
+        <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['classe', 'body']">{{activity?.classe}}</div>
+        <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['sessione','body']">{{activity?.sessione}}</div>
+        <div [ngStyle]="{'border-bottom-right-radius': isLastRow! == true ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['link', 'body']">{{activity?.link}}</div>
+    </ng-template>
+
+</ng-container>

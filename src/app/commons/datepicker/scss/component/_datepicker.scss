@@ -1,0 +1,25 @@
+.datepicker-container {
+
+    border-radius: 6px;
+    border: 1px solid #e6e6e69f;
+    background: $white;
+    padding-left: 1rem;
+ 
+    input[type=text]{
+        border: none;
+        background-color: transparent;
+        outline: none;
+    }
+
+    .icon-container{
+
+        input[type="date"]{
+            transform: rotate(180deg);
+        }
+    }
+    
+
+   // svg{ fill: red; }
+
+ }
+ 

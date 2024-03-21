@@ -1,0 +1,25 @@
+.arrow-sx,.arrow-dx{
+    border-radius: 4px;
+   
+    &.enable{
+        //background-color: red;
+        cursor: pointer;
+        &:hover{  svg{fill: $icon-enable-hover-color} }
+    }
+    &.disable{ 
+        pointer-events: none;
+        svg{ fill: $icon-disable-color} 
+    }
+}
+
+.page-size-container{
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+}
+
+.page-numbers-container .page-number span{
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+}

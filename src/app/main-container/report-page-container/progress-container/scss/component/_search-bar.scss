@@ -1,0 +1,12 @@
+.user-form, .course-form, .activity-form{
+    .form input.search-bar{
+        background-color: $white;
+        border-radius: 6px;
+        border: 1px solid #e6e6e69f;
+        padding-left: 1rem;
+
+        &.classe-associata{
+            background-color: #EDEDED;
+        }
+    }
+}

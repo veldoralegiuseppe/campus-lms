@@ -1,0 +1,45 @@
+<div class="search-user-container">
+    <div class="title">Ricerca</div>
+
+    <div class="user-form">
+        <div class="form-title">Dati utente</div>
+        <div class="form" [formGroup] = "userFilter">
+            <div class="app-select-bar" [options]="['Tutti','Studente','Admin','Ufficio Reg']" formControlName="tipoUtente"></div>
+            <input class="search-bar" type="text" placeholder="Nome" formControlName="nome">
+            <input class="search-bar" type="text" placeholder="Cognome" formControlName="cognome">
+            <input class="search-bar" type="text" placeholder="Codice fiscale" formControlName="codiceFiscale">
+        </div>
+    </div>
+
+    <div class="course-form">
+        <div class="form-title">Dati corso</div>
+        <div class="form" [formGroup] = "courseFilter">
+            <div class="app-select-bar" [options]="['Tutti']" formControlName="corso"></div>
+            <input class="search-bar" type="text" placeholder="CUP" formControlName="cup">
+            <input style="visibility: hidden;" class="search-bar" type="text">
+            <input style="visibility: hidden;" class="search-bar" type="text">
+        </div>
+    </div>
+
+    <div class="control-button-container">
+        <app-reset-filter-button [onClick]="resetFilter" [label]="'Azzera filtri'" class="reset-button-container"></app-reset-filter-button>
+        <app-search-button [onClick]="submitForms" [label]="'Cerca'" class="search-button-container"></app-search-button>
+    </div>
+
+
+    <div class="app-table-v2 table" 
+         [@openClose] = "hideTable ? 'close' : 'open'"
+         [columnsTemplate]="['selector','.5fr','nome','1fr','cognome','1fr','corso','1fr','sessione','1fr','classe','1fr','email','1fr']" 
+         [modelTableMapper]="userTableMapper"
+         [rowType]="rowType"
+         [onEvent]="onSelectedRow"> 
+    </div>
+
+    <app-pagination [@openClose] = "hidePagination ? 'close' : 'open'" class="pagination"  [pageSize]="pageSize" [pageSizeOptions]="[3,5,10]" (onPageChange)="handlePaginationChange($event)">
+    </app-pagination>
+
+    <div #opButtons [@openClose] = "hideOperationButton? 'close' : 'open'" id="buttons" class="container">
+        <app-detail-button [onClick]="detailUser" [label]="'Dettaglio'"></app-detail-button>
+        <app-remove-button [onClick]="removeUser" [label]="'Rimuovi'"></app-remove-button>
+    </div>
+</div>

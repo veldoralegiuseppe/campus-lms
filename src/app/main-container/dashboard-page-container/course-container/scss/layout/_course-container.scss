@@ -1,0 +1,22 @@
+.course-container{
+    display: grid;
+    grid-template-rows: [title-area-start] 1fr [title-area-end search-area-start] 1fr [search-area-end table-area-start] auto [table-area-end];
+    grid-template-columns: [title-area-start search-area-start table-area-start] 1fr [title-area-end search-area-end table-area-end];
+    row-gap: $page-containers-row-gap;
+ 
+    .title-container{
+        grid-column: title-area-start/title-area-end;
+        grid-row: title-area-start/title-area-end;
+    }
+ 
+    .search-container{
+        grid-column: search-area-start/search-area-end;
+        grid-row: search-area-start/search-area-end;
+    }
+
+    .table-container{
+        margin-bottom: 2rem;
+        grid-column: table-area-start/table-area-end;
+        grid-row: table-area-start/table-area-end;
+    }
+ }

@@ -1,0 +1,14 @@
+.main-container{
+    .form-title{ border-bottom: 1px solid #43a7e7; }
+
+    .stepper-button-container button{
+        padding: 1.5rem;
+        background-color: #43a7e7;
+        color: white;
+
+        &[disabled="true"]{
+            background-color: #EDEDED;
+            color: #8A8A8A;
+        }
+    }
+}

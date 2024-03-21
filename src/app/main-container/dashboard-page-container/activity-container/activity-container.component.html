@@ -1,0 +1,18 @@
+<div class="activity-container">
+    <div class="title-container">Attività programmate</div>
+    <div class="search-container" [formGroup]="activityFilter">
+        <app-search-dropdown-bar [list]="dropdownList" formControlName="like"></app-search-dropdown-bar>
+        <div class="checkbox-container">
+            <app-checkbox-v2 class='dad' [label]="'DAD'" formControlName="dad"></app-checkbox-v2>
+            <app-checkbox-v2 [label]="'FAD'" formControlName="fad"></app-checkbox-v2>
+        </div>
+    </div>
+    <div class="app-table-v2 table-container"
+         [@openClose] = "hideTable ? 'close' : 'open'"
+         [columnsTemplate]="['Tipo','1fr','Corso','1fr','Ora','1fr','Classe','1fr','Sessione','1fr','Link','1fr']"
+         [rowType]="rowType"
+         [modelTableMapper]="activityTableMapper">
+    </div>
+    <app-pagination [@openClose] = "hidePagination ? 'close' : 'open'" class="pagination"  [pageSize]="pageSize" [pageSizeOptions]="[3,5,10]" (onPageChange)="handlePaginationChange($event)">
+    </app-pagination>
+</div>

@@ -1,0 +1,9 @@
+<div class="datepicker-container">
+    <input id="date" type="text" [(ngModel)]="date" (ngModelChange)="onDateModify()" [placeholder]="placeholder">
+    <span class="icon-container" for="datepicker" (click)="openDatepicker()">
+        <input #datepicker [(ngModel)]="dateSelected" (ngModelChange)="onDateSelected()" style="opacity: 0;" type="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 27">
+            <path d="M0.0328103 0V6.56205H23V0H0.0328103ZM0.0328103 9.84308V25.9529C0.0328103 26.117 0.164051 26.2482 0.328103 26.2482H22.6719C22.8359 26.2482 22.9672 26.117 22.9672 25.9529V9.84308H0H0.0328103ZM3.31384 13.1241H6.59486V16.4051H3.31384V13.1241ZM9.87589 13.1241H13.1569V16.4051H9.87589V13.1241ZM16.4379 13.1241H19.719V16.4051H16.4379V13.1241ZM3.31384 19.6862H6.59486V22.9672H3.31384V19.6862ZM9.87589 19.6862H13.1569V22.9672H9.87589V19.6862Z"/>
+        </svg>
+    </span>
+</div>

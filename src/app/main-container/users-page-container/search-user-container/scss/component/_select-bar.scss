@@ -1,0 +1,21 @@
+.user-form, .course-form{
+    .form div.app-select-bar::ng-deep #select{
+       
+        background-color: $lilac;
+        border-radius: 8px;
+
+        svg{fill: $violet;}
+
+        p{user-select: none;}
+
+        ul{
+            background-color: #f3f3fc;
+            border-radius: 8px !important;
+            li{
+                color: #b8b8c4f1;
+                user-select: none;
+                &:hover{ color: $violet}
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+::ng-deep.detail-button-container{
+    &.active{
+        background-color: $violet;
+        svg{ fill: $white; }
+        &:hover{ background-color: $detail-hover-color; }
+        &:active{ background-color: $detail-active-color;}
+    }
+}

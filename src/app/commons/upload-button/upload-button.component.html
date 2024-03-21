@@ -1,0 +1,17 @@
+<input type="file" class="file-input"
+       (change)="onFileSelected($event)" #fileUpload>
+
+<div class="file-upload">
+
+    {{fileName || default}}
+
+    <button class="upload-btn" (click)="uploadFile()" *ngIf="!fileName">
+        <mat-icon class="attach-icon" >attach_file</mat-icon>
+    </button>
+ 
+    <div class="progress" [style]="{display: 'flex', alignItems:'center', marginLeft: '1rem'}">
+        <mat-progress-spinner class="progress-bar" mode="determinate" [value]="uploadProgress" [diameter]="22" *ngIf="upload"> </mat-progress-spinner>
+        <mat-icon class="cancel-upload" (click)="cancelUpload()" [style]="{transform: 'scale(0.8)', color: 'red'}" *ngIf="!upload && fileName">delete_forever</mat-icon>
+    </div>
+
+</div>

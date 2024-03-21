@@ -1,0 +1,59 @@
+:host{
+    display: contents;
+}
+
+.selector{
+    grid-column: selector-start/selector-end;
+}
+
+.nome{
+    grid-column: nome-start/nome-end;
+}
+
+.cognome{
+    grid-column: cognome-start/cognome-end;
+}
+
+.email{
+    grid-column: email-start/email-end;
+}
+
+.corso{
+    grid-column: corso-start/corso-end;
+}
+
+.sessione{
+    grid-column: sessione-start/sessione-end;
+}
+
+.classe{
+    grid-column: classe-start/classe-end;
+}
+
+.loading-bar{
+    height: 6px;
+    display: flex;
+    align-items: center;
+    grid-column: selector-start/email-end;
+
+    .wrapper{ width: 100%; }
+
+    .load-pointer{
+        height: 3px;
+        width: 55%;
+    }
+}
+
+div.body{
+    &.selector .loading{
+        width: 2.5rem
+    }
+
+    .loading{
+        border-radius: 5px;
+        height: 2.5rem;
+        width: 55%;
+    }
+}
+
+

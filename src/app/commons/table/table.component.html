@@ -1,0 +1,15 @@
+<div [ngStyle]="tableLayout" class="table">
+    
+    <ng-container *ngFor="let row of table; index as i">
+        <ng-container  *ngFor="let column of row; index as j">
+            <div #item
+                 [ngClass]="column.isHeader ? ['header', column.headerColumn] : ['body', column.headerColumn]" 
+                 [ngStyle]="getColumnStyle(column)">
+                    <ng-container *ngIf="!column.isComponent; else elseBlock ">{{column.isHTML ? injectHTML(item,i,j,column.value) : column.value}}</ng-container>
+                    <ng-template #elseBlock anchor>{{addComponent(column.value,i,j)}}</ng-template>
+            </div>
+        </ng-container>
+    </ng-container>
+
+</div>  
+

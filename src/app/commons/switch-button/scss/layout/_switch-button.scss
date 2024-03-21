@@ -1,0 +1,25 @@
+.switch-container{
+
+    display: flex;
+    box-sizing: content-box;
+    align-items: center;
+    padding: 3px 0;
+    width: 4rem;
+    height: 1.5rem;
+    position: relative;
+  
+    .round-button{
+        position: absolute;
+        height: 1.5rem;
+        width: 1.5rem;
+        margin: 0 4px;
+        border-radius: 300px;
+        right: 43%;
+    }
+
+    &.on{
+        .round-button{ right: 0; }
+    }
+
+    
+}

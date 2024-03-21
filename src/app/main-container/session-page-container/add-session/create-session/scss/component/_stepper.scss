@@ -1,0 +1,18 @@
+.stepper::ng-deep{
+
+    background: transparent;
+    
+    // Disable ripple manually
+    .mat-ripple div{background-color: transparent;}
+
+    // Backgroud color del rettangolo degli step
+    .mat-step-header:hover:not([aria-disabled]), .mat-step-header:hover[aria-disabled="false"] {
+        background-color: transparent;
+        border-radius: 8px;
+    }
+
+    .mat-step-header:focus:not([aria-disabled]), .mat-step-header:focus[aria-disabled="false"] {
+        background-color: transparent;
+        border-radius: 8px;
+    }
+} 

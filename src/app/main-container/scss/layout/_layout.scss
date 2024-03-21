@@ -1,0 +1,43 @@
+.main-container{
+    height: 100%;
+    display: grid;
+    grid-template-rows: [header-start] 1fr [header-end body-start] 12fr [body-end];
+    grid-template-columns: [header-start vertical-nav-start] 1fr [vertical-nav-end content-start] 12fr [header-end content-end];
+
+    .horizontal-header{
+        grid-row: header-start/header-end;
+        grid-column: header-start/header-end;
+    }
+
+    .hamburger-button{
+        grid-row: header-start/header-end;
+        grid-column: vertical-nav-start/vertical-nav-end;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .side-nav-container{ 
+        display: flex;
+        grid-row: header-start/body-end;
+        grid-column: vertical-nav-start/content-end;
+    }
+
+    .vertical-nav{
+        display: flex;
+        position: fixed;
+        top: 3rem;
+        height: 95%;
+        grid-row: body-start/body-end;
+        grid-column: vertical-nav-start/vertical-nav-end;
+    }
+
+    .page-content{
+        grid-row: body-start/body-end;
+        grid-column: content-start/content-end;
+        
+        @include respond(phone){
+            grid-column: vertical-nav-start/content-end;
+        }
+    }
+}

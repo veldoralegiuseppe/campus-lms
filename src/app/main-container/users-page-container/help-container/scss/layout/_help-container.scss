@@ -1,0 +1,26 @@
+.help-container{
+    display: grid;
+    grid-template-columns: [text-area-start] 1fr [text-area-end img-start] 1fr [img-end];
+    grid-template-rows: [text-area-start img-start] 1fr [text-area-end img-end];
+    column-gap: 13px;
+    max-height: 20rem;
+    max-width: 62rem;
+ 
+    .text-area{
+     display: flex;
+     flex-direction: column;
+     grid-column: text-area-start/text-area-end;
+     grid-row: text-area-start/text-area-end;
+     h1{margin-bottom: 1rem;}
+    }
+ 
+    svg{
+     width: $width-svg;
+     height: auto;
+     align-self: center;
+     max-height: $max-height-svg;
+     min-width: $min-width-svg;
+     grid-column: img-start/img-end;
+     grid-row: img-start/img-end;
+    }
+ }

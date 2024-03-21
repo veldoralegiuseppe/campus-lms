@@ -1,0 +1,15 @@
+.control-button-container .reset-button-container::ng-deep{
+    &.active{
+        background-color: transparent;
+        border: 1px solid $azzurro-scuro;
+        svg{ fill: $azzurro-scuro; }
+        &:hover{ 
+            background-color: $reset-hover-color; 
+            svg{ fill: $white; }
+        }
+        &:active{ 
+            background-color: $reset-active-color;
+            svg{ fill: $white; }
+        }
+    }
+}

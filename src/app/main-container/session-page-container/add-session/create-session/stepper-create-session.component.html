@@ -1,0 +1,68 @@
+<div class="main-container">
+
+  <!-- Titolo pagina -->
+  <h1 class="title">Calendario - Crea sessione</h1>
+
+  <!-- Stepper -->
+  <mat-stepper class="stepper"  [orientation]="(stepperOrientation | async)!" [linear]="isLinear" #stepper>
+
+    <!-- Step 1 -->
+    <mat-step #step1 [stepControl]="firstFormGroup" [completed]="stepOneCompleted" disableRipple="true">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Sessione</ng-template>
+        <!-- Dati sulla sessione-->
+        <div class="course-form">
+          <div class="corso-form-container">
+            <div class="form-title">Dati corso</div>
+            <div class="form" [formGroup] = "courseFilter">
+              <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Corsi disponibili</mat-label>
+                <mat-select class="custom-theme" formControlName="corso" (selectionChange)="isStepComplete()">
+                  @for (food of foods; track food) {
+                    <mat-option class='not-empty-select' [value]="food.value">{{food.viewValue}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">CUP</mat-label>
+                <input matInput formControlName="cup" (change)="isStepComplete()">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="import-excel">
+            <div class="form-title">Importa la calendarizzazione</div>
+            <app-upload-button (onUploadComplete)="onFileUpload($event)" (onUploadDelete)="onFileDelete($event)" class="upload-btn" default="Nessuna calendarizzazione importata."></app-upload-button>
+          </div>
+          <div class="import-excel">
+            <div class="form-title">Importa le classi</div>
+            <app-upload-button (onUploadComplete)="onFileUpload($event)" (onUploadDelete)="onFileDelete($event)" class="upload-btn" default="Nessuna classe importata."></app-upload-button>
+          </div>
+        </div>
+        <div class="stepper-button-container"> <button mat-button matStepperNext [disabled]="!step1.completed">Avanti</button> </div>
+      </form>
+    </mat-step>
+
+     <!-- Step 2 -->
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Riepilogo calendario</ng-template>
+        <div class="stepper-button-container">
+          <button mat-button matStepperPrevious>Indietro</button>
+          <button mat-button matStepperNext>Avanti</button>
+        </div>
+      </form>
+    </mat-step>
+
+     <!-- Step 3 -->
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Riepilogo classi</ng-template>
+        <div class="stepper-button-container">
+          <button mat-button matStepperPrevious>Indietro</button>
+          <button mat-button matStepperNext>Crea</button>
+        </div>
+      </form>
+    </mat-step>
+
+  </mat-stepper>
+</div>

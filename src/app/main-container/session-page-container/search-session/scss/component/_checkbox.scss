@@ -1,0 +1,11 @@
+.checkbox-wrapper .checkbox::ng-deep{
+    #checkbox{
+        background-color: $white;
+        
+        .checkbox-filling {
+            background: $azzurro !important;
+            width: 10px !important;
+            height: 10px !important;
+        }
+    }
+}

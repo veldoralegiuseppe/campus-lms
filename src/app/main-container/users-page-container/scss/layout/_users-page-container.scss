@@ -1,0 +1,23 @@
+.users-page-container{
+    padding: $padding;
+    display: grid;
+    grid-template-rows: [help-start] .5fr [help-end add-user-start] 1fr [add-user-end search-user-start] auto [search-user-end];
+    grid-template-columns: [help-start add-user-start search-user-start] 1fr [help-end add-user-end search-user-end];
+    row-gap: $page-row-gap;
+    column-gap: $page-column-gap;
+    
+    .help-container{
+        grid-row: help-start/help-end;
+        grid-column: help-start/help-end;
+    }
+
+    .add-user-container{
+        grid-row: add-user-start/add-user-end;
+        grid-column: add-user-start/add-user-end;
+    }
+
+    .search-user-container{
+        grid-row: search-user-start/search-user-end;
+        grid-column: search-user-start/search-user-end;
+    }
+}

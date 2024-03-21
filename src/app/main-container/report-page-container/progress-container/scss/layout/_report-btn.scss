@@ -1,0 +1,14 @@
+.report-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 13rem;
+    height: 3rem;
+
+    svg{
+        width: 16px;
+        height: 16px;
+        fill: $dark-blue;
+    }
+}

@@ -1,0 +1,23 @@
+.dashboard-page-container{
+    padding: $padding;
+    display: grid;
+    grid-template-rows: [welcome-start activity-start] 1fr [welcome-end course-start] 2fr [course-end activity-end];
+    grid-template-columns: [welcome-start course-start] 1fr [welcome-end course-end activity-start] 1fr [activity-end];
+    row-gap: $page-row-gap;
+    column-gap: $page-column-gap;
+    
+    .welcome-container{
+        grid-row: welcome-start/welcome-end;
+        grid-column: welcome-start/welcome-end;
+    }
+
+    .course-container{
+        grid-row: course-start/course-end;
+        grid-column: course-start/course-end;
+    }
+
+    .activity-container{
+        grid-row: activity-start/activity-end;
+        grid-column: activity-start/activity-end;
+    }
+}

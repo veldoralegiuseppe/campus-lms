@@ -1,0 +1,16 @@
+.add-user-container ::ng-deep.button-container{
+    border: 1px solid $lilac !important;
+    background-color: transparent;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: background-color .1s ease-in;
+
+    &:hover{
+        background-color: $lilac;
+    }
+    
+    &:active{
+        background-color: $active-color;
+    }
+}

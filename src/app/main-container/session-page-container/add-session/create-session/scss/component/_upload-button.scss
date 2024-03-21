@@ -1,0 +1,22 @@
+.import-excel .upload-btn::ng-deep {
+
+    button.upload-btn{
+        border: solid 1px $light-blue;
+        background-color: transparent;
+        -webkit-transition: background-color 50ms linear;
+        -ms-transition: background-color 50ms linear;
+        transition: background-color 50ms linear;
+        
+        &:hover{
+            background-color: $light-blue;
+
+            .attach-icon{
+                color: white;
+            }
+        }
+
+        .attach-icon{
+            color: $light-blue;
+        }
+    }
+}

@@ -1,0 +1,75 @@
+:host{
+    display: contents;
+}
+
+.selector{
+    grid-column: selector-start/selector-end;
+}
+
+.nome{
+    grid-column: nome-start/nome-end;
+}
+
+.cognome{
+    grid-column: cognome-start/cognome-end;
+}
+
+.codice-fiscale{
+    grid-column: codice-fiscale-start/codice-fiscale-end;
+}
+
+.attivita{
+    grid-column: attivita-start/attivita-end;
+}
+
+.tipo{
+    grid-column: tipo-start/tipo-end;
+}
+
+.data-inizio{
+    grid-column: data-inizio-start/data-inizio-end;
+}
+
+.data-fine{
+    grid-column: data-fine-start/data-fine-end;
+}
+
+.ora-inizio{
+    grid-column: ora-inizio-start/ora-inizio-end;
+}
+
+.ora-fine{
+    grid-column: ora-fine-start/ora-fine-end;
+}
+
+.completata{
+    grid-column: completata-start/completata-end;
+}
+
+.loading-bar{
+    height: 6px;
+    display: flex;
+    align-items: center;
+    grid-column: selector-start/email-end;
+
+    .wrapper{ width: 100%; }
+
+    .load-pointer{
+        height: 3px;
+        width: 55%;
+    }
+}
+
+div.body{
+    &.selector .loading{
+        width: 2.5rem
+    }
+
+    .loading{
+        border-radius: 5px;
+        height: 2.5rem;
+        width: 55%;
+    }
+}
+
+

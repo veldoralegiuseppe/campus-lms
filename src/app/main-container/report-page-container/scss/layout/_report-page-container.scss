@@ -1,0 +1,20 @@
+.report-page-container{
+    padding: $padding;
+    display: grid;
+    grid-template-rows: [help-container-start] 1fr [help-container-end progress-container-start] auto [progress-container-end];
+    grid-template-columns: [help-container-start progress-container-start] 1fr [help-container-end progress-container-end];
+    row-gap: $page-row-gap;
+    column-gap: $page-column-gap;
+
+    .help-container{
+        max-height: 20rem;
+        max-width: 62rem;
+        grid-row: help-container-start/help-container-end;
+        grid-column: help-container-start/help-container-end;
+    }
+    
+    .progress-container{
+        grid-row: progress-container-start/progress-container-end;
+        grid-column: progress-container-start/progress-container-end;
+    }
+}

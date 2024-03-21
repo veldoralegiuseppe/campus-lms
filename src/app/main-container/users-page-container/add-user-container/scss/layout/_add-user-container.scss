@@ -1,0 +1,24 @@
+.add-user-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 100rem;
+
+    .add-student,.add-admin,.add-office{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 17.7rem;
+    }
+
+    .button{
+        margin-top: 2rem;
+    }
+    
+    .add-office{
+        svg{
+            align-self: center;
+        }
+    }
+}

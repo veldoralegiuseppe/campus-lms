@@ -1,0 +1,31 @@
+.vertical-nav{
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    width: 7.2rem;
+    display: grid;
+    grid-template-areas: 'logo' 'dashboard' 'utenti' 'report' 'sessioni' '.';
+    justify-items: center;
+    align-items: center;
+
+    // Layout icone
+    div:not(.logo, .logo__P, .logo__UNTO, .logo__FORM){ 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        svg{
+            width: 60%;
+            height: auto;
+        }
+        svg.logo{ grid-area: logo; }
+        svg.dashboard__icon{ grid-area: dashboard; }
+        svg.utenti__icon{ grid-area: utenti; }
+        svg.report__icon{ grid-area: report; }
+        svg.sessioni__icon{ grid-area: sessioni; }
+    }
+    
+    @include respond(phone){
+        display: none;
+    }
+}

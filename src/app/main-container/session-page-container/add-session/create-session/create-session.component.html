@@ -1,0 +1,55 @@
+<div class="main-container">
+    <h1 class="title">Calendario - Crea sessione</h1>
+
+    <div class="steps">
+        <div class="line"></div>
+
+        <div class="step-container">
+            <div class="round-step active">1</div>
+            <div class="step-title">Creazione calendario</div>
+        </div>
+       
+        <div class="step-container">
+            <div class="round-step">2</div>
+            <div class="step-title">Importa studenti</div>
+        </div>
+    </div>
+
+    <div class="create-container">
+        <!-- Dati sulla sessione-->
+        <div class="course-form">
+            <div class="form-title">Dati corso</div>
+            <div class="form" [formGroup] = "courseFilter">
+                <div [ngStyle]="{'margin-right':'3rem'}" class="app-select-bar" [options]="['Corso']" formControlName="corso"></div>
+                <input [ngStyle]="{'transform':'translateX(3rem)'}" class="search-bar cup" type="text" placeholder="CUP">
+                <input style="visibility: hidden;" class="search-bar" type="text">
+                <input style="visibility: hidden;" class="search-bar" type="text">
+            </div>
+        </div>
+
+        <!-- Import calendarizzazione -->
+        <div class="import-excel">
+            <div class="form-title">Importa la calendarizzazione</div>
+            <app-upload-button class="upload-btn"></app-upload-button>
+        </div>
+
+        <div class="anteprima" style="overflow-y: scroll;">
+            <div class="form-title">Anteprima</div>
+            <ng-template [ngIf]="!importCalendario">Importa una calendarizzazione per visualizzare l'anteprima</ng-template>
+            <!-- Tabella di riepilogo -->
+            <div *ngIf="importCalendario"  
+                class="app-table-v2 table" 
+                [@openClose] = "hideTable ? 'close' : 'open'"
+                [columnsTemplate]="['corso','1fr','modulo','1fr','tipo','1fr','data','1fr','ora-inizio','1fr','ora-fine','1fr','durata','1fr','pausa','1fr','docente','1fr']" 
+                [modelTableMapper]="sessionTableMapper"
+                [rowType]="rowType"> 
+            </div>
+
+            <app-pagination [@openClose] = "hidePagination ? 'close' : 'open'" class="pagination"  [pageSize]="pageSize" [pageSizeOptions]="[3,5,10]" (onPageChange)="handlePaginationChange($event)">
+            </app-pagination>
+
+        </div>
+
+        
+    </div>
+</div>

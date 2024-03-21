@@ -1,0 +1,30 @@
+#side-menu{
+    transition: all .25s ease-in 0.1s;
+}
+
+@include respond(phone){
+    .side-menu{
+        background: rgba(23, 22, 22, 0.93);
+        visibility: hidden;
+        opacity: 0;
+    
+
+        // Stile icone
+        div:not(.logo, .logo__P, .logo__UNTO, .logo__FORM){ 
+                
+            &:hover svg{
+                background-color: #92c2e0;
+            }
+            &.active svg{
+                background-color: $dark-blue;
+            }
+            svg{
+                border: 1px solid rgba(205, 205, 209, 0.59);
+                background-color: rgba(241, 241, 241, 0.24);
+                border-radius: 20%;
+                transition: all .1s ease .05s;
+                pointer-events: none;
+            }
+        }
+    }
+}

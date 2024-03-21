@@ -1,0 +1,26 @@
+<ng-container>
+
+    <!-- Header -->
+    <ng-template [ngIf]="index === 0 && !loading">
+        <div [ngClass]="['corso', 'header']">{{course?.corso}}</div>
+        <div [ngClass]="['classi', 'header']">{{course?.classi}}</div>
+        <div [ngClass]="['studenti', 'header']">{{course?.studenti}}</div>
+    </ng-template>
+
+    <!-- Animazione di caricamento -->
+    <ng-template [ngIf]="index === 0 && loading">
+        <div [ngClass]="['loading-bar']">
+            <div class="wrapper">
+                <div class="load-pointer"></div>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template [ngIf]="index > 0 && (loading === undefined || !loading)">
+        <div [ngClass]="['corso', 'body']">{{course?.corso}}</div>
+        <div [ngClass]="['classi', 'body']">{{course?.classi}}</div>
+        <div [ngClass]="['studenti', 'body']">{{course?.studenti}}</div>
+    </ng-template>
+
+</ng-container>

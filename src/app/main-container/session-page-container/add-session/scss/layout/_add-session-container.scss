@@ -1,0 +1,19 @@
+.add-session-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 100rem;
+
+    .add-session{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 17.7rem;
+
+        svg{
+            height: 15rem;
+        }
+    }
+
+}

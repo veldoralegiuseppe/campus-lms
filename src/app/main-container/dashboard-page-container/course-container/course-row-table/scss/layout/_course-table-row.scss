@@ -1,0 +1,43 @@
+:host{
+    display: contents;
+}
+
+.corso{
+    grid-column: corso-start/corso-end;
+}
+
+.classi{
+    grid-column: classi-start/classi-end;
+}
+
+.studenti{
+    grid-column: studenti-start/studenti-end;
+}
+
+.loading-bar{
+    height: 6px;
+    display: flex;
+    align-items: center;
+    grid-column: corso-start/studenti-end;
+
+    .wrapper{ width: 100%; }
+
+    .load-pointer{
+        height: 3px;
+        width: 55%;
+    }
+}
+
+div.body{
+    &.selector .loading{
+        width: 2.5rem
+    }
+
+    .loading{
+        border-radius: 5px;
+        height: 2.5rem;
+        width: 55%;
+    }
+}
+
+

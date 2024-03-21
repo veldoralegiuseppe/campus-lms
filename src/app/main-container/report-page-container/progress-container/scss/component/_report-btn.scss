@@ -1,0 +1,40 @@
+.report-btn{
+	border: none;
+    border-radius: 8px;
+	padding: 0;
+	cursor: pointer;
+	outline: inherit;
+    background-color: $rosa;
+
+    &.disable{
+        pointer-events: none;
+        cursor: none;
+        background-color: #E6E6E6;
+        svg{ fill: #CDCDCD;}
+    }
+
+    &:hover{
+        background-color: #fbe6ea;
+    }
+
+    &:active{
+        background-color: #f3d5da;
+    }
+
+    &.applica-tutoraggio.enable{
+        background-color: transparent;
+        border: 1px solid $dark-blue;
+
+        &:hover{
+            background-color: $dark-blue;
+        }
+
+        &:active{
+            background-color: #063d60;
+        }
+    }
+
+    p{
+        cursor: pointer;
+    }
+}

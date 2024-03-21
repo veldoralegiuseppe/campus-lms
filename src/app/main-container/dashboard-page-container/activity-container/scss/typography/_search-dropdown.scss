@@ -1,0 +1,17 @@
+::ng-deep.search-dropdown-container{
+    // TIPOGRAFIA
+    color: #C45A01;
+    font-family: Mulish;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 17px; /* 121.429% */
+    letter-spacing: 0.14px;
+
+    #select{
+        color: #C45A01;
+        ul{ color: #C45A01; }
+    }
+    
+    input::placeholder{  color: #ACAFB5 }
+}

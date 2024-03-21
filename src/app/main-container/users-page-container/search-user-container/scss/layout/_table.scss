@@ -1,0 +1,21 @@
+.search-user-container ::ng-deep.table{
+
+    .body,.header{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 5rem;
+
+        &.selector{
+            position: relative;
+            left: .5px;
+        }
+    }
+     
+    .header{
+        &.email{
+            position: relative;
+            right: .5px;
+        }
+    }
+}

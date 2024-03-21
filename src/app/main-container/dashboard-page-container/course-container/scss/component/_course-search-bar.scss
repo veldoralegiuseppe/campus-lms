@@ -1,0 +1,9 @@
+.course-search-bar::ng-deep{
+    &:focus, &:focus:hover{
+        border: 1px solid rgba(134, 186, 238, 0.74);
+    }
+
+    &:hover{
+        border: 1px solid rgba(195, 225, 255, 0.852);
+    }
+}

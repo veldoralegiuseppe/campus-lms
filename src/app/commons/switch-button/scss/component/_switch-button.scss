@@ -1,0 +1,21 @@
+.switch-container{
+    border-radius: 15px;
+    user-select: none;
+    transition: background-color .2s ease-out;
+    background-color: #E4E4E4;
+   
+    .round-button{
+        border-radius: 300px;
+        transition: right .2s ease-in-out, background-color .2s ease-in-out;
+        background-color: #B0B0B0;
+    }
+
+    &.on{
+       // background-color: cornflowerblue;
+        .round-button{
+           // background-color: blue;
+        }
+    }
+
+    
+}

@@ -1,0 +1,59 @@
+// COLORI 
+$dark-blue: #085A8E;
+$light-blue: #158CD8;
+$red: #DE0A0A;
+$black: #042235;
+$white: #FEFEFE;
+$main-background-color: #F9F9F9;
+$scroll-thumb: #F9F9F9;
+$scroll-track: #dddddd;
+
+// LUNGHEZZE
+// Altezza e larghezza delle checkbox
+$checkbox-height: 22px;
+
+//Layout generale del contenuto della pagina (dashboard, users..)
+$page-row-gap: 4rem;
+$page-column-gap: 1rem;
+$padding: 0 2rem;
+
+// CONTAINER (tranne per i welcome/help container)
+$page-containers-padding-left: 3rem;
+$page-containers-padding-top: 1rem;
+$page-containers-row-gap: 0rem;
+
+/* For use in src/lib/core/theming/_palette.scss */
+$light-blue-palette: (
+    50 : #e3f1fa,
+    100 : #b9ddf3,
+    200 : #8ac6ec,
+    300 : #5bafe4,
+    400 : #389dde,
+    500 : #158cd8,
+    600 : #1284d4,
+    700 : #0f79ce,
+    800 : #0c6fc8,
+    900 : #065cbf,
+    A100 : #e8f2ff,
+    A200 : #b5d4ff,
+    A400 : #82b6ff,
+    A700 : #69a7ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+

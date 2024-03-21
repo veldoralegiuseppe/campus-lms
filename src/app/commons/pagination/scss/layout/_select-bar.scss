@@ -1,0 +1,19 @@
+.pagination-container div.page-size-container ::ng-deep.items{
+   
+    #select{
+        p{
+            margin-left: 4px;
+        }
+        ul{
+            top: 130% !important;
+        }
+        li{
+            display: flex;
+        }
+        svg{
+            margin: 3px 4px 0 4px;
+            width: 10px;
+            height: 10px;
+        }
+    }
+}

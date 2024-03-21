@@ -1,0 +1,21 @@
+.report-btn{
+    color: $dark-blue;
+    font-family: Mulish;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 17px; /* 121.429% */
+    letter-spacing: 0.14px;
+
+    &.disable{
+        color: #8A8A8A;
+    }
+
+
+    &.applica-tutoraggio.enable{
+        color: $dark-blue;
+        &:hover{
+            color: $white;
+        }
+    }
+}

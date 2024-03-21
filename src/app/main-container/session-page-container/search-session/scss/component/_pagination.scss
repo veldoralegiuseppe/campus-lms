@@ -1,0 +1,28 @@
+.pagination::ng-deep.pagination-container{
+
+    & div.page-size-container ::ng-deep.items{
+        border: 1px solid $azzurro-scuro !important;
+
+        #select{
+            background-color: transparent;
+            border-radius: 4px;
+            
+            svg{ fill: $azzurro-scuro !important; }
+            ul{ background-color: $azzurro !important;}
+        }
+    }
+
+    & div.page-numbers-container ::ng-deep{
+        .arrow-sx,.arrow-dx{
+            transition: background-color .3s ease-out;
+            &.enable{
+                svg{fill: $azzurro-scuro}
+                background-color: $azzurro; 
+            }
+            &.disable{
+                background-color: #EDEDED; 
+            }
+        }
+    }
+   
+}

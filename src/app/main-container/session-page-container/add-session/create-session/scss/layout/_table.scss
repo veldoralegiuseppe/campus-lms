@@ -1,0 +1,21 @@
+.create-container ::ng-deep.table{
+
+    .body,.header{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 5rem;
+
+        &.corso{
+            position: relative;
+            left: .5px;
+        }
+    }
+     
+    .header{
+        &.docente{
+            position: relative;
+            right: .5px;
+        }
+    }
+}

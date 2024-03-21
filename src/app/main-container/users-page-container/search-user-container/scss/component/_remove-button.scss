@@ -1,0 +1,8 @@
+::ng-deep.remove-button-container{
+    &.active{
+        background-color: $red;
+        svg{ fill: $remove-icon-active; }
+        &:hover{ background-color: $remove-hover-color; }
+        &:active{ background-color: $remove-active-color;}
+    }
+}

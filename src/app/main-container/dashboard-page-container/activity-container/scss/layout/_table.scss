@@ -1,0 +1,16 @@
+.activity-container ::ng-deep.table{
+
+    .body,.header{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 5rem;
+    }
+     
+    .header{
+        &.link{
+            position: relative;
+            right: .5px;
+        }
+    }
+}

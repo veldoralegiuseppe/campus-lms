@@ -1,0 +1,22 @@
+// GLOBAL VARIABLES
+@import "../../../../scss/abstract/variables";
+
+// GLOBAL TYPOGRAPHY
+@import "../../../../scss/typography/typography";
+
+// LAYOUT
+@import "./scss/layout/course-container";
+@import "./scss/layout/table";
+
+// VARIABLES
+@import "./scss/abstract/variables";
+
+// COMPONENT
+@import "./scss/component/course-component";
+@import "./scss/component/course-search-bar";
+@import "./scss/component/table";
+
+// TYPOGRAPHY
+@import "./scss/typography/course-container";
+@import "./scss/typography/course-search-bar";
+@import "./scss/typography/table";

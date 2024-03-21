@@ -1,0 +1,26 @@
+<div class="pagination-container">
+    <div class="page-size-container">
+        <p class="label">Elementi per pagina:</p>
+        <div class="app-select-bar items" [options]="pageSizeOptions" (onOptionSelected)="handlePageSizeChange($event)"></div>
+    </div>
+    <div class="page-numbers-container">
+        <div (click)="prevPage()" [ngClass]="currentPage > 1 ? 'enable' : 'disable'" class="arrow-sx">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
+                <path d="M2.58312 0L0.5 2.07232L6.055 7.59852L11.61 2.07232L9.52687 0L6.055 3.45387L2.58312 0Z"/>
+            </svg>
+        </div>
+
+        <div class="page-number">
+            <span>{{'Pagina '}}</span>
+            <span class="current-page">{{currentPage}}</span>
+            <span>{{" di "}}</span>
+            <span class="total-page">{{pages}}</span>
+        </div>
+
+        <div (click)="nextPage()" [ngClass]="currentPage != pages ? 'enable' : 'disable'" class="arrow-dx">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
+                <path d="M2.58312 0L0.5 2.07232L6.055 7.59852L11.61 2.07232L9.52687 0L6.055 3.45387L2.58312 0Z"/>
+            </svg>
+        </div>
+    </div>
+</div>

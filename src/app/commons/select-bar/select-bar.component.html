@@ -1,0 +1,13 @@
+<div class="select-bar-container">
+    <div (click)="toggle()" id="select">
+        <p>{{optionSelected}}</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
+            <path d="M2.58312 0L0.5 2.07232L6.055 7.59852L11.61 2.07232L9.52687 0L6.055 3.45387L2.58312 0Z"/>
+        </svg>
+        <ul [@openClose] = "isOpen ? 'open' : 'closed'">
+            <ng-container *ngFor="let option of options">
+                <li (click)="onCategoryClick(option)">{{option.toString()}}</li>
+            </ng-container>
+        </ul>
+    </div>
+</div>

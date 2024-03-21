@@ -1,0 +1,142 @@
+$form-title-height: 2rem;
+
+.session-container{
+    display: grid;
+    grid-template-rows: [title-start] 1fr [title-end course-form-start] auto [course-form-end activity-form-start] auto  [activity-form-end control-button-container-start] auto [control-button-container-end table-start] auto [table-end pagination-start] auto [pagination-end button-container-start] .5fr [button-container-end];
+    grid-template-columns: [title-start course-form-start activity-form-start table-start button-container-start pagination-start control-button-container-start] 1fr [title-end course-form-end activity-form-start table-end button-container-end pagination-end control-button-container-end];
+    row-gap: 0rem;
+    
+    .title{
+        grid-row: title-start/title-end;
+        grid-column: title-start/title-end;
+    }
+
+    .course-form, .activity-form{
+        height: 10rem;
+        display: flex;
+        flex-direction: column;
+        .form-title{ height: $form-title-height;}
+        .form{ display: flex; }
+    }
+
+    .course-form{
+        grid-row: course-form-start/course-form-end;
+        grid-column: course-form-start/course-form-end;
+
+        .form{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+    }
+
+    .activity-form{
+        grid-row: activity-form-start/activity-form-end;
+        grid-column: activity-form-start/activity-form-end;
+
+        .form{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+
+            .checkbox-wrapper{
+                justify-content: space-around;
+                display: flex;
+                width: 16rem;
+            }
+        }
+    }
+
+    .table{
+        grid-row: table-start/table-end;
+        grid-column: table-start/table-end;
+    }
+
+    .pagination{
+        grid-row: pagination-start/pagination-end;
+        grid-column: pagination-start/pagination-end;
+    }
+
+    .container{
+        display: grid;
+        grid-template-rows: [switch-start] auto [switch-end modal-start] auto [modal-end];
+        grid-row: button-container-start/button-container-end;
+        grid-column: button-container-start/button-container-end;
+        row-gap: 5rem;
+
+        .switch{
+            grid-row: switch-start/switch-end;
+        }
+
+        .add-activity-modal{
+            border: 1px solid black;
+            border-radius: 8px;
+            padding: 2rem 1rem;
+
+            color: #ACAFB5;
+            font-family: Mulish;
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 17px; /* 121.429% */
+            letter-spacing: 0.14px;
+
+            display: grid;
+            grid-template-rows: [title-start] auto [title-end time-start] auto [time-end pausa-start] auto [pausa-end course-info-start] auto [course-info-end];
+            grid-template-columns: [title-start time-start course-info-start pausa-start]  1fr  [title-end time-end course-info-end pausa-end];
+            grid-row: modal-start/modal-end;
+            row-gap: 3rem;
+            justify-content: space-around;
+
+            .form-title{
+                grid-row: title-start/title-end;
+                grid-column: title-start/title-end;
+            }
+
+            .time-section{
+                display: flex;
+                grid-row: time-start/time-end;
+                grid-column: time-start/time-end;
+                justify-content: space-around;
+
+                #oraInizioAttivita,#oraFineAttivita,#pausaAttivita{
+                    margin-left: 1rem;
+                   
+                    outline: none;
+                    border-radius: 4px;
+                    border: 1px solid #EDEDED;
+
+                    height: 3.5rem;
+                }
+            }
+
+            .pausa-section{
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                grid-row: pausa-start/pausa-end;
+                grid-column: pausa-start/pausa-end;
+            }
+
+            .activity-section{
+                display: flex;
+                align-items: center;
+                grid-row: course-info-start/course-info-end;
+                grid-column: course-info-start/course-info-end;
+                justify-content: space-evenly;
+            }
+
+        }
+    }
+
+    .control-button-container{
+        display: flex;
+        align-items: end;
+        justify-content: space-evenly;
+        margin-top: 3rem;
+        grid-row: control-button-container-start/control-button-container-end;
+        grid-column: control-button-container-start/control-button-container-end;
+    }
+}

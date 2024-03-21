@@ -1,0 +1,8 @@
+.session-container .date::ng-deep{
+    .icon-container{
+        svg{ fill: #EDEDED; }
+        &:hover svg{
+            fill: $azzurro;
+        }
+    }
+}

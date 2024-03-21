@@ -1,0 +1,6 @@
+.table{
+    display : grid;
+    grid-template-rows: [table-start] 1fr [table-end];
+    // grid-template-columns: programmaticamente
+    grid-auto-flow : 'row';
+  }

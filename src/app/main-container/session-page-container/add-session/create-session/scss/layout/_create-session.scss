@@ -1,0 +1,47 @@
+.main-container{
+    display: grid;
+    height: 100%;
+    grid-template-rows: [title-start] .5fr [title-end steps-start] 8fr [steps-end];
+    grid-template-columns: [title-start steps-start] 1fr [title-end steps-end];
+    padding: $padding;
+    row-gap: $page-row-gap;
+    column-gap: $page-column-gap;
+
+
+    .title{
+        grid-row: title-start/title-end;
+        grid-column: title-start/title-end;
+        padding-left: 2.6rem;
+    }
+
+    .stepper{
+        grid-row: steps-start/steps-end;
+        grid-column: steps-start/steps-end;
+
+        .course-form{
+            display: flex;
+            flex-direction: column;
+            row-gap: 3rem;
+            margin-top: 4rem;
+
+            .form{
+                display: flex;
+                align-items: center;
+            }
+    
+            .import-excel{
+                margin-bottom: 18px;
+            }
+            
+        }
+
+        .stepper-button-container{
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-basis: 100%;
+            margin-top: 2.5rem;
+        }
+    }
+
+}

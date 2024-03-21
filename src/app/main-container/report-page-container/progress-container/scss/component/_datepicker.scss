@@ -1,0 +1,8 @@
+.progress-container .date::ng-deep{
+    .icon-container{
+        svg{ fill: #EDEDED; }
+        &:hover svg{
+            fill: $dark-blue;
+        }
+    }
+}

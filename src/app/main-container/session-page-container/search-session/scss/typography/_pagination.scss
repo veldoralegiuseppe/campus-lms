@@ -1,0 +1,30 @@
+.pagination::ng-deep.pagination-container{
+
+    & div.page-size-container ::ng-deep{
+        p.label{
+            color: $dark-blue !important;
+        }
+
+        & ::ng-deep.items #select{
+            p, li{ 
+                font-family: Poppins !important;
+                color: $dark-blue !important; 
+            } 
+            
+        }
+    }
+
+    & div.page-numbers-container{
+        .page-number{
+            color: $dark-blue;
+            .current-page{
+                font-family: Poppins;
+                font-weight: 600;
+            }
+            .total-page{
+                font-family: Poppins;
+                font-weight: 600;
+            }
+        }
+    }   
+}

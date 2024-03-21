@@ -1,0 +1,15 @@
+// GLOBAL VARIABLES
+@import "../../../../../scss/abstract/variables";
+@import "../../../../../scss/abstract/mixins";
+
+// ABSTRACT
+@import "./scss/abstract/variables";
+@import "./scss/abstract/mixins";
+
+// LAYOUT
+@import "./scss/layout/user-table-row";
+
+// COMPONENT
+@import "./scss/component/user-table-row";
+
+

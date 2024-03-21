@@ -1,0 +1,11 @@
+.course-form, .activity-form{
+    .form div.app-select-bar::ng-deep #select{
+        color: $azzurro-scuro;
+        font-family: Mulish;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 17px; /* 121.429% */
+        letter-spacing: 0.14px;
+    }
+}

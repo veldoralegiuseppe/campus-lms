@@ -1,0 +1,9 @@
+.course-container div.table-container::ng-deep{
+
+    .body,.header{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 5rem;
+    }
+}

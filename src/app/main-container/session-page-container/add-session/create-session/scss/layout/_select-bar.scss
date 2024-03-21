@@ -1,0 +1,14 @@
+.course-form{
+    .form div.app-select-bar::ng-deep #select{
+        width: 10rem;
+        height: 3.5rem;
+
+        ul{
+            padding-left: 1.8rem;
+            top: 112% !important;
+           
+            li{ margin-bottom: 1rem; }
+        }
+
+    }
+}

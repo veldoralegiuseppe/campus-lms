@@ -1,0 +1,40 @@
+.vertical-nav{
+    border-radius: 16px;
+    background: linear-gradient(220deg, rgba(40, 169, 229, 0.54), rgba(191, 75, 146, 0.37) 66.81%, rgba(225, 83, 105, 0.59) 98.32%);
+    backdrop-filter: blur(2px);
+    
+    // Animazione per icone
+    div:not(.logo, .logo__P, .logo__UNTO, .logo__FORM){ 
+        cursor: pointer;
+       
+
+        svg{ 
+            transition: transform 0.25s ease-in-out;
+            pointer-events: none;
+        }
+    
+        &:hover svg{ 
+            transition: transform 0.25s ease-in-out;
+            transform:scale(1.2);
+        }
+
+        &:active svg{
+            transition: transform 0.1s ease-out;
+            transform:scale(1);
+        }
+
+        &::after{
+            content: "";
+            opacity: 0;
+            margin-top: .8rem;
+            width: .6rem;
+            height: .6rem;
+            border-radius: 100px;
+            background-color: rgba(255, 245, 245, 0.7);
+            transition: opacity .1s ease-out .15s;
+        }
+
+        &.active::after{ opacity: 1; }
+    }
+
+}

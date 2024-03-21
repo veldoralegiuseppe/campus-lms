@@ -1,0 +1,16 @@
+.remove-button-container{
+    border-radius: 8px;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: background-color .1s ease-in;
+
+    &.disable{
+        pointer-events: none;
+        background-color: $backgroud-disable;
+        svg{
+            fill: $icon-disable-color;
+        }
+    }
+}

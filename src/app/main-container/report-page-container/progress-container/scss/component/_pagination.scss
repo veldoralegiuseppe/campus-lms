@@ -1,0 +1,28 @@
+.pagination::ng-deep.pagination-container{
+
+    & div.page-size-container ::ng-deep.items{
+        border: 1px solid $dark-blue!important;
+
+        #select{
+            background-color: $white;
+            border-radius: 4px;
+            
+            svg{ fill: $dark-blue !important; }
+            ul{ background-color: $white !important;}
+        }
+    }
+
+    & div.page-numbers-container ::ng-deep{
+        .arrow-sx,.arrow-dx{
+            transition: background-color .3s ease-out;
+            &.enable{
+                svg{fill: $white}
+                background-color: $dark-blue; 
+            }
+            &.disable{
+                background-color: #EDEDED; 
+            }
+        }
+    }
+   
+}

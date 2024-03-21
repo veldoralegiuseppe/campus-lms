@@ -1,0 +1,35 @@
+.pagination-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 2rem;
+
+    .page-size-container{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        p{ margin-right: 1rem; }
+    }
+
+    .page-numbers-container{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        min-width: 12rem;
+
+        .arrow-sx,.arrow-dx{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 2rem;
+            height: 2rem;
+
+            svg{
+                height: 10px;
+                width: 10px;
+            }
+        }
+        .arrow-dx svg{transform: rotate(270deg);}
+        .arrow-sx svg{transform: rotate(90deg);}
+    }
+}

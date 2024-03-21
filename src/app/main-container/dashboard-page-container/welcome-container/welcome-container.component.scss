@@ -1,0 +1,17 @@
+// GLOBAL TYPOGRAPHY
+@import "../../../../scss/typography/typography";
+
+// GLOBAL VARIABLES
+@import "../../../../scss/abstract/variables";
+
+// VARIABLES
+@import "./scss/abstract/variables";
+
+// COMPONENT
+@import "./scss/component/welcome-container";
+
+// LAYOUT
+@import "./scss/layout/welcome-container";
+
+// TYPOGRAPHY
+@import "./scss/typography/welcome-container";

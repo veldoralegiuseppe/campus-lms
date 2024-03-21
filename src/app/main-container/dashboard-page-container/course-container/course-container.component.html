@@ -1,0 +1,11 @@
+<div class="course-container" [formGroup]="courseFilter">
+   <div class="title-container">Tutti i corsi</div>
+   <app-search-bar formControlName="like" [ngClass]="'course-search-bar'"></app-search-bar>
+   <div 
+      class="app-table-v2 table-container"
+      [@openClose] = "hideTable ? 'close' : 'open'"
+      [columnsTemplate]="['Corso','2fr','Classi','1fr','Studenti','1fr']"
+      [rowType]="rowType"
+      [modelTableMapper]="courseTableMapper">
+   </div>
+</div>

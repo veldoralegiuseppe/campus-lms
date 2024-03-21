@@ -1,0 +1,29 @@
+
+@media (min-width: 37.5em) {
+    #side-menu{display: none;}
+}
+
+@include respond(phone){
+    .side-menu{
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        z-index: 1;
+        
+        // Layout icone
+        div:not(.logo, .logo__P, .logo__UNTO, .logo__FORM){ 
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            
+            svg{
+                width: 32%;
+                height: auto;
+            }
+        }
+    }
+}

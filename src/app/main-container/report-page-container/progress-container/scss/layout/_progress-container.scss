@@ -1,0 +1,90 @@
+$form-title-height: 2rem;
+
+.progress-container{
+    display: grid;
+    grid-template-rows: [title-start] .5fr [title-end user-form-start] 1fr[user-form-end course-form-start] 1fr [course-form-end activity-form-start] 1fr  [activity-form-end control-button-container-start] .3fr [control-button-container-end table-start] auto [table-end pagination-start] .8fr [pagination-end button-container-start] .5fr [button-container-end];
+    grid-template-columns: [title-start user-form-start course-form-start activity-form-start table-start button-container-start pagination-start control-button-container-start] 1fr [title-end user-form-end course-form-end activity-form-start table-end button-container-end pagination-end control-button-container-end];
+    row-gap: 0rem;
+    
+    .title{
+        grid-row: title-start/title-end;
+        grid-column: title-start/title-end;
+    }
+
+    .course-form, .user-form, .activity-form{
+        height: 10rem;
+        display: flex;
+        flex-direction: column;
+        .form-title{ height: $form-title-height;}
+        .form{ display: flex; }
+    }
+
+    .user-form{
+        grid-row: user-form-start/user-form-end;
+        grid-column: user-form-start/user-form-end;
+
+        .form{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+    }
+
+    .course-form{
+        grid-row: course-form-start/course-form-end;
+        grid-column: course-form-start/course-form-end;
+
+        .form{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+    }
+
+    .activity-form{
+        grid-row: activity-form-start/activity-form-end;
+        grid-column: activity-form-start/activity-form-end;
+
+        .form{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+
+            .checkbox-wrapper{
+                justify-content: space-around;
+                display: flex;
+                width: 16rem;
+            }
+        }
+    }
+
+    .table{
+        grid-row: table-start/table-end;
+        grid-column: table-start/table-end;
+    }
+
+    .pagination{
+        grid-row: pagination-start/pagination-end;
+        grid-column: pagination-start/pagination-end;
+    }
+
+    .container{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        grid-row: button-container-start/button-container-end;
+        grid-column: button-container-start/button-container-end;
+    }
+
+    .control-button-container{
+        display: flex;
+        align-items: end;
+        justify-content: space-evenly;
+        margin-top: 3rem;
+        grid-row: control-button-container-start/control-button-container-end;
+        grid-column: control-button-container-start/control-button-container-end;
+    }
+}

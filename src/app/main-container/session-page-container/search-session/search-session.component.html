@@ -1,0 +1,83 @@
+<div class="session-container">
+    <div class="title">Calendario</div>
+
+    <div class="course-form">
+        <div class="form-title">Dati corso</div>
+        <div class="form" [formGroup] = "courseFilter">
+            <div [ngStyle]="{'margin-right':'3rem'}" class="app-select-bar" [options]="['Corso']" formControlName="corso"></div>
+            <div class="app-select-bar" [options]="['CUP']" formControlName="sessione"></div>
+            <input [ngStyle]="{'transform':'translateX(3rem)'}" class="search-bar classe-associata" type="text" placeholder="Classe associata" disabled="true">
+            <input style="visibility: hidden;" class="search-bar" type="text">
+        </div>
+    </div>
+
+    <div class="activity-form">
+        <div class="form-title">Dati attività</div>
+        <div class="form" [formGroup] = "activityFilter">
+            <input class="search-bar" type="text" placeholder="Attività" formControlName="attivita">
+            <app-datepicker class="date" [placeholder]="'Da'" formControlName="dataDa"></app-datepicker>
+            <app-datepicker class="date" [placeholder]="'A'" formControlName="dataA"></app-datepicker>
+            <div class="checkbox-wrapper">
+                <app-checkbox-v2 class="checkbox" [label]="'FAD'" formControlName="fad"></app-checkbox-v2>
+                <app-checkbox-v2 class="checkbox" [label]="'DAD'" formControlName="dad"></app-checkbox-v2>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-button-container">
+        <app-reset-filter-button [onClick]="resetFilter" [label]="'Azzera filtri'" class="reset-button-container"></app-reset-filter-button>
+        <app-search-button [onClick]="submitForms" [label]="'Cerca'" class="search-button-container"></app-search-button>
+    </div>
+
+
+    <div class="app-table-v2 table" 
+         [@openClose] = "hideTable ? 'close' : 'open'"
+         [columnsTemplate]="['corso','1fr','modulo','1fr','tipo','1fr','data','1fr','ora-inizio','1fr','ora-fine','1fr','durata','1fr','pausa','1fr','docente','1fr']" 
+         [modelTableMapper]="sessionTableMapper"
+         [rowType]="rowType"> 
+    </div>
+
+    <app-pagination [@openClose] = "hidePagination ? 'close' : 'open'" class="pagination"  [pageSize]="pageSize" [pageSizeOptions]="[3,5,10]" (onPageChange)="handlePaginationChange($event)">
+    </app-pagination>
+
+    <div #opButtons [@openClose] = "hideOperationButton? 'close' : 'open'" id="buttons" class="container">
+        <!-- <div class="switch" [ngStyle]="{'display':'flex', 'align-items':'center'}">
+            <app-switch-button class="switch-button"></app-switch-button>
+            <p [ngStyle]="{'margin-left':'8px'}">Aggiungi un'attività alla sessione</p>
+        </div>
+
+        
+        <div [@openClose] = "switch?.isOff ? 'close' : 'open'" class="add-activity-modal">
+          
+            <div class="form-title">Dati attivita</div>
+
+            <form class="time-section">
+                <app-datepicker class="date" [placeholder]="'Data'" formControlName="dataNuovaAttivita"></app-datepicker>
+            
+                <div class="oraInizio">
+                    <label for="oraInizioAttivita">Ora inizio</label>
+                    <input type="time" placeholder="Ora inizio" id="oraInizioAttivita">
+                </div>
+                
+                <div class="oraFine">
+                    <label for="oraFineAttivita">Ora fine</label>
+                    <input type="time" placeholder="Ora fine" id="oraFineAttivita">
+                </div>
+            </form>
+                
+            <form class="pausa-section">
+                <div>
+                    <label for="pausaAttivita">Ora pausa</label>
+                    <input type="time" id="pausaAttivita">
+                </div>
+                <app-checkbox-v2 class="checkbox" [label]="'PAUSA'" formControlName="fad"></app-checkbox-v2>
+            </form>
+
+            <form class="activity-section">
+                <input class="search-bar" type="text" placeholder="Docente">
+                <div class="app-select-bar" [options]="['Modulo']"></div>
+            </form>
+           
+        </div>  -->
+    </div>
+</div>

@@ -1,0 +1,23 @@
+.course-form, .activity-form{
+    .form input.search-bar{
+        color: $black;
+        font-family: Mulish;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 17px; /* 121.429% */
+        letter-spacing: 0.14px;
+    }
+}
+
+.add-activity-modal form{
+    input.search-bar{
+        color: $black;
+        font-family: Mulish;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 17px; /* 121.429% */
+        letter-spacing: 0.14px;
+    }
+}

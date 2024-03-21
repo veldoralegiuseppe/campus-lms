@@ -1,0 +1,44 @@
+.header{
+    background: transparent;
+    border-bottom: 1px solid $dark-blue !important;
+}
+
+.body{
+    background-color: #F7FAFD;
+    border-bottom: 1px solid #E6E6E6;
+}
+
+.loading{
+    background: linear-gradient(to right, #eee 10%, #ddd 40%, #eee 50%);
+    background-size: 500px 100px;
+    animation-name: moving-gradient;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+.loading-bar{
+    background-color: #d4e7f4;
+    border-radius: 8px;
+
+    .wrapper{
+        padding-bottom: 0.5px;
+        animation-name: slide-in;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        animation-direction: alternate;
+    }
+    .load-pointer{
+        background-color: $dark-blue;
+        border-radius: 8px;
+        animation-name: slide-out;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function:ease-in-out;
+        animation-fill-mode: forwards;
+        animation-direction: alternate;
+    }
+}

@@ -1,0 +1,22 @@
+.activity-container ::ng-deep.table{
+    border-radius: 8px;
+    border: 1px solid #E6E6E6;
+   
+    .header{
+        background: #FFF1EB;
+       
+        &.link{
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 4px;
+        }
+        &.tipo{
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 4px;
+        }
+    }
+   
+    .body,.header{
+        border-bottom: 1px solid #E6E6E6;
+        height: 5rem;
+    }
+}

@@ -1,0 +1,11 @@
+// GLOBAL MIXINS
+@import "../../../scss/abstract/mixins";
+
+// GLOBAL VARIABLES
+@import "../../../scss/abstract/variables";
+
+// COMPONENT
+@import "./scss/component/side-nav";
+
+// LAYOUT
+@import "./scss/layout/side-nav";

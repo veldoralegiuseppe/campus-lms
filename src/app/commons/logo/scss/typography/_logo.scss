@@ -1,0 +1,26 @@
+.logo{
+    font-family: 'Open Sans';
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    color: $dark-blue;
+    @include respond(phone){ font-size: 3rem; }
+
+    .logo__P{
+        font-size: 1rem;
+        line-height: 1.2rem;
+        color: $red;
+        @include respond(phone){ 
+            font-size: 3rem; 
+            line-height: 3rem;
+        }
+    }
+    .logo__UNTO{
+        @include respond(phone){ 
+            font-weight: 300;
+        }
+    }
+    .logo__FORM{ font-weight: 800; }
+  }

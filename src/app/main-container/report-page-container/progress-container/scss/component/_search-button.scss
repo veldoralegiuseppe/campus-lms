@@ -1,0 +1,8 @@
+.control-button-container .search-button-container::ng-deep{
+    &.active{
+        background-color: $dark-blue;
+        svg{ fill: $white; }
+        &:hover{ background-color: $search-hover-color; }
+        &:active{ background-color: $search-active-color;}
+    }
+}

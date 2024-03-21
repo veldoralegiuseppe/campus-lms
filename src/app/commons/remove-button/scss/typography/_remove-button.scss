@@ -1,0 +1,15 @@
+.remove-button-container{
+
+    font-family: Mulish;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 17px; /* 121.429% */
+    letter-spacing: 0.14px;
+
+    &.disable{
+       p{
+        color: $font-color-disable
+       }
+    }
+}

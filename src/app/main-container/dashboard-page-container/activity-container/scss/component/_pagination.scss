@@ -1,0 +1,28 @@
+.pagination::ng-deep.pagination-container{
+
+    & div.page-size-container ::ng-deep.items{
+        border: 1px solid $rosso !important;
+
+        #select{
+            background-color: $rosa;
+            border-radius: 4px;
+            
+            svg{ fill: $rosso !important; }
+            ul{ background-color: $rosa !important;}
+        }
+    }
+
+    & div.page-numbers-container ::ng-deep{
+        .arrow-sx,.arrow-dx{
+            transition: background-color .3s ease-out;
+            &.enable{
+                svg{fill: $rosso}
+                background-color: $rosa; 
+            }
+            &.disable{
+                background-color: #EDEDED; 
+            }
+        }
+    }
+   
+}

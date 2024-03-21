@@ -1,0 +1,21 @@
+.pagination-container div.page-size-container ::ng-deep.items{
+    border-radius: 4px;
+    border: 1px solid grey;
+
+    #select{
+        cursor: pointer;
+
+        svg{ fill: black; }
+
+        ul{
+            list-style: none;
+            border-radius: 4px;
+            background-color: white;
+           
+            li {
+                padding: 6px 0 6px 5px;
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+// GLOBAL
+@import "../../../../../scss/abstract/variables";
+
+// ABSTRACT
+@import "./scss/abstract/mixins";
+@import "./scss/abstract/variables";
+
+// COMPONENT
+@import "./scss/component/session-table-row";
+
+// LAYOUT
+@import "./scss/layout/session-table-row";

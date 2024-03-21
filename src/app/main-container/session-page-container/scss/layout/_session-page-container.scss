@@ -1,0 +1,25 @@
+.session-page-container{
+    display: grid;
+    grid-template-rows: [help-container-start] 1fr [help-container-end add-session-container-start] 1fr [add-session-container-end search-session-container-start] auto [search-session-container-end];
+    grid-template-columns: [help-container-start add-session-container-start search-session-container-start] 1fr [help-container-end add-session-container-end search-session-container-end];
+    padding: $padding;
+    row-gap: $page-row-gap;
+    column-gap: $page-column-gap;
+
+    .help-container{
+        max-height: 20rem;
+        max-width: 62rem;
+        grid-row: help-container-start/help-container-end;
+        grid-column: help-container-start/help-container-end;
+    }
+    
+    .add-session-container{
+        grid-row: add-session-container-start/add-session-container-end;
+        grid-column: add-session-container-start/add-session-container-end;
+    }
+
+    .search-session-container{
+        grid-row: search-session-container-start/search-session-container-end;
+        grid-column: search-session-container-start/search-session-container-end;
+    }
+}

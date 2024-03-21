@@ -1,0 +1,38 @@
+<ng-container>
+
+    <!-- Header -->
+    <ng-template [ngIf]="index === 0 && !loading">
+        <div [ngClass]="['corso','header']">{{session?.corso}}</div>
+        <div [ngClass]="['modulo','header']">{{session?.modulo}}</div>
+        <div [ngClass]="['tipo','header']">{{session?.tipo}}</div>
+        <div [ngClass]="['data', 'header']">{{session?.data}}</div>
+        <div [ngClass]="['ora-inizio','header']">{{session?.oraInizio}}</div>
+        <div [ngClass]="['ora-fine', 'header']">{{session?.oraFine}}</div>
+        <div [ngClass]="['durata', 'header']">{{session?.durata}}</div>
+        <div [ngClass]="['pausa', 'header']">{{session?.pausa}}</div>
+        <div [ngClass]="['docente', 'header']">{{session?.docente}}</div>
+    </ng-template>
+
+    <!-- Animazione di caricamento -->
+    <ng-template [ngIf]="index === 0 && loading">
+        <div [ngClass]="['loading-bar']">
+            <div class="wrapper">
+                <div class="load-pointer"></div>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template [ngIf]="index > 0 && (loading === undefined || !loading)">
+        <div [ngClass]="['corso','body']">{{session?.corso}}</div>
+        <div [ngClass]="['modulo','body']">{{session?.modulo}}</div>
+        <div [ngClass]="['tipo','body']">{{session?.tipo}}</div>
+        <div [ngClass]="['data', 'body']">{{session?.data}}</div>
+        <div [ngClass]="['ora-inizio','body']">{{session?.oraInizio}}</div>
+        <div [ngClass]="['ora-fine', 'body']">{{session?.oraFine}}</div>
+        <div [ngClass]="['durata', 'body']">{{session?.durata}}</div>
+        <div [ngClass]="['pausa', 'body']">{{session?.pausa}}</div>
+        <div [ngClass]="['docente', 'body']">{{session?.docente}}</div>
+    </ng-template>
+
+</ng-container>

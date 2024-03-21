@@ -1,0 +1,14 @@
+<div class="search-dropdown-container">
+    <div (click)="toggle()" id="select">
+        <p>{{categoriaSelezionata}}</p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none">
+            <path d="M2.58312 0L0.5 2.07232L6.055 7.59852L11.61 2.07232L9.52687 0L6.055 3.45387L2.58312 0Z" fill="#C45A01"/>
+        </svg>
+        <ul [@openClose] = "isOpen ? 'open' : 'closed'">
+            <ng-container *ngFor="let item of list">
+                <li (click)="onCategoryClick(item.value)">{{item.value}}</li>
+            </ng-container>
+        </ul>
+    </div>
+    <input [(ngModel)] = "like" (ngModelChange)="onInsertText()" type="text" placeholder={{inputPlaceholder}}>
+</div>

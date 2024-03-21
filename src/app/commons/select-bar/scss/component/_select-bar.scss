@@ -1,0 +1,13 @@
+.select-bar-container{
+    border-radius: 4px;
+
+    #select{
+        cursor: pointer;
+        
+        ul{
+            list-style: none;
+            border-radius: 4px;
+            li { cursor: pointer;}
+        }
+    }
+}
