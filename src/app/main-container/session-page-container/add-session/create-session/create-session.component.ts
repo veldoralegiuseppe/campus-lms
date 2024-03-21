@@ -129,8 +129,8 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
   isLinear = true;
 
   foods: Food[] = [
-    {value: 'id-corso-osa', viewValue: 'OSA'},
-    {value: 'id-corso-oss', viewValue: 'OSS'},
+    {value: 'id-corso-1', viewValue: 'Corso 1'},
+    {value: 'id-corso-2', viewValue: 'Corso 2'},
   ];
 
   stepperOrientation!: Observable<StepperOrientation>;
