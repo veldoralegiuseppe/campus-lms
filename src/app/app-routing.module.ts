@@ -8,16 +8,19 @@ import { CreateSessionComponent } from './main-container/session-page-container/
 import { CreateStudentComponent } from './main-container/users-page-container/add-user-container/create-student/create-student.component';
 import { CreateAdminComponent } from './main-container/users-page-container/add-user-container/create-admin/create-admin.component';
 import { CreateOfficeComponent } from './main-container/users-page-container/add-user-container/create-office/create-office.component';
+import { LoginComponent } from './main-container/login/login.component';
+import { AuthService } from './commons/authentication/auth.service';
 
 const routes: Routes = [
-  {path: '', component: DashboardPageContainerComponent},
-  {path: 'users', component: UsersPageContainerComponent},
-  {path: 'report', component: ReportPageContainerComponent},
-  {path: 'session', component: SessionPageContainerComponent},
-  {path: 'session/create', component: CreateSessionComponent},
-  {path: 'users/create/student', component: CreateStudentComponent},
-  {path: 'users/create/admin', component: CreateAdminComponent},
-  {path: 'users/create/office', component: CreateOfficeComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'dashboard', component: DashboardPageContainerComponent, canActivate: [AuthService]},
+  {path: 'users', component: UsersPageContainerComponent, canActivate: [AuthService]},
+  {path: 'report', component: ReportPageContainerComponent, canActivate: [AuthService]},
+  {path: 'session', component: SessionPageContainerComponent, canActivate: [AuthService]},
+  {path: 'session/create', component: CreateSessionComponent, canActivate: [AuthService]},
+  {path: 'users/create/student', component: CreateStudentComponent, canActivate: [AuthService]},
+  {path: 'users/create/admin', component: CreateAdminComponent, canActivate: [AuthService]},
+  {path: 'users/create/office', component: CreateOfficeComponent, canActivate: [AuthService]},
 ];
 
 @NgModule({

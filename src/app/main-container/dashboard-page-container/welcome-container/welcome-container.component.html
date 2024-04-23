@@ -1,6 +1,14 @@
 <div class="welcome-container">
-    <div class="text-area">
-        <h1>Ciao Puntoform!</h1>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Studente'}}!</h1> 
+        <p>Da qui puoi visualizzare i corsi che stai frequentando e le attività pianificate per oggi!</p>
+    </div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Docente'}}!</h1>
+        <p>Da qui puoi visualizzare i corsi in sessione e le attività pianificate per oggi!</p>
+    </div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Admin'}}!</h1>
         <p>Da qui puoi visualizzare i corsi in sessione e le attività pianificate per oggi!</p>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 182" fill="none">

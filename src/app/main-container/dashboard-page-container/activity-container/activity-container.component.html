@@ -1,5 +1,10 @@
 <div class="activity-container">
-    <div class="title-container">Attività programmate</div>
+    <!-- TITOLO CONDIZIONATO-->
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="title-container">Le mie attività</div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="title-container">Attività pianificate</div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="title-container">Attività pianificate</div>
+    
+    
     <div class="search-container" [formGroup]="activityFilter">
         <app-search-dropdown-bar [list]="dropdownList" formControlName="like"></app-search-dropdown-bar>
         <div class="checkbox-container">

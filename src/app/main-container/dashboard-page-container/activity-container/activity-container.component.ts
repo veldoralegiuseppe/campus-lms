@@ -8,6 +8,8 @@ import { Activity } from './activity-table-row/Activity';
 import { ActivityTableRowComponent } from './activity-table-row/activity-table-row.component';
 import { ActivityService } from './activity.service';
 import { FormControl, FormGroup } from '@angular/forms';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
+import { AuthService } from 'src/app/commons/authentication/auth.service';
 
 @Component({
   selector: '.app-activity-container',
@@ -27,7 +29,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ActivityContainerComponent implements OnInit, AfterViewInit{
+export class ActivityContainerComponent extends AuthenticationComponent implements OnInit, AfterViewInit{
 
 
   /**
@@ -91,7 +93,9 @@ export class ActivityContainerComponent implements OnInit, AfterViewInit{
    activityFilter!: FormGroup
 
    
-  constructor(private activityService : ActivityService){}
+  constructor(private activityService : ActivityService){
+    super();
+  }
   
   ngOnInit(): void {
      // Inizializzazione form

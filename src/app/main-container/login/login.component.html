@@ -1,0 +1,30 @@
+<div  style="width: 100%; height: 100%;" class="container">
+        <form style="height: 100%; width: 100%; display: flex; justify-content: center;" class="example-form" (ngSubmit)="onSubmit()">
+            <div style="margin: auto; width: fit-content; display: flex; gap: 2rem; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="text-align: center; font-size: 2rem; font-family: Open Sans;">Login</div>
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput [formControl]="emailFormControl" [errorStateMatcher]="matcher"
+                        placeholder="Ex. pat@example.com">
+                    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {
+                    <mat-error>Inserisci un indirizzo email valido</mat-error>
+                    }
+                    @if (emailFormControl.hasError('required')) {
+                    <mat-error>Email <strong>richiesta</strong></mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput [formControl]="passwordFormControl" [errorStateMatcher]="matcher">
+                    @if (passwordFormControl.hasError('required')) {
+                    <mat-error>Password <strong>richiesta</strong></mat-error>
+                    }
+                </mat-form-field>
+
+                <button style="margin-top: 10px;" type="submit" mat-flat-button color="primary">Accedi</button>
+            </div>
+        </form>
+</div>
+
+

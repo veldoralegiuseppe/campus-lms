@@ -6,6 +6,7 @@ import { CourseRowTableComponent } from './course-row-table/course-row-table.com
 import { CourseService } from './course.service';
 import { TableV2Component } from 'src/app/commons/table-v2/table-v2.component';
 import { FormControl, FormGroup } from '@angular/forms';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 
 @Component({
   selector: '.app-course-container',
@@ -25,7 +26,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CourseContainerComponent implements OnInit, AfterViewInit{
+export class CourseContainerComponent extends AuthenticationComponent implements OnInit, AfterViewInit{
 
   /**
    * Model 
@@ -67,7 +68,9 @@ export class CourseContainerComponent implements OnInit, AfterViewInit{
     */
    courseFilter!: FormGroup
 
-  constructor(private courseService : CourseService){}
+  constructor(private courseService : CourseService){
+    super();
+  }
 
   ngAfterViewInit(): void {
     this.getCoursesPaginated({page: this.pages, size: this.pageSize})
