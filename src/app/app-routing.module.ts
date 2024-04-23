@@ -14,6 +14,7 @@ import { AuthService } from './commons/authentication/auth.service';
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardPageContainerComponent, canActivate: [AuthService]},
+  {path: '', component: DashboardPageContainerComponent, canActivate: [AuthService]},
   {path: 'users', component: UsersPageContainerComponent, canActivate: [AuthService]},
   {path: 'report', component: ReportPageContainerComponent, canActivate: [AuthService]},
   {path: 'session', component: SessionPageContainerComponent, canActivate: [AuthService]},
