@@ -27,8 +27,8 @@ export class LoginComponent {
   onSubmit(): void {
     console.log('Submit!')
     if (this.emailFormControl.valid && this.passwordFormControl.valid) {
-      const username = this.emailFormControl.value;
-      const password = this.passwordFormControl.value;
+      const email = this.emailFormControl.value!;
+      const password = this.passwordFormControl.value!;
 
       //  // Call the authentication service's login method
       //  if (this.authService.login(username, password)) {
@@ -39,7 +39,7 @@ export class LoginComponent {
       // }
 
       // Call the authentication service's login method
-      this.auth.fakeLogin()
+      this.auth.fakeLogin(email, password)
       
       // Navigate to the dashboard
       this.router.navigate(['/dashboard']);

@@ -30,9 +30,28 @@ export class AuthService implements CanActivate {
 
   }
 
-  fakeLogin(){
-    this.stateItem.next({accessToken: "", payload:{email: "", id:"", role: UserRole.STUDENTE,}})
-  }
+  fakeLogin(email: String, password: String){
+    console.log(`Password inserita: ${password}`)
+    switch (password){
+      case "studente":{
+        this.stateItem.next({accessToken: "", payload:{email: email, id:"", role: UserRole.STUDENTE, nome: "Giuseppe", cognome: "Veldorale", cf: "VLDGPP97E16F138C"}})
+        break
+      }
+      case "docente":{
+        this.stateItem.next({accessToken: "", payload:{email: email, id:"", role: UserRole.DOCENTE, nome: "Giuseppe", cognome: "Veldorale", cf: "VLDGPP97E16F138C"}})
+        break
+      }
+      case "admin": {
+        this.stateItem.next({accessToken: "", payload:{email: email, id:"", role: UserRole.ADMIN, nome: "Giuseppe", cognome: "Veldorale", cf: "VLDGPP97E16F138C"}})
+        break
+      }
+      default: {
+        this.stateItem.next({accessToken: "", payload:{email: email, id:"", role: UserRole.STUDENTE, nome: "Giuseppe", cognome: "Veldorale", cf: "VLDGPP97E16F138C"}})
+        break
+      }
+    }
+    console.log(this.stateItem)
+ }
 
   logout(){
     this.stateItem.next(null)
@@ -55,6 +74,9 @@ export interface IUser {
   id: String;
   role: UserRole;
   username?: String ;
+  nome: String;
+  cognome: String;
+  cf: String;
 }
 
 // auth model

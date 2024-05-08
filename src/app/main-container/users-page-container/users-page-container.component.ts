@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 declare function onRootChange(icon : string) : any;
 
 @Component({
@@ -6,7 +7,7 @@ declare function onRootChange(icon : string) : any;
   templateUrl: './users-page-container.component.html',
   styleUrls: ['./users-page-container.component.scss']
 })
-export class UsersPageContainerComponent implements OnInit {
+export class UsersPageContainerComponent extends AuthenticationComponent implements OnInit {
   ngOnInit(): void {
     onRootChange('utenti')
   }

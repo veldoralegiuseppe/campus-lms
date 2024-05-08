@@ -4,7 +4,7 @@ import { PaginationComponent } from 'src/app/commons/pagination/pagination.compo
 import { DropdownOption } from 'src/app/commons/search-dropdown-bar/dropdown-option';
 import { Row } from 'src/app/commons/table-v2/Row';
 import { TableV2Component } from 'src/app/commons/table-v2/table-v2.component';
-import { Activity } from './activity-table-row/Activity';
+import { Activity, StudenteActivity } from './activity-table-row/Activity';
 import { ActivityTableRowComponent } from './activity-table-row/activity-table-row.component';
 import { ActivityService } from './activity.service';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -80,17 +80,22 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
   /**
    * Dropdown
    */
-  dropdownList: DropdownOption[] = [
-    new DropdownOption('Tutte le categorie'),
-    new DropdownOption('Corsi'),
-    new DropdownOption('Classi'),
-    new DropdownOption('Sessioni'),
-  ];
+  dropdownList: DropdownOption[] = [];
 
    /**
    * Activity form
    */
    activityFilter!: FormGroup
+
+   /**
+    * Current user role
+    */
+   role: String = ""
+
+   /**
+    * Table header
+    */
+   private header : Activity = {}
 
    
   constructor(private activityService : ActivityService){
@@ -98,9 +103,29 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
   }
   
   ngOnInit(): void {
-     // Inizializzazione form
-     this.activityFilter = new FormGroup({
-      'like': new FormControl({option: 'Tutte le categorie', like: ""}),
+    // Recupero il ruolo dell'utente corrente
+    this.role = this.authInfo!.payload!.role.toString()
+
+    // Inizializzazione elementi condizionali
+    if(this.role == "STUDENTE"){
+      this.dropdownList = [
+        new DropdownOption('Corso'),
+      ]
+      this.header = {studenteActivity: {tipo: 'Tipo', corso: 'Corso', data: 'Data', dettaglio: 'Dettaglio'}}
+    }
+    else if(this.role == "DOCENTE"){
+      this.dropdownList = [
+        new DropdownOption('Corso'),
+        new DropdownOption('Sessione'),
+      ]
+      this.header = {docenteActivity: {sessione: 'Sessione', corso: 'Corso', data: 'Data', correzione: 'Correzione'}}
+    }
+    else if(this.role == "ADMIN"){
+    }
+
+    // Inizializzazione form
+    this.activityFilter = new FormGroup({
+      'like': new FormControl({option: this.dropdownList.at(0)?.value, like: ""}),
       'fad': new FormControl(false),
       'dad': new FormControl(false)
     })
@@ -121,7 +146,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     if(this.activities.length <= 0) return {loading: true}
     
     if(index === 0)
-     return {activity: {tipo: 'Tipo', corso: 'Corso', ora: 'Ora', classe: 'Classe', sessione: 'Sessione', link: 'Link'} as Activity, loading: false}
+     return {activity: this.header, loading: false}
     else 
       return {activity: this.activities.at(index-1), loading: false, isLastRow: index == this.activities.length}
   }
@@ -185,4 +210,15 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
   handlePaginationChange(pagination: { page: number; size: number; }) {
     this.getActivitiesPaginated(pagination)
   }
+
+  /**
+   * Converta la stringa in camelcase in testo con spazi 
+   * @param s 
+   * @returns 
+   */
+  camelCaseToWords(s: string) {
+    const result = s.replace(/([A-Z])/g, ' $1');
+    return result.charAt(0).toUpperCase() + result.slice(1);
+  }
+  
 }

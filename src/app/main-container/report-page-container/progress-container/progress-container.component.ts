@@ -8,6 +8,7 @@ import { PaginationComponent } from 'src/app/commons/pagination/pagination.compo
 import { ResetFilterButtonComponent } from 'src/app/commons/reset-filter-button/reset-filter-button.component';
 import { TableV2Component } from 'src/app/commons/table-v2/table-v2.component';
 import { ProgressService } from './progress.service';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 
 @Component({
   selector: '.app-progress-container',
@@ -27,7 +28,7 @@ import { ProgressService } from './progress.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProgressContainerComponent implements OnInit, AfterViewInit {
+export class ProgressContainerComponent extends AuthenticationComponent implements OnInit, AfterViewInit {
 
   /**
    * Model
@@ -107,14 +108,16 @@ export class ProgressContainerComponent implements OnInit, AfterViewInit {
   private tableMarginTop: string = '8rem'
   private loadingBarMarginTop: string = '6rem'
 
-  constructor(private progressService: ProgressService){}
+  constructor(private progressService: ProgressService){
+    super()
+  }
   
   ngOnInit(): void {
     // Inizializzazione form
     this.userFilter = new FormGroup({
-      'nome': new FormControl(""),
-      'cognome': new FormControl(""),
-      'codiceFiscale': new FormControl("")
+      'nome': this.authInfo?.payload?.nome ? new FormControl(this.authInfo?.payload?.nome) : new FormControl(""),
+      'cognome': this.authInfo?.payload?.cognome ? new FormControl(this.authInfo?.payload?.cognome) : new FormControl(""),
+      'codiceFiscale': this.authInfo?.payload?.cf ? new FormControl(this.authInfo?.payload?.cf) : new FormControl(""),
     })
 
     this.courseFilter = new FormGroup({

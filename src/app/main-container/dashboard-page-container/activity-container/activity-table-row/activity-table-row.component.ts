@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Activity } from './Activity';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 
 @Component({
   selector: 'app-activity-table-row',
@@ -7,7 +8,7 @@ import { Activity } from './Activity';
   styleUrls: ['./activity-table-row.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ActivityTableRowComponent {
+export class ActivityTableRowComponent extends AuthenticationComponent {
 
   /**
    * Indice della riga

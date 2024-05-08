@@ -1,7 +1,15 @@
 <div class="help-container">
-    <div class="text-area">
-        <h1>Puntoform</h1>
-        <p>Da qui puoi ricercare gli utenti iscritti alla piattaforma o aggiungerne di nuovi!</p>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Studente'}}!</h1> 
+        <p>Da qui puoi trovare informazioni sui professori e gli amministratori presenti in piattaforma!</p>
+    </div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Docente'}}!</h1>
+        <p>Da qui puoi trovare informazioni sugli studenti, professori e amministratori presenti in piattaforma!</p>
+    </div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Admin'}}!</h1>
+        <p>Da qui puoi ricercare gli utenti presenti in piattaforma o aggiungerne di nuovi!</p>
     </div>
     <svg viewBox="0 0 351 287" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask id="mask0_65_76" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="17" y="23" width="304" height="232">

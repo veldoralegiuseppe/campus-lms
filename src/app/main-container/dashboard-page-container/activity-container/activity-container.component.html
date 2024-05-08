@@ -14,7 +14,7 @@
     </div>
     <div class="app-table-v2 table-container"
          [@openClose] = "hideTable ? 'close' : 'open'"
-         [columnsTemplate]="['Tipo','1fr','Corso','1fr','Ora','1fr','Classe','1fr','Sessione','1fr','Link','1fr']"
+         [columnsTemplate]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? ['Tipo','1fr','Corso','1fr','Data','1fr','Dettaglio','1fr'] : ['Corso','1fr','Sessione', '1fr', 'Data','1fr','Correzione','1fr']"
          [rowType]="rowType"
          [modelTableMapper]="activityTableMapper">
     </div>

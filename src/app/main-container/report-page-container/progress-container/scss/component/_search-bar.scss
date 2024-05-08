@@ -5,8 +5,12 @@
         border: 1px solid #e6e6e69f;
         padding-left: 1rem;
 
-        &.classe-associata{
+        &.classe-associata, &.disabled{
             background-color: #EDEDED;
+        }
+
+        &.disabled{
+            color: #8A8A8A;
         }
     }
 }

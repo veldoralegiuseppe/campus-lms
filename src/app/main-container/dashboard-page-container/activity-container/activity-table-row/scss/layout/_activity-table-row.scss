@@ -26,6 +26,14 @@
     grid-column: link-start/link-end;
 }
 
+.data{
+    grid-column: data-start/data-end;
+}
+
+.correzione{
+    grid-column: correzione-start/correzione-end;
+}
+
 .loading-bar{
     height: 6px;
     display: flex;

@@ -1,15 +1,15 @@
 <div class="welcome-container">
     <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="text-area">
         <h1>Ciao {{authInfo?.payload?.username || 'Studente'}}!</h1> 
-        <p>Da qui puoi visualizzare i corsi che stai frequentando e le attività pianificate per oggi!</p>
+        <p>Da qui puoi visualizzare i corsi che stai frequentando, le tue attività e le tue sessioni d'esame!</p>
     </div>
     <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="text-area">
         <h1>Ciao {{authInfo?.payload?.username || 'Docente'}}!</h1>
-        <p>Da qui puoi visualizzare i corsi in sessione e le attività pianificate per oggi!</p>
+        <p>Da qui puoi visualizzare i tuoi corsi e le sessioni d'esame programmate!</p>
     </div>
     <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="text-area">
         <h1>Ciao {{authInfo?.payload?.username || 'Admin'}}!</h1>
-        <p>Da qui puoi visualizzare i corsi in sessione e le attività pianificate per oggi!</p>
+        <p>Da qui puoi visualizzare i corsi presenti in piattaforma e crearne di nuovi!</p>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 182" fill="none">
         <path d="M153.051 43.4122C153.051 43.4122 97.0781 -17.9267 49.3405 5.21917C1.60283 28.365 -5.46164 74.6568 5.14124 93.7533C15.7441 112.85 29.306 134.259 73.4929 135.421C117.68 136.583 175.428 146.419 188.99 104.751C202.552 63.0838 166.601 50.9358 153.051 43.4122Z" fill="#FFF1EB"/>

@@ -1,7 +1,15 @@
 <div class="help-container">
-    <div class="text-area">
-        <h1>Puntoform</h1>
-        <p>Da qui puoi generare il report giornaliero o utilizzare i filtri di ricerca per generare un report più specifico! </p>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="text-area">
+      <h1>Ciao {{authInfo?.payload?.username || 'Studente'}}!</h1> 
+      <p>Da qui puoi generare il report relativo al tuo andamento!</p>
+    </div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Docente'}}!</h1>
+        <p>Da qui puoi generare il report relativo ai tuoi corsi!</p>
+    </div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="text-area">
+        <h1>Ciao {{authInfo?.payload?.username || 'Admin'}}!</h1>
+        <p>Da qui puoi generare il report sui corsi in piattaforma!</p>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 187 180" fill="none">
         <path d="M27.3749 179.796L7.83003 108.396L9.78278 108.574L28.269 176.108L107.381 154.452L115.057 155.794L27.3749 179.796ZM4.84796 97.5019L0 79.7917L1.77123 79.3067L5.41051 92.6021L4.84796 97.5019Z" fill="#A5B1DB"/>

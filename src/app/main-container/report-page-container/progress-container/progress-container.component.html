@@ -4,9 +4,9 @@
     <div class="user-form">
         <div class="form-title">Dati studente</div>
         <div class="form" [formGroup] = "userFilter">
-            <input class="search-bar" type="text" placeholder="Nome" formControlName="nome">
-            <input class="search-bar" type="text" placeholder="Cognome" formControlName="cognome">
-            <input class="search-bar" type="text" placeholder="Codice fiscale" formControlName="codiceFiscale">
+            <input [ngClass]="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'disabled' : ''" [readonly]="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="search-bar" type="text" placeholder="Nome" formControlName="nome">
+            <input [ngClass]="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'disabled' : ''" [readonly]="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="search-bar" type="text" placeholder="Cognome" formControlName="cognome">
+            <input [ngClass]="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'disabled' : ''" [readonly]="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="search-bar" type="text" placeholder="Codice fiscale" formControlName="codiceFiscale">
             <input style="visibility: hidden;" class="search-bar" type="text">
         </div>
     </div>
@@ -16,7 +16,7 @@
         <div class="form" [formGroup] = "courseFilter">
             <div [ngStyle]="{'margin-right':'3rem'}" class="app-select-bar" [options]="['Corso']" formControlName="corso"></div>
             <div class="app-select-bar" [options]="['CUP']" formControlName="sessione"></div>
-            <input [ngStyle]="{'transform':'translateX(3rem)'}" class="search-bar classe-associata" type="text" placeholder="Classe associata" disabled="true">
+            <input [ngStyle]="{'transform':'translateX(3rem)'}" class="search-bar classe-associata disabled" type="text" placeholder="Classe associata" disabled="true">
             <input style="visibility: hidden;" class="search-bar" type="text">
         </div>
     </div>
