@@ -25,25 +25,18 @@ export class LoginComponent {
   constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
 
   onSubmit(): void {
-    console.log('Submit!')
     if (this.emailFormControl.valid && this.passwordFormControl.valid) {
+      
       const email = this.emailFormControl.value!;
       const password = this.passwordFormControl.value!;
 
-      //  // Call the authentication service's login method
-      //  if (this.authService.login(username, password)) {
-      //   // Navigate to the ProductListComponent upon successful login
-      //   this.router.navigate(['/product-list']);
-      // } else {
-      //   // Handle authentication error (show error message, etc.)
-      // }
-
-      // Call the authentication service's login method
-      this.auth.fakeLogin(email, password)
+      this.auth.login(email, password).subscribe(value => {
+        console.log(value)
+        if(value) this.router.navigate(['/dashboard'])
+      })
+     
+      //this.auth.fakeLogin(email, password)
       
-      // Navigate to the dashboard
-      this.router.navigate(['/dashboard']);
-
     }
   }
 

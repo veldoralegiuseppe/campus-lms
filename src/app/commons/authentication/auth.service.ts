@@ -1,29 +1,44 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { BehaviorSubject, Observable, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, map, catchError} from 'rxjs';
+import { environment } from 'src/environments/environment';
+import * as jwt_decode from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService implements CanActivate {
-  private _loginUrl = '/auth/login';
+  private _path = '/api/login'
+  private _loginUrl = `${environment.http_server_host}${this._path}`;
   private stateItem: BehaviorSubject<IAuthInfo | null> = new BehaviorSubject<IAuthInfo | null>(null);
   stateItem$: Observable<IAuthInfo | null> = this.stateItem.asObservable();
 
   constructor(private _http: HttpClient, private router: Router) {}
  
-  Login(username: string, password: string): Observable<any> {
-    return this._http.post(this._loginUrl, { username, password }).pipe(
+  login(username: string, password: string): Observable<any> {
+   
+    const credentials = {username: username, password: password} as CredentialsRequest
+    
+    return this._http.post(this._loginUrl, credentials).pipe(
       map((response) => {
-        // prepare the response to be handled, then return
-        // we'll tidy up later
-        const retUser: IAuthInfo = <IAuthInfo>(<any>response).data;
-        // save in localStorage
-        localStorage.setItem('user', JSON.stringify(retUser));
-        // also update state
-        this.stateItem.next(retUser);
-        return retUser;
+    
+        // recupero il token 
+        console.log(response)
+        const resp: XTokenResponse = <XTokenResponse>(response);
+        const token = resp.xToken;
+        const tokenInfo: TokenInfo = jwt_decode.jwtDecode(token.toString())
+        
+        // compongo IAuthInfo
+        const currentUser: IAuthInfo = {
+          accessToken: token,
+          expiresAt: tokenInfo.exp,
+          payload:{email: tokenInfo.sub, role: tokenInfo.ruolo, nome: tokenInfo.nome, cognome: tokenInfo.cognome, cf: tokenInfo.cf}
+        }
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        this.stateItem.next(currentUser);
+
+        return currentUser;
       })
     );
     
@@ -66,23 +81,37 @@ export class AuthService implements CanActivate {
     }
   }
 
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    return new Error('Something bad happened; please try again later.');
+  }
+
 }
 
 // user model
 export interface IUser {
   email: String;
-  id: String;
+  id?: String;
   role: UserRole;
-  username?: String ;
   nome: String;
   cognome: String;
+  username?: String;
   cf: String;
 }
 
 // auth model
 export interface IAuthInfo {
   payload?: IUser;
-  accessToken?: string;
+  accessToken: String;
   refreshToken?: string;
   expiresAt?: number
 }
@@ -93,3 +122,23 @@ export enum UserRole {
   DOCENTE = "DOCENTE",
   ADMIN = "ADMIN"
 }
+
+interface XTokenResponse{
+  xToken: String
+}
+
+interface CredentialsRequest{
+  username: String,
+  password: String
+}
+
+interface TokenInfo{
+  sub: String,
+  nome: String,
+  cognome: String,
+  ruolo: UserRole,
+  exp: number,
+  cf: String
+}
+
+

@@ -63,7 +63,15 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import { LoginComponent } from './main-container/login/login.component';
 
+import { Provider } from '@angular/core';
 
+// Injection token for the Http Interceptors multi-provider
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorInterceptor } from './commons/interceptors/error-interceptor';
+
+/** Provider for the Noop Interceptor. */
+export const errorInterceptorProvider: Provider =
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true };
 
 @NgModule({
   declarations: [
@@ -133,7 +141,9 @@ import { LoginComponent } from './main-container/login/login.component';
     MatButtonModule,
     MatInputModule,
   ],
-  providers: [],
+  providers: [
+    errorInterceptorProvider,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
