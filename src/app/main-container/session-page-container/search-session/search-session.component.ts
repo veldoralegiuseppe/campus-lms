@@ -9,6 +9,7 @@ import { Row } from 'src/app/commons/table-v2/Row';
 import { TableV2Component } from 'src/app/commons/table-v2/table-v2.component';
 import { SessionService } from './session.service';
 import { SwitchButtonComponent } from 'src/app/commons/switch-button/switch-button.component';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 
 @Component({
   selector: '.app-search-session',
@@ -28,7 +29,7 @@ import { SwitchButtonComponent } from 'src/app/commons/switch-button/switch-butt
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SearchSessionComponent implements OnInit, AfterViewInit {
+export class SearchSessionComponent extends AuthenticationComponent implements OnInit, AfterViewInit {
 
   /**
    * Model
@@ -105,7 +106,9 @@ export class SearchSessionComponent implements OnInit, AfterViewInit {
 
 
 
-  constructor(private sessionService: SessionService){}
+  constructor(private sessionService: SessionService){
+    super()
+  }
   
   ngOnInit(): void {
     // Inizializzazione form

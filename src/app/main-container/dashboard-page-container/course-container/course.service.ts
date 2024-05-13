@@ -8,10 +8,10 @@ export class CourseService{
 
  
   private courses : Course[] = [
-    {corso: "corso1", studenti:"1", classi: "1"} as Course,
-    {corso: "corso2", studenti:"2", classi: "2"} as Course,
-    {corso: "corso3", studenti:"3", classi: "3"} as Course,
-    {corso: "corso4", studenti:"4", classi: "4"} as Course,
+    {studenteCourse: {corso: "corso1", sessioni:"1", moduli: "1"}, docenteCourse: {corso: "corso1", sessioni:"1", studenti: "1" }, adminCourse: {corso: "corso1", sessioni:"1", studenti: "1" }},
+    {studenteCourse: {corso: "corso2", sessioni:"2", moduli: "2"}, docenteCourse: {corso: "corso2", sessioni:"2", studenti: "2" }, adminCourse: {corso: "corso2", sessioni:"2", studenti: "2" }},
+    {studenteCourse: {corso: "corso3", sessioni:"3", moduli: "3"}, docenteCourse: {corso: "corso2", sessioni:"3", studenti: "3" }, adminCourse: {corso: "corso3", sessioni:"3", studenti: "3" }},
+    {studenteCourse: {corso: "corso4", sessioni:"4", moduli: "4"}, docenteCourse: {corso: "corso2", sessioni:"4", studenti: "4" }, adminCourse: {corso: "corso4", sessioni:"4", studenti: "4" }},
   ]
     
   private coursesPaginated: Course[] = []

@@ -90,7 +90,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
    /**
     * Current user role
     */
-   role: String = ""
+   private role: String = ""
 
    /**
     * Table header
@@ -112,6 +112,11 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
         new DropdownOption('Corso'),
       ]
       this.header = {studenteActivity: {tipo: 'Tipo', corso: 'Corso', data: 'Data', dettaglio: 'Dettaglio'}}
+      this.activityFilter = new FormGroup({
+        'like': new FormControl({option: this.dropdownList.at(0)?.value, like: ""}),
+        'studio': new FormControl(false),
+        'sessioni': new FormControl(false)
+      })
     }
     else if(this.role == "DOCENTE"){
       this.dropdownList = [
@@ -119,18 +124,18 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
         new DropdownOption('Sessione'),
       ]
       this.header = {docenteActivity: {sessione: 'Sessione', corso: 'Corso', data: 'Data', correzione: 'Correzione'}}
+      this.activityFilter = new FormGroup({
+        'like': new FormControl({option: this.dropdownList.at(0)?.value, like: ""}),
+        'daCorreggere': new FormControl(false),
+        'corrette': new FormControl(false)
+      })
     }
     else if(this.role == "ADMIN"){
+      
     }
 
-    // Inizializzazione form
-    this.activityFilter = new FormGroup({
-      'like': new FormControl({option: this.dropdownList.at(0)?.value, like: ""}),
-      'fad': new FormControl(false),
-      'dad': new FormControl(false)
-    })
 
-    this.activityFilter.valueChanges.subscribe(value => console.log(value))
+    this.activityFilter?.valueChanges.subscribe(value => console.log(value))
   }
 
   ngAfterViewInit(): void {

@@ -1,5 +1,8 @@
 <div class="session-container">
-    <div class="title">Calendario</div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="title">Cerca sessioni</div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="title">Cerca sessioni</div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="title">Cerca sessioni</div>
+    
 
     <div class="course-form">
         <div class="form-title">Dati corso</div>

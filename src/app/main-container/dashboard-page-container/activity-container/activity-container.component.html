@@ -1,15 +1,15 @@
 <div class="activity-container">
     <!-- TITOLO CONDIZIONATO-->
     <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE'" class="title-container">Le mie attività</div>
-    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="title-container">Attività pianificate</div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="title-container">Sessioni pianificate</div>
     <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="title-container">Attività pianificate</div>
     
     
     <div class="search-container" [formGroup]="activityFilter">
         <app-search-dropdown-bar [list]="dropdownList" formControlName="like"></app-search-dropdown-bar>
         <div class="checkbox-container">
-            <app-checkbox-v2 class='dad' [label]="'DAD'" formControlName="dad"></app-checkbox-v2>
-            <app-checkbox-v2 [label]="'FAD'" formControlName="fad"></app-checkbox-v2>
+            <app-checkbox-v2 class='dad' [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'" formControlName="dad" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'"></app-checkbox-v2>
+            <app-checkbox-v2 [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONI' : 'CORRETTE'" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'"></app-checkbox-v2>
         </div>
     </div>
     <div class="app-table-v2 table-container"

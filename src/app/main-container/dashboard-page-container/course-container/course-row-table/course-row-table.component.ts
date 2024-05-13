@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { Row } from 'src/app/commons/table-v2/Row';
 import { Course } from '../Course';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 
 @Component({
   selector: 'app-course-row-table',
   templateUrl: './course-row-table.component.html',
   styleUrls: ['./course-row-table.component.scss']
 })
-export class CourseRowTableComponent implements Row{
+export class CourseRowTableComponent extends AuthenticationComponent implements Row{
 
   index!: number;
   loading: boolean = false

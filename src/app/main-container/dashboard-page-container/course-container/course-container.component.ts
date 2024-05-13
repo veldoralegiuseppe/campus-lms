@@ -68,6 +68,16 @@ export class CourseContainerComponent extends AuthenticationComponent implements
     */
    courseFilter!: FormGroup
 
+   /**
+    * Current user role
+    */
+   private role: String = ""
+
+   /**
+    * Table header
+    */
+   private header : Course = {}
+
   constructor(private courseService : CourseService){
     super();
   }
@@ -77,6 +87,20 @@ export class CourseContainerComponent extends AuthenticationComponent implements
   }
   
   ngOnInit(): void {
+    // Recupero il ruolo dell'utente corrente
+    this.role = this.authInfo!.payload!.role.toString()
+
+    // Inizializzazione elementi condizionali
+    if(this.role == "STUDENTE"){
+      this.header = {studenteCourse: {moduli: 'Moduli', corso: 'Corso', sessioni: 'Sessioni'}}
+    }
+    else if(this.role == "DOCENTE"){
+      this.header = {docenteCourse: {studenti: 'Studenti', corso: 'Corso', sessioni: 'Sessioni'}}
+    }
+    else if(this.role == "ADMIN"){
+      this.header = {adminCourse: {studenti: 'Studenti', corso: 'Corso', sessioni: 'Sessioni'}}
+    }
+
     // Inizializzazione form
     this.courseFilter = new FormGroup({
       'like': new FormControl(""),
@@ -137,7 +161,7 @@ export class CourseContainerComponent extends AuthenticationComponent implements
     if(this.courses.length <= 0) return {loading: true}
     
     if(index === 0)
-     return { course: {corso: 'Corso', classi: "Classi", studenti: "Studenti"}, loading: false}
+     return { course: this.header, loading: false}
     else 
       return {course: this.courses.at(index-1), loading: false}
   }

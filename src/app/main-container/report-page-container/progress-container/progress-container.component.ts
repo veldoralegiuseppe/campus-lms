@@ -115,9 +115,9 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
   ngOnInit(): void {
     // Inizializzazione form
     this.userFilter = new FormGroup({
-      'nome': this.authInfo?.payload?.nome ? new FormControl(this.authInfo?.payload?.nome) : new FormControl(""),
-      'cognome': this.authInfo?.payload?.cognome ? new FormControl(this.authInfo?.payload?.cognome) : new FormControl(""),
-      'codiceFiscale': this.authInfo?.payload?.cf ? new FormControl(this.authInfo?.payload?.cf) : new FormControl(""),
+      'nome': (this.authInfo?.payload?.nome && this.authInfo.payload.role == 'STUDENTE') ? new FormControl(this.authInfo?.payload?.nome) : new FormControl(""),
+      'cognome': (this.authInfo?.payload?.cognome && this.authInfo.payload.role == 'STUDENTE') ? new FormControl(this.authInfo?.payload?.cognome) : new FormControl(""),
+      'codiceFiscale': (this.authInfo?.payload?.cf && this.authInfo.payload.role == 'STUDENTE') ? new FormControl(this.authInfo?.payload?.cf) : new FormControl(""),
     })
 
     this.courseFilter = new FormGroup({

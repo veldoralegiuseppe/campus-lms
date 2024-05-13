@@ -1,5 +1,5 @@
 <div class="users-page-container">
     <div class="app-help-container help-container"></div>
-    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() != 'STUDENTE'" class="app-add-user-container add-user-container"></div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="app-add-user-container add-user-container"></div>
     <div class="app-search-user-container search-user-container"></div>
 </div>
