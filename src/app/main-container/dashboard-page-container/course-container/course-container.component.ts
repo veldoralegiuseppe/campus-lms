@@ -49,7 +49,7 @@ export class CourseContainerComponent extends AuthenticationComponent implements
   @ViewChild(TableV2Component, { read: ElementRef }) tableDOM?: ElementRef<HTMLElement>;
 
    /**
-   * Numero di utenti da visualizzare per pagina (di default)
+   * Numero di elementi da visualizzare per pagina (di default)
    */
    pageSize: number = 3
 
@@ -120,11 +120,11 @@ export class CourseContainerComponent extends AuthenticationComponent implements
 
     this.courseService.getCoursesPaginated(pagination).then(response => {
       
-      this.courses = response.courses
-      this.pages = response.pagination.totalPages
-      this.pageSize = response.pagination.size
-      
-      if(response.execTime <= 500){
+      this.courses = response!.courses
+      this.pages = response!.pagination.totalPages
+      this.pageSize = response!.pagination.size
+
+      if(response!.execTime <= 500){
         setTimeout(() => {
           // Update table
           this.table!.size = this.courses!.length + 1
@@ -133,7 +133,7 @@ export class CourseContainerComponent extends AuthenticationComponent implements
   
           //onEnd
           if(onEnd) onEnd()
-        }, 500 - response.execTime)
+        }, 500 - response!.execTime)
       }
       else {
         // Update table

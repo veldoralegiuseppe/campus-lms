@@ -21,8 +21,12 @@ export class LoginComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
+  private previousUrl: String | undefined
 
-  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
+  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {
+    this.previousUrl = router.getCurrentNavigation()?.extras?.state?.['previousUrl'];
+    console.log(`Login component - previousUrl: ${this.previousUrl}`)
+  }
 
   onSubmit(): void {
     if (this.emailFormControl.valid && this.passwordFormControl.valid) {
@@ -32,7 +36,10 @@ export class LoginComponent {
 
       this.auth.login(email, password).subscribe(value => {
         console.log(value)
-        if(value) this.router.navigate(['/dashboard'])
+        if(value){
+          if(this.previousUrl) this.router.navigateByUrl(this.previousUrl.toString())
+          else this.router.navigate(['/dashboard'])
+        } 
       })
      
       //this.auth.fakeLogin(email, password)

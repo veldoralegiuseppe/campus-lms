@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -63,15 +64,15 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import { LoginComponent } from './main-container/login/login.component';
 
-import { Provider } from '@angular/core';
 
-// Injection token for the Http Interceptors multi-provider
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './commons/interceptors/error-interceptor';
+import { AuthInterceptor } from './commons/interceptors/auth-interceptor';
 
-/** Provider for the Noop Interceptor. */
-export const errorInterceptorProvider: Provider =
-  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true };
+
+export const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+]
 
 @NgModule({
   declarations: [
@@ -142,7 +143,7 @@ export const errorInterceptorProvider: Provider =
     MatInputModule,
   ],
   providers: [
-    errorInterceptorProvider,
+    httpInterceptorProviders,
   ],
   bootstrap: [AppComponent]
 })

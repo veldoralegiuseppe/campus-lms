@@ -33,7 +33,7 @@ export class AuthService implements CanActivate {
         const currentUser: IAuthInfo = {
           accessToken: token,
           expiresAt: tokenInfo.exp,
-          payload:{email: tokenInfo.sub, role: tokenInfo.ruolo, nome: tokenInfo.nome, cognome: tokenInfo.cognome, cf: tokenInfo.cf}
+          payload:{email: tokenInfo.sub, role: tokenInfo.ruolo, nome: tokenInfo.nome, cognome: tokenInfo.cognome, cf: tokenInfo.cf, username: tokenInfo.nome}
         }
         localStorage.setItem('user', JSON.stringify(currentUser));
         this.stateItem.next(currentUser);
