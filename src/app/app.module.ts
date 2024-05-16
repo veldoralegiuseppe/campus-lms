@@ -62,6 +62,7 @@ import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
 import { LoginComponent } from './main-container/login/login.component';
 
 
@@ -144,6 +145,7 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
     MatSelectModule,
     MatButtonModule,
     MatInputModule,
+    MatRadioModule,
   ],
   providers: [
     httpInterceptorProviders,

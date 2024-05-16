@@ -64,6 +64,41 @@ export class ActivityService {
     ).toPromise()
   }
 
+  getSessioniPaginated(pagination: {page: number, size:number}):  Promise<{activities: Activity[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined>{
+    let startTime = performance.now()
+    let url = `${environment.http_server_host}${this._pathSessioni}/${pagination.size}/${pagination.page-1}`
+    console.log(`ActivityService - url sessioni: ${url}`)
+
+    return this._http.get(url).pipe(
+      map((response) => {
+        // recupero le informazioni sull'utente
+        let currentUser = localStorage.getItem("user")
+        let userInfo: IAuthInfo = currentUser ? JSON.parse(currentUser) : undefined
+        let role = userInfo.payload!.role
+        
+        // converto la response
+        const resp = <SessioneDTO>(response)
+       
+        let activities: Activity[] = resp.content.map(s =>  {
+
+          let activity: Activity = {
+            docenteActivity: role == UserRole.DOCENTE ? {corso: s.nomeCorso, data: s.dataOra, sessione: s.tipo, correzione: ""} : undefined,
+            studenteActivity: role == UserRole.STUDENTE ? {tipo: 'ESAME', corso: s.nomeCorso, data: s.dataOra, dettaglio: s.tipo} : undefined,
+            adminActivity: undefined
+          }
+
+          return activity
+        })
+        for(let i=activities.length; i<pagination.size; i++) activities.push(this.getEmptyActivity())
+        //console.log(`Activities: ${JSON.stringify(activities)}, sizeDesiderata: ${pagination.size}`)
+
+        let pag = {totalPages: resp.totalPages, currentPage: resp.pageable.pageNumber, size: pagination.size} 
+
+        return {activities: activities, pagination: pag, execTime: performance.now() - startTime}
+      })
+    ).toPromise()
+  }
+
   private paginate(pagination: {page: number, size:number}): {totalPages: number, currentPage: number, size: number}{
     // CODICE DI BACKEND
     let pag = {totalPages: Math.ceil(this.activities.length/pagination.size), currentPage: pagination.page, size: pagination.size} 
@@ -84,7 +119,7 @@ export class ActivityService {
 }
 
 interface SessioneDTO{
-  "summaries": {
+  
     "totalPages": number,
     "totalElements": number,
     "size": number,
@@ -125,7 +160,7 @@ interface SessioneDTO{
     "first": Boolean,
     "last": Boolean,
     "empty": Boolean
-  }
+  
 }
 
 interface AttivitaSummaryResponse{

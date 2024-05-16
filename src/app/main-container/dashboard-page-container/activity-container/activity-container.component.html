@@ -6,10 +6,14 @@
     
     
     <div class="search-container" [formGroup]="activityFilter">
-        <app-search-dropdown-bar [list]="dropdownList" formControlName="like"></app-search-dropdown-bar>
+        <!-- <app-search-dropdown-bar [list]="dropdownList" formControlName="like"></app-search-dropdown-bar> -->
         <div class="checkbox-container">
-            <app-checkbox-v2 class='dad' [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'" formControlName="dad" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'"></app-checkbox-v2>
-            <app-checkbox-v2 [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONE' : 'CORRETTE'" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'"></app-checkbox-v2>
+            <!-- <app-checkbox-v2 #check1 class='dad' [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'" formControlName="dad" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'"></app-checkbox-v2>
+            <app-checkbox-v2 #check2 [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONE' : 'CORRETTE'" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'"></app-checkbox-v2> -->
+            <mat-radio-group aria-label="Select an option" formControlName="tipoOptions">
+                <mat-radio-button  [value]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'">{{authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'}}</mat-radio-button>
+                <mat-radio-button  [value]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'">{{authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONE' : 'CORRETTE'}}</mat-radio-button>
+            </mat-radio-group>
         </div>
     </div>
     <div class="app-table-v2 table-container"

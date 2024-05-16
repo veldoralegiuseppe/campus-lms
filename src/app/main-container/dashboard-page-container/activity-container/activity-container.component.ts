@@ -10,6 +10,9 @@ import { ActivityService } from './activity.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 import { AuthService } from 'src/app/commons/authentication/auth.service';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { CheckboxV2Component } from 'src/app/commons/checkbox-v2/checkbox-v2.component';
+import { FormBuilder } from '@angular/forms'
 
 @Component({
   selector: '.app-activity-container',
@@ -86,8 +89,8 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
    * Activity form
    */
    activityFilter!: FormGroup
-   private activeFilter: string = ""
-
+   private activeFilter: BehaviorSubject<string> = new BehaviorSubject<string>("studio")
+ 
    /**
     * Current user role
     */
@@ -98,8 +101,9 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     */
    private header : Activity = {}
 
+
    
-  constructor(private activityService : ActivityService){
+  constructor(private activityService : ActivityService, private formBuilder: FormBuilder){
     super();
   }
   
@@ -113,12 +117,9 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
         new DropdownOption('Corso'),
       ]
       this.header = {studenteActivity: {tipo: 'Tipo', corso: 'Corso', data: 'Data', dettaglio: 'Dettaglio'}}
-      this.activityFilter = new FormGroup({
-        'like': new FormControl({option: this.dropdownList.at(0)?.value, like: ""}),
-        'studio': new FormControl(true),
-        'sessioni': new FormControl(false)
+      this.activityFilter = this.formBuilder.group({
+        tipoOptions: ['studio'],
       })
-      this.activeFilter = 'studio'
     }
     else if(this.role == "DOCENTE"){
       this.dropdownList = [
@@ -126,10 +127,8 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
         new DropdownOption('Sessione'),
       ]
       this.header = {docenteActivity: {sessione: 'Sessione', corso: 'Corso', data: 'Data', correzione: 'Correzione'}}
-      this.activityFilter = new FormGroup({
-        'like': new FormControl({option: this.dropdownList.at(0)?.value, like: ""}),
-        'daCorreggere': new FormControl(false),
-        'corrette': new FormControl(false)
+      this.activityFilter = this.formBuilder.group({
+        tipoOptions: ['daCorreggere'],
       })
     }
     else if(this.role == "ADMIN"){
@@ -137,21 +136,14 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     }
    
     this.activityFilter?.valueChanges.subscribe(value => {
-      if(!this.activityFilter.get('studio')?.value && !this.activityFilter.get('sessioni')?.value && this.activeFilter=='studio') this.activityFilter.get('studio')?.setValue(true)
-      if(!this.activityFilter.get('studio')?.value && !this.activityFilter.get('sessioni')?.value && this.activeFilter=='sessioni') this.activityFilter.get('sessioni')?.setValue(true)
-      
-      if(this.activityFilter.get('studio')?.value && this.activityFilter.get('sessioni')?.value && this.activeFilter=='studio'){ 
-        this.activityFilter.get('studio')?.setValue(false)
-        this.activityFilter.get('sessioni')?.setValue(true)
-        this.activeFilter = 'sessioni'
-      }
-      if(this.activityFilter.get('studio')?.value && this.activityFilter.get('sessioni')?.value && this.activeFilter=='sessioni'){ 
-        this.activityFilter.get('studio')?.setValue(true)
-        this.activityFilter.get('sessioni')?.setValue(false)
-        this.activeFilter = 'studio'
-      }
+      //console.log(value)
+      if(value.tipoOptions == 'studio') this.activeFilter.next('studio')
+      else if(value.tipoOptions =='sessioni') this.activeFilter.next('sessioni')
+    })
 
-
+    this.activeFilter.subscribe(f => {
+      if(f == 'studio') this.getActivitiesPaginated({page: this.pages, size: this.pageSize})
+      else if(f == 'sessioni') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
     })
   }
 
@@ -180,7 +172,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
    */
   private getActivitiesPaginated(pagination: {page: number, size: number}, onEnd?: () => void){
     
-    this.tableDOM!.nativeElement.style.marginTop = '6rem'
+    if(this.tableDOM?.nativeElement) this.tableDOM.nativeElement.style.marginTop = '6rem'
 
     this.activityService.getActivitiesPaginated(pagination).then(response => {
       
@@ -191,8 +183,8 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
       if(response!.execTime <= 500){
         setTimeout(() => {
           // Update table
-          this.table!.size = this.activities!.length + 1
-          this.tableDOM!.nativeElement.style.marginTop = '4rem'
+          if(this.table?.size) this.table.size = this.activities!.length + 1
+          if(this.tableDOM?.nativeElement) this.tableDOM!.nativeElement.style.marginTop = '4rem'
           this.hideTable = false
   
           // Update pagination
@@ -205,8 +197,8 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
       }
       else {
         // Update table
-        this.table!.size = this.activities!.length + 1
-        this.tableDOM!.nativeElement.style.marginTop = '4rem'
+        if(this.table?.size) this.table!.size = this.activities!.length + 1
+        if(this.tableDOM?.nativeElement) this.tableDOM!.nativeElement.style.marginTop = '4rem'
         this.hideTable = false
   
         // Update pagination
@@ -222,7 +214,58 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
      this.activities = []
      this.hideTable = false
      this.hidePagination = true
-     this.table!.size = pagination.size + 1
+     if(this.table?.size) this.table!.size = pagination.size + 1
+  }
+
+  /**
+   * Recupera le sessoni in maniera paginata
+   * @param pagination Paginazione
+   * @param onEnd Callbak
+   */
+  private getSessioniPaginated(pagination: {page: number, size: number}, onEnd?: () => void){
+    
+    if(this.tableDOM?.nativeElement) this.tableDOM!.nativeElement.style.marginTop = '6rem'
+    this.activityService.getSessioniPaginated(pagination).then(response => {
+      
+      this.activities = response!.activities
+      this.pages = response!.pagination.totalPages
+      this.pageSize = response!.pagination.size
+      
+      if(response!.execTime <= 500){
+        setTimeout(() => {
+          // Update table
+          if(this.table?.size) this.table!.size = this.activities!.length + 1
+          if(this.tableDOM?.nativeElement) this.tableDOM!.nativeElement.style.marginTop = '4rem'
+          this.hideTable = false
+  
+          // Update pagination
+          this.pagination!.pages = this.pages
+          this.hidePagination = false
+  
+          //onEnd
+          if(onEnd) onEnd()
+        }, 500 - response!.execTime)
+      }
+      else {
+        // Update table
+        if(this.table?.size) this.table!.size = this.activities!.length + 1
+        if(this.tableDOM?.nativeElement) this.tableDOM!.nativeElement.style.marginTop = '4rem'
+        this.hideTable = false
+  
+        // Update pagination
+        this.pagination!.pages = this.pages
+        this.hidePagination = false
+
+        //onEnd
+        if(onEnd) onEnd()
+      }
+    })
+
+     // CODICE ASINCRONO: Gestione animazione
+     this.activities = []
+     this.hideTable = false
+     this.hidePagination = true
+     if(this.table?.size) this.table!.size = pagination.size + 1
   }
 
   /**
@@ -230,7 +273,9 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
    * @param pagination Paginazione
    */
   handlePaginationChange(pagination: { page: number; size: number; }) {
-    this.getActivitiesPaginated(pagination)
+    console.log("handlePaginationChange")
+    if(this.activeFilter.value == 'studio') this.getActivitiesPaginated(pagination)
+    else if(this.activeFilter.value == 'sessioni') this.getSessioniPaginated(pagination)
   }
 
   /**
