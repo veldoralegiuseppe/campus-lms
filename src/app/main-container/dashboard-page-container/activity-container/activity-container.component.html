@@ -9,7 +9,7 @@
         <app-search-dropdown-bar [list]="dropdownList" formControlName="like"></app-search-dropdown-bar>
         <div class="checkbox-container">
             <app-checkbox-v2 class='dad' [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'" formControlName="dad" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'"></app-checkbox-v2>
-            <app-checkbox-v2 [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONI' : 'CORRETTE'" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'"></app-checkbox-v2>
+            <app-checkbox-v2 [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONE' : 'CORRETTE'" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'"></app-checkbox-v2>
         </div>
     </div>
     <div class="app-table-v2 table-container"

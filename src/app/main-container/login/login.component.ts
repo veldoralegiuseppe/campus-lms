@@ -24,8 +24,8 @@ export class LoginComponent {
   private previousUrl: String | undefined
 
   constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {
-    this.previousUrl = router.getCurrentNavigation()?.extras?.state?.['previousUrl'];
-    console.log(`Login component - previousUrl: ${this.previousUrl}`)
+    //this.previousUrl = router.getCurrentNavigation()?.extras?.state?.['previousUrl'];
+    //console.log(`Login component - previousUrl: ${this.previousUrl}`)
   }
 
   onSubmit(): void {
@@ -35,11 +35,11 @@ export class LoginComponent {
       const password = this.passwordFormControl.value!;
 
       this.auth.login(email, password).subscribe(value => {
-        console.log(value)
         if(value){
           if(this.previousUrl) this.router.navigateByUrl(this.previousUrl.toString())
           else this.router.navigate(['/dashboard'])
         } 
+        // else gestire credenziali errate
       })
      
       //this.auth.fakeLogin(email, password)

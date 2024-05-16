@@ -1,9 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject, Observable, map, catchError} from 'rxjs';
 import { environment } from 'src/environments/environment';
-import * as jwt_decode from "jwt-decode";
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService implements CanActivate {
   private stateItem: BehaviorSubject<IAuthInfo | null> = new BehaviorSubject<IAuthInfo | null>(null);
   stateItem$: Observable<IAuthInfo | null> = this.stateItem.asObservable();
 
-  constructor(private _http: HttpClient, private router: Router) {}
+  constructor(private _http: HttpClient, private router: Router, private jwtService: JwtHelperService) {}
  
   login(username: string, password: string): Observable<any> {
    
@@ -24,10 +25,9 @@ export class AuthService implements CanActivate {
       map((response) => {
     
         // recupero il token 
-        console.log(response)
         const resp: XTokenResponse = <XTokenResponse>(response);
-        const token = resp.xToken;
-        const tokenInfo: TokenInfo = jwt_decode.jwtDecode(token.toString())
+        const token = resp.xToken.toString();
+        const tokenInfo: TokenInfo = this.jwtService.decodeToken(token)!
         
         // compongo IAuthInfo
         const currentUser: IAuthInfo = {
@@ -70,6 +70,14 @@ export class AuthService implements CanActivate {
 
   logout(){
     this.stateItem.next(null)
+  }
+
+  isTokenExpired(token: String): boolean{
+    if(this.jwtService.isTokenExpired(token.toString())) {
+      this.stateItem.next(null)
+      return true
+    }
+    return false
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {

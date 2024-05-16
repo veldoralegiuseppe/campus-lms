@@ -11,24 +11,21 @@ export class ErrorInterceptor implements HttpInterceptor {
     constructor(private router: Router){}
     
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+       
         return next.handle(request)
         .pipe(
             catchError((error: HttpErrorResponse) => {
                 let errorMsg = '';
                 if (error.error instanceof ErrorEvent) {
-                    //console.log('This is client side error');
+                    console.log('This is client side error');
                     errorMsg = `Error: ${error.error.message}`;
                     console.log(errorMsg);
-
-                    if(error.status == 403){
-                        // rimando l'utente alla pagina di login
-                        console.log(`Url prima del logout: ${this.router.url}`)
-                        this.router.navigate(['login'], {state: {previousUrl: this.router.url}})
-                    }
+                    if(error.status == 403){ this.router.navigate(['login'])}
                 } else {
                     //console.log(`This is server side error: ${error.message}`);
-                    errorMsg = `Error Code: ${error.status},  Message: ${error.error.message}`;
-                    console.log(errorMsg);
+                    errorMsg = `Error Code: ${error.status},  Message: ${error?.message}`;
+                    //console.log(errorMsg);
+                    if(error.status == 403){ this.router.navigate(['login'])}
                 }
                
                 return throwError(errorMsg);

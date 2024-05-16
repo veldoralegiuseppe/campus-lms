@@ -67,12 +67,15 @@ import { LoginComponent } from './main-container/login/login.component';
 
 import { ErrorInterceptor } from './commons/interceptors/error-interceptor';
 import { AuthInterceptor } from './commons/interceptors/auth-interceptor';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 ]
+
+export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, useClass: JwtHelperService, multi: true}
 
 @NgModule({
   declarations: [
@@ -144,6 +147,8 @@ export const httpInterceptorProviders = [
   ],
   providers: [
     httpInterceptorProviders,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService
   ],
   bootstrap: [AppComponent]
 })

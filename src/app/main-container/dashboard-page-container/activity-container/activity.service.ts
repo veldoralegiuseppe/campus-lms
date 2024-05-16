@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Column } from 'src/app/commons/table/table-column';
 import { Activity, StudenteActivity } from './activity-table-row/Activity';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { IAuthInfo, UserRole } from 'src/app/commons/authentication/auth.service';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,16 +24,44 @@ export class ActivityService {
   
   private activitiesPaginated: Activity[] = []
 
-  constructor() { }
+  private _pathAttivita = '/api/attivita'
+  private _pathSessioni = '/api/sessione'
 
-  getActivitiesPaginated(pagination: {page: number, size:number}):  Promise<{activities: Activity[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number}>{
+  constructor(private _http: HttpClient) { }
+
+  getActivitiesPaginated(pagination: {page: number, size:number}):  Promise<{activities: Activity[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined>{
     let startTime = performance.now()
-    let pag = this.paginate(pagination)
-    return new Promise<any>((resolve, error) =>{
-      setTimeout(() => {
-        resolve({activities: this.activitiesPaginated, pagination: pag, execTime: performance.now() - startTime})
-      }, 0)
-    })
+    let url = `${environment.http_server_host}${this._pathAttivita}/${pagination.size}/${pagination.page-1}`
+    //console.log(`ActivityService - url: ${url}`)
+
+    return this._http.get(url).pipe(
+      map((response) => {
+        // recupero le informazioni sull'utente
+        let currentUser = localStorage.getItem("user")
+        let userInfo: IAuthInfo = currentUser ? JSON.parse(currentUser) : undefined
+        let role = userInfo.payload!.role
+        
+        // converto la response
+        const resp = <AttivitaSummaryResponse>(response)
+       
+        let activities: Activity[] = resp.summaries.content.map(a =>  {
+
+          let activity: Activity = {
+            docenteActivity: undefined,
+            studenteActivity: role == UserRole.STUDENTE ? {tipo: 'STUDIO', corso: a.nomeCorso, data: a.settimanaProgrammata, dettaglio: a.dettaglio} : undefined,
+            adminActivity: undefined
+          }
+
+          return activity
+        })
+        for(let i=activities.length; i<pagination.size; i++) activities.push(this.getEmptyActivity())
+        //console.log(`Activities: ${JSON.stringify(activities)}, sizeDesiderata: ${pagination.size}`)
+
+        let pag = {totalPages: resp.summaries.totalPages, currentPage: resp.summaries.pageable.pageNumber, size: pagination.size} 
+
+        return {activities: activities, pagination: pag, execTime: performance.now() - startTime}
+      })
+    ).toPromise()
   }
 
   private paginate(pagination: {page: number, size:number}): {totalPages: number, currentPage: number, size: number}{
@@ -40,5 +72,103 @@ export class ActivityService {
     this.activitiesPaginated = this.activities.slice(startIndex,startIndex+pagination.size)
     
     return pag
+  }
+
+  private getEmptyActivity() : Activity {
+    return {
+      studenteActivity: {tipo: "", corso: "", data:"", dettaglio: ""}, 
+      docenteActivity: {corso: "", sessione:"", correzione: "", data: ""}, 
+  }
+
+  }
+}
+
+interface SessioneDTO{
+  "summaries": {
+    "totalPages": number,
+    "totalElements": number,
+    "size": number,
+    "content": [
+      {
+        "nomeCorso": String,
+        "dataOra": String,
+        "tipo": String
+      }
+    ],
+    "number": number,
+    "sort": [
+      {
+        "direction": String,
+        "nullHandling": String,
+        "ascending": Boolean,
+        "property": String,
+        "ignoreCase": Boolean
+      }
+    ],
+    "pageable": {
+      "offset": number,
+      "sort": [
+        {
+          "direction": String,
+          "nullHandling": String,
+          "ascending": Boolean,
+          "property": String,
+          "ignoreCase": Boolean
+        }
+      ],
+      "paged": Boolean,
+      "unpaged": Boolean,
+      "pageNumber": number,
+      "pageSize": number
+    },
+    "numberOfElements": number,
+    "first": Boolean,
+    "last": Boolean,
+    "empty": Boolean
+  }
+}
+
+interface AttivitaSummaryResponse{
+  "summaries": {
+    "totalPages": number,
+    "totalElements": number,
+    "size": number,
+    "content": [
+      {
+        "nomeCorso": String,
+        "dettaglio": String,
+        "settimanaProgrammata": String
+      }
+    ],
+    "number": number,
+    "sort": [
+      {
+        "direction": String,
+        "nullHandling": String,
+        "ascending": Boolean,
+        "property": String,
+        "ignoreCase": Boolean
+      }
+    ],
+    "pageable": {
+      "offset": number,
+      "sort": [
+        {
+          "direction": String,
+          "nullHandling": String,
+          "ascending": Boolean,
+          "property": String,
+          "ignoreCase": Boolean
+        }
+      ],
+      "paged": Boolean,
+      "unpaged": Boolean,
+      "pageNumber": number,
+      "pageSize": number
+    },
+    "numberOfElements": number,
+    "first": Boolean,
+    "last": Boolean,
+    "empty": Boolean
   }
 }

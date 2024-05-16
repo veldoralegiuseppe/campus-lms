@@ -51,7 +51,7 @@ export class CourseContainerComponent extends AuthenticationComponent implements
    /**
    * Numero di elementi da visualizzare per pagina (di default)
    */
-   pageSize: number = 3
+   pageSize: number = -1
 
    /**
     * Numero di pagine

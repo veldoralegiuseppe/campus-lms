@@ -41,7 +41,7 @@ function onClickIcon(icon){
     // Aggiungo lo stile all'icona attualmente attiva
     if(icon){
         selected = icon 
-        console.log(selected)
+        //console.log(selected)
         for (child of verticalNav.children)
             if(child.classList.contains(selected.classList[0])) child.classList.add('active')
 

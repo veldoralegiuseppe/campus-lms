@@ -86,6 +86,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
    * Activity form
    */
    activityFilter!: FormGroup
+   private activeFilter: string = ""
 
    /**
     * Current user role
@@ -114,9 +115,10 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
       this.header = {studenteActivity: {tipo: 'Tipo', corso: 'Corso', data: 'Data', dettaglio: 'Dettaglio'}}
       this.activityFilter = new FormGroup({
         'like': new FormControl({option: this.dropdownList.at(0)?.value, like: ""}),
-        'studio': new FormControl(false),
+        'studio': new FormControl(true),
         'sessioni': new FormControl(false)
       })
+      this.activeFilter = 'studio'
     }
     else if(this.role == "DOCENTE"){
       this.dropdownList = [
@@ -133,9 +135,24 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     else if(this.role == "ADMIN"){
       
     }
+   
+    this.activityFilter?.valueChanges.subscribe(value => {
+      if(!this.activityFilter.get('studio')?.value && !this.activityFilter.get('sessioni')?.value && this.activeFilter=='studio') this.activityFilter.get('studio')?.setValue(true)
+      if(!this.activityFilter.get('studio')?.value && !this.activityFilter.get('sessioni')?.value && this.activeFilter=='sessioni') this.activityFilter.get('sessioni')?.setValue(true)
+      
+      if(this.activityFilter.get('studio')?.value && this.activityFilter.get('sessioni')?.value && this.activeFilter=='studio'){ 
+        this.activityFilter.get('studio')?.setValue(false)
+        this.activityFilter.get('sessioni')?.setValue(true)
+        this.activeFilter = 'sessioni'
+      }
+      if(this.activityFilter.get('studio')?.value && this.activityFilter.get('sessioni')?.value && this.activeFilter=='sessioni'){ 
+        this.activityFilter.get('studio')?.setValue(true)
+        this.activityFilter.get('sessioni')?.setValue(false)
+        this.activeFilter = 'studio'
+      }
 
 
-    this.activityFilter?.valueChanges.subscribe(value => console.log(value))
+    })
   }
 
   ngAfterViewInit(): void {
@@ -167,11 +184,11 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
 
     this.activityService.getActivitiesPaginated(pagination).then(response => {
       
-      this.activities = response.activities
-      this.pages = response.pagination.totalPages
-      this.pageSize = response.pagination.size
+      this.activities = response!.activities
+      this.pages = response!.pagination.totalPages
+      this.pageSize = response!.pagination.size
       
-      if(response.execTime <= 500){
+      if(response!.execTime <= 500){
         setTimeout(() => {
           // Update table
           this.table!.size = this.activities!.length + 1
@@ -184,7 +201,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
   
           //onEnd
           if(onEnd) onEnd()
-        }, 500 - response.execTime)
+        }, 500 - response!.execTime)
       }
       else {
         // Update table

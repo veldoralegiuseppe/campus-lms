@@ -26,8 +26,9 @@ export class CourseService{
   getCoursesPaginated(pagination: {page: number, size:number}):  Promise<{courses: Course[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined>{
     
     let startTime = performance.now()
-    let url = `${environment.http_server_host}${this._path}/${pagination.size}/${pagination.page-1}`
-    console.log(`CourseService - url: ${url}`)
+    let url = `${environment.http_server_host}${this._path}/${pagination.size > 0 ? pagination.size : 100}/${pagination.page-1}`
+    let minTableSize = 3
+    //console.log(`CourseService - url: ${url}`)
     
     return this._http.get(url).pipe(
       map((response) => {
@@ -50,8 +51,9 @@ export class CourseService{
 
           return course
         })
-        for(let i=courses.length; i<pagination.size; i++) courses.push(this.getEmptyElement())
-        console.log(`Course: ${JSON.stringify(courses)}, sizeDesiderata: ${pagination.size}`)
+        if(pagination.size && pagination.size > courses.length) for(let i=courses.length; i<pagination.size; i++) courses.push(this.getEmptyElement())
+        else if(courses.length < minTableSize) for(let i=courses.length; i<minTableSize; i++) courses.push(this.getEmptyElement())
+        //console.log(`Course: ${JSON.stringify(courses)}, sizeDesiderata: ${pagination.size}`)
 
         let pag = {totalPages: resp.summaries.totalPages, currentPage: resp.summaries.pageable.pageNumber, size: pagination.size} 
 
