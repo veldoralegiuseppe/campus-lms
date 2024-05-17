@@ -89,7 +89,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
    * Activity form
    */
    activityFilter!: FormGroup
-   private activeFilter: BehaviorSubject<string> = new BehaviorSubject<string>("studio")
+   private activeFilter: BehaviorSubject<string> = new BehaviorSubject<string>("")
  
    /**
     * Current user role
@@ -120,6 +120,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
       this.activityFilter = this.formBuilder.group({
         tipoOptions: ['studio'],
       })
+      this.activeFilter.next("studio")
     }
     else if(this.role == "DOCENTE"){
       this.dropdownList = [
@@ -130,6 +131,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
       this.activityFilter = this.formBuilder.group({
         tipoOptions: ['daCorreggere'],
       })
+      this.activeFilter.next("daCorreggere")
     }
     else if(this.role == "ADMIN"){
       
@@ -144,11 +146,14 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     this.activeFilter.subscribe(f => {
       if(f == 'studio') this.getActivitiesPaginated({page: this.pages, size: this.pageSize})
       else if(f == 'sessioni') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
+      else if(f == 'daCorreggere') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
+      else if(f == 'corrette') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
     })
   }
 
   ngAfterViewInit(): void {
-    this.getActivitiesPaginated({page: this.pages, size: this.pageSize})
+    if(this.role == "STUDENTE") this.getActivitiesPaginated({page: this.pages, size: this.pageSize})
+    else if(this.role == "DOCENTE") this.getSessioniPaginated({page: this.pages, size: this.pageSize})
   }
 
   /**
@@ -276,6 +281,8 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     console.log("handlePaginationChange")
     if(this.activeFilter.value == 'studio') this.getActivitiesPaginated(pagination)
     else if(this.activeFilter.value == 'sessioni') this.getSessioniPaginated(pagination)
+    else if(this.activeFilter.value == 'daCorreggere') this.getSessioniPaginated(pagination)
+    else if(this.activeFilter.value == 'corrette') this.getSessioniPaginated(pagination)
   }
 
   /**

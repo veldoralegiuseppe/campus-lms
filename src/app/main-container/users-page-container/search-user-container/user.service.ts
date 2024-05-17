@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { User } from './User';
+import { environment } from 'src/environments/environment';
+import { map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -8,31 +11,49 @@ import { User } from './User';
 export class UserService {
 
   private users : User[] = [
-    {id: 1,nome: 'nome1', cognome: 'cognome1', email: 'email1', corso: 'corso1', classe: 'classe1', sessione: 'sessione1'},
-    {id: 2,nome: 'nome2', cognome: 'cognome2', email: 'email2', corso: 'corso2', classe: 'classe2', sessione: 'sessione2'},
-    {id: 3,nome: 'nome3', cognome: 'cognome3', email: 'email3', corso: 'corso3', classe: 'classe3', sessione: 'sessione3'},
-    {id: 4,nome: 'nome4', cognome: 'cognome4', email: 'email4', corso: 'corso4', classe: 'classe4', sessione: 'sessione4'},
-    {id: 5,nome: 'nome5', cognome: 'cognome5', email: 'email5', corso: 'corso5', classe: 'classe5', sessione: 'sessione5'},
-    {id: 6,nome: 'nome6', cognome: 'cognome6', email: 'email6', corso: 'corso6', classe: 'classe6', sessione: 'sessione6'},
-    {id: 7,nome: 'nome7', cognome: 'cognome7', email: 'email7', corso: 'corso7', classe: 'classe7', sessione: 'sessione7'},
-    {id: 8,nome: 'nome8', cognome: 'cognome8', email: 'email8', corso: 'corso8', classe: 'classe8', sessione: 'sessione8'},
-    {id: 9,nome: 'nome9', cognome: 'cognome9', email: 'email9', corso: 'corso9', classe: 'classe9', sessione: 'sessione9'},
-    {id: 10,nome: 'nome10', cognome: 'cognome10', email: 'email10', corso: 'corso10', classe: 'classe10', sessione: 'sessione10'},
+    {nome: 'nome1', cognome: 'cognome1', email: 'email1', codiceFiscale: 'cf1', ruolo: 'ruolo1'},
   ]
   private usersPaginated : User[] = []
+  private _pathUtenti = '/api/utente/search'
+  private _pathCorsi = '/api/corso/list/nome'
+
+  constructor(private _http:HttpClient){}
 
   getUsers() : Observable<User[]> {
     return of(this.users)
   }
 
-  getUsersPaginated(pagination: {page: number, size:number}):  Promise<{users: User[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number}>{
+  getUsersPaginated(pagination: {page: number, size:number}, filtri: SearchUtenteRequest):  Promise<{users: User[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined>{
     let startTime = performance.now()
-    let pag = this.paginate(pagination)
-    return new Promise<any>((resolve, error) =>{
-      setTimeout(() => {
-        resolve({users: this.usersPaginated, pagination: pag, execTime: performance.now() - startTime})
-      }, 0)
-    })
+    let url = `${environment.http_server_host}${this._pathUtenti}/${pagination.size}/${pagination.page-1}`
+    console.log(`UserService - url: ${url}`)
+
+    return this._http.post(url, filtri).pipe(
+      map((response) => {
+       
+        // converto la response
+        const resp = <UtenteDTOPaginated>(response)
+       
+        let utenti: User[] = resp.content.map(a =>  {
+
+          let utente: User = {
+            nome: a.nome ? a.nome : "",
+            cognome: a.cognome ? a.cognome : "",
+            codiceFiscale: a.codiceFiscale ? a.codiceFiscale : "",
+            email: a.email ? a.email : "",
+            ruolo: a.ruolo ? a.ruolo : ""
+          }
+
+          return utente
+        })
+        for(let i=utenti.length; i<pagination.size; i++) utenti.push(this.getEmptyUtente())
+        console.log(`Utenti: ${JSON.stringify(utenti)}, sizeDesiderata: ${pagination.size}`)
+
+        let pag = {totalPages: resp.totalPages > 0 ? resp.totalPages : 1, currentPage: resp.pageable.pageNumber, size: pagination.size} 
+
+        return {users: utenti, pagination: pag, execTime: performance.now() - startTime}
+      })
+    ).toPromise()
   }
 
   paginate(pagination: {page: number, size:number}): {totalPages: number, currentPage: number, size: number}{
@@ -45,4 +66,78 @@ export class UserService {
     return pag
   }
 
+
+  getCorsi() : Promise<{nome: string}[] | undefined>{
+    
+    let url = `${environment.http_server_host}${this._pathCorsi}`
+    console.log(`UserService - url nome corsi: ${url}`)
+
+    return this._http.get(url).pipe(
+      map((response) => {
+        
+        // converto la response
+        let resp: {nome: string}[] = [{nome: "Tutti"}]
+        const list = <{nome: string}[]>(response)
+        if(list) resp = resp.concat(list)
+        return resp
+      })
+    ).toPromise()
+  }
+
+  getEmptyUtente() : User{
+    return {nome: "", codiceFiscale: "", cognome: "", ruolo: "", email: ""}
+  }
+
+}
+
+export interface SearchUtenteRequest{
+  [key: string]: any
+  "utente": UtenteDTO,
+  "nomeCorso": String | null
+}
+
+export interface UtenteDTO{
+  [key: string]: any
+  "nome": String | null,
+  "cognome": String | null,
+  "codiceFiscale": String | null,
+  "email": String | null,
+  "ruolo": String | null,
+}
+
+interface UtenteDTOPaginated{
+  "totalPages": number,
+    "totalElements": number,
+    "size": number,
+    "content": [UtenteDTO],
+    "number": number,
+    "sort": [
+      {
+        "direction": String,
+        "nullHandling": String,
+        "ascending": Boolean,
+        "property": String,
+        "ignoreCase": Boolean
+      }
+    ],
+    "pageable": {
+      "offset": number,
+      "sort": [
+        {
+          "direction": String,
+          "nullHandling": String,
+          "ascending": Boolean,
+          "property": String,
+          "ignoreCase": Boolean
+        }
+      ],
+      "paged": Boolean,
+      "unpaged": Boolean,
+      "pageNumber": number,
+      "pageSize": number
+    },
+    "numberOfElements": number,
+    "first": Boolean,
+    "last": Boolean,
+    "empty": Boolean
 }

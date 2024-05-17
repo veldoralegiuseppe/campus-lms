@@ -23,7 +23,7 @@ export class UserTableRowComponent implements Row{
   /**
    * Model della riga
    */
-  user? : {nome: string, cognome: string, corso: string, sessione: string, classe: string, email: string, selector: any, loading: boolean}
+  user? : {nome: string, cognome: string, codiceFiscale: string, email: string, ruolo:string, loading: boolean}
   
   /**
    * Riferimento alla checkbox

@@ -8,6 +8,7 @@
 
 .nome{
     grid-column: nome-start/nome-end;
+    transform: translateX(0.2px);
 }
 
 .cognome{
@@ -29,12 +30,18 @@
 .classe{
     grid-column: classe-start/classe-end;
 }
+.cf{
+    grid-column: cf-start/cf-end;
+}
+.ruolo{
+    grid-column: ruolo-start/ruolo-end;
+}
 
 .loading-bar{
     height: 6px;
     display: flex;
     align-items: center;
-    grid-column: selector-start/email-end;
+    grid-column: nome-start/email-end;
 
     .wrapper{ width: 100%; }
 
@@ -45,7 +52,7 @@
 }
 
 div.body{
-    &.selector .loading{
+    &.nome .loading{
         width: 2.5rem
     }
 

@@ -7,7 +7,7 @@ import { Row } from 'src/app/commons/table-v2/Row';
 import { TableV2Component } from 'src/app/commons/table-v2/table-v2.component';
 import { User } from './User';
 import { UserTableRowComponent } from './user-table-row/user-table-row.component';
-import { UserService } from './user.service';
+import { SearchUtenteRequest, UserService, UtenteDTO } from './user.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ResetFilterButtonComponent } from 'src/app/commons/reset-filter-button/reset-filter-button.component';
 
@@ -111,6 +111,13 @@ export class SearchUserContainerComponent implements OnInit, AfterViewInit{
    */
   courseFilter!: FormGroup
 
+  /**
+   * Nomi di tutti i corsi
+   */
+  private nomeCorsi: {nome: string}[] = []
+
+ 
+
   constructor(private userService: UserService){}
 
   /**
@@ -118,10 +125,11 @@ export class SearchUserContainerComponent implements OnInit, AfterViewInit{
    */
   ngOnInit(): void {
     // Request per popolare la select dei corsi disponibili
+    this.userService.getCorsi().then(corsi => this.nomeCorsi = corsi!)
 
     // Inizializzazione form
     this.userFilter = new FormGroup({
-      'tipoUtente': new FormControl('Tutti'),
+      'ruolo': new FormControl('Tutti'),
       'nome': new FormControl(""),
       'cognome': new FormControl(""),
       'codiceFiscale': new FormControl("")
@@ -166,7 +174,7 @@ export class SearchUserContainerComponent implements OnInit, AfterViewInit{
     if(this.users.length <= 0) return {loading: true}
     
     if(index === 0)
-     return {nome:'Nome', cognome: 'Cognome', classe:'Classe', sessione: 'Sessione', email: 'E-mail', corso: 'Corso', id: -1, selector: ""}
+     return {nome:'Nome', cognome: 'Cognome', codiceFiscale:'Codice fiscale', ruolo: 'Ruolo', email: 'E-mail'}
     else 
       return this.users.at(index-1)
   }
@@ -229,16 +237,35 @@ export class SearchUserContainerComponent implements OnInit, AfterViewInit{
   getUsers(pagination: {page: number, size: number}, onEnd?: () => void){
     
     // Gestione delle form
-    console.log(this.userFilter)
-    console.log(this.courseFilter)
+    //console.log(this.userFilter.value)
+    //console.log(this.courseFilter)
 
-    this.userService.getUsersPaginated(pagination).then(response => {
-      this.users = response.users
-      this.pages = response.pagination.totalPages
-      this.pageSize = response.pagination.size
-      this.tableDOM!.nativeElement.style.marginTop = '6rem'
+    // gestione filtro dati utente
+    const filtri: UtenteDTO = this.userFilter.value
+    if(filtri.ruolo && filtri.ruolo.toLowerCase() == 'tutti') filtri.ruolo = null
+    Object.entries(filtri).forEach(([key, value], index, array) => {
+      if(value == 'tutti' || value == "") filtri[key] = null 
+    })
+    if(filtri.ruolo) filtri.ruolo = filtri.ruolo?.toLocaleUpperCase()
 
-      if(response.execTime <= 500){
+    // gestione filtro corso
+    let nomeCorso = <String | null> this.courseFilter.value.corso 
+    nomeCorso = (nomeCorso == "" || nomeCorso?.toLocaleLowerCase() == 'tutti') ? null : nomeCorso
+   
+    // compongo la request
+    const request: SearchUtenteRequest = {
+      utente: filtri,
+      nomeCorso: nomeCorso
+    }
+    console.log(request)
+
+    this.userService.getUsersPaginated(pagination, request).then(response => {
+      this.users = response!.users
+      this.pages = response!.pagination.totalPages
+      this.pageSize = response!.pagination.size
+      this.tableDOM!.nativeElement.style.marginTop = '8rem'
+
+      if(response!.execTime <= 500){
         setTimeout(() => {
           // Update table
           this.table!.size = this.users!.length + 1
@@ -252,7 +279,7 @@ export class SearchUserContainerComponent implements OnInit, AfterViewInit{
 
           //onEnd
           if(onEnd) onEnd()
-        }, 500 - response.execTime)
+        }, 500 - response!.execTime)
       }
       else {
         // Update table
@@ -306,6 +333,14 @@ export class SearchUserContainerComponent implements OnInit, AfterViewInit{
     this.resetFilterButton?.enable(false)
     console.log(this.userFilter.value)
     console.log(this.courseFilter.value)
+  }
+
+  /**
+   * Ritorna la lista con i nomi di tutti i corsi
+   * @returns 
+   */
+  getCorsi(): string[]{
+    return this.nomeCorsi.map(c => c.nome)
   }
 
 
