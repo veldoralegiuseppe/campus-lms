@@ -12,49 +12,58 @@
         <ng-template matStepLabel>Sessione</ng-template>
         <!-- Dati sulla sessione-->
         <div class="course-form">
+
           <div class="corso-form-container">
             <div class="form-title">Dati corso</div>
+
             <div class="form" [formGroup] = "courseFilter">
               <mat-form-field class="form-input-field" appearance="outline">
                 <mat-label class="form-input-label">Corsi disponibili</mat-label>
                 <mat-select class="custom-theme" formControlName="corso" (selectionChange)="isStepComplete()">
-                  @for (food of foods; track food) {
-                    <mat-option class='not-empty-select' [value]="food.value">{{food.viewValue}}</mat-option>
+                  @for (corso of corsi; track corso) {
+                    <mat-option class='not-empty-select' [value]="corso.value">{{corso.viewValue}}</mat-option>
                   }
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="form-input-field" appearance="outline">
-                <mat-label class="form-input-label">CUP</mat-label>
-                <input matInput formControlName="cup" (change)="isStepComplete()">
+                <mat-label class="form-input-label">Tipo</mat-label>
+                <mat-select class="custom-theme" formControlName="tipo" (selectionChange)="isStepComplete()">
+                    <mat-option class='not-empty-select' value="scritto">Scritto</mat-option>
+                    <mat-option class='not-empty-select' value="orale">Orale</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Data</mat-label>
+                <input matInput [min]="minDate" (dateChange)="isStepComplete()" formControlName="data" type="date-local" [matDatepicker]="picker">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
             </div>
           </div>
-          <div class="import-excel">
-            <div class="form-title">Importa la calendarizzazione</div>
-            <app-upload-button (onUploadComplete)="onFileUpload($event)" (onUploadDelete)="onFileDelete($event)" class="upload-btn" default="Nessuna calendarizzazione importata."></app-upload-button>
+
+          <div *ngIf="this.courseFilter.get('tipo')?.value == 'scritto'" class="import-excel">
+            <div class="form-title">Importa la prova</div>
+            <app-upload-button (onUploadComplete)="onFileUpload($event)" (onUploadDelete)="onFileDelete($event)" class="upload-btn" default="Nessuna prova caricata."></app-upload-button>
           </div>
-          <div class="import-excel">
-            <div class="form-title">Importa le classi</div>
-            <app-upload-button (onUploadComplete)="onFileUpload($event)" (onUploadDelete)="onFileDelete($event)" class="upload-btn" default="Nessuna classe importata."></app-upload-button>
-          </div>
+
         </div>
-        <div class="stepper-button-container"> <button mat-button matStepperNext [disabled]="!step1.completed">Avanti</button> </div>
+        <div class="stepper-button-container"> <button mat-button matStepperNext [disabled]="!step1.completed">Crea</button> </div>
       </form>
     </mat-step>
 
      <!-- Step 2 -->
-    <mat-step [stepControl]="secondFormGroup">
+    <!-- <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Riepilogo calendario</ng-template>
+        <ng-template matStepLabel>Data</ng-template>
         <div class="stepper-button-container">
           <button mat-button matStepperPrevious>Indietro</button>
           <button mat-button matStepperNext>Avanti</button>
         </div>
       </form>
-    </mat-step>
+    </mat-step> -->
 
      <!-- Step 3 -->
-    <mat-step [stepControl]="secondFormGroup">
+    <!-- <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>Riepilogo classi</ng-template>
         <div class="stepper-button-container">
@@ -62,7 +71,7 @@
           <button mat-button matStepperNext>Crea</button>
         </div>
       </form>
-    </mat-step>
+    </mat-step> -->
 
   </mat-stepper>
 </div>

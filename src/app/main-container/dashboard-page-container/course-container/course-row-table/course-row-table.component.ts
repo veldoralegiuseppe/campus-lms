@@ -18,5 +18,6 @@ export class CourseRowTableComponent extends AuthenticationComponent implements 
   generateRow: (data: any) => any = (data: {course: Course, loading: boolean}) => { 
     this.course = data.course
     this.loading = data.loading
+    console.log(`Loading: ${this.loading}, index: ${this.index}`)
   }
 }

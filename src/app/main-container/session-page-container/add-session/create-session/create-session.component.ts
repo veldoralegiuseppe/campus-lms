@@ -12,7 +12,7 @@ import { Observable, map, of } from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import { UploadButtonComponent } from 'src/app/commons/upload-button/upload-button.component';
 
-interface Food {
+interface Corsi {
   value: string;
   viewValue: string;
 }
@@ -113,7 +113,12 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
    */
   stepOneCompleted: boolean = false
 
+  /**
+   * Data minima 
+   */
+  minDate: Date = new Date()
 
+ 
   /**
    * Layout param
    */
@@ -128,10 +133,7 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
   });
   isLinear = true;
 
-  foods: Food[] = [
-    {value: 'id-corso-1', viewValue: 'Corso 1'},
-    {value: 'id-corso-2', viewValue: 'Corso 2'},
-  ];
+  corsi: Corsi[] = [];
 
   stepperOrientation!: Observable<StepperOrientation>;
   
@@ -142,11 +144,18 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
+    // inizializzazione corsi
+    this.sessionService.getCorsi().then(c => {
+      this.corsi = c!.map(v => { return {value: v.nome, viewValue: v.nome}})
+    })
+
     // Inizializzazione form
     this.courseFilter = new FormGroup({
       'corso': new FormControl(''),
-      'cup': new FormControl(''),
+      'tipo': new FormControl(''),
+      'data': new FormControl('')
     })
+
   }
   
   ngAfterViewInit(): void {
@@ -162,16 +171,26 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
   }
 
   onFileDelete(fileName : string){
-    --this.fileCaricati
+    if(this.fileCaricati > 0) --this.fileCaricati
     this.isStepComplete()
   }
 
   isStepComplete(){
-    console.log(`file caricati: ${this.fileCaricati}, corsoSelezionato: ${this.courseFilter.get('corso')?.value}, cupSelezionato: ${this.courseFilter.get('cup')?.value}`)
-    let corso = this.courseFilter.get('corso')?.value
-    let cup = this.courseFilter.get('cup')?.value
-    if(corso && cup && this.fileCaricati == this.uploads?.length) this.stepOneCompleted = true
-    else this.stepOneCompleted = false
+    let corso = <String>this.courseFilter.get('corso')?.value
+    let tipo = <String>this.courseFilter.get('tipo')?.value
+    let data = this.courseFilter.get("data")?.value
+    let fileName = this.uploads?.first?.fileName ? <String> this.uploads?.first?.fileName : null
+    if(fileName) ++this.fileCaricati
+    let isStepCompleted = false 
+
+    if(corso && tipo && data){
+      if(tipo.toLowerCase() == 'orale') isStepCompleted = true
+      else if(fileName) isStepCompleted = true
+    }
+
+    console.log(`file caricati: ${this.fileCaricati}, fileName: ${fileName},uploadButtons:${this.uploads?.length}, corsoSelezionato: ${corso}, tipoEsameSelezionato: ${tipo}, dataSelezionata: ${data} isStepComplete:${isStepCompleted}`)
+    this.stepOneCompleted = isStepCompleted
+    
   }
 
   /**
@@ -254,6 +273,15 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
     this.hidePagination = true
     this.hideOperationButton = true
     this.table!.size = pagination.size + 1
+  }
+
+  onSubmit(){
+    let corso = <String>this.courseFilter.get('corso')?.value
+    let tipo = <String>this.courseFilter.get('tipo')?.value
+    let data = new Date(this.courseFilter.get("data")?.value)
+
+    console.log(`file caricati: ${this.fileCaricati}, uploads:${this.uploads?.length}, corsoSelezionato: ${corso}, tipoEsameSelezionato: ${tipo}, dataSelezionata: ${data}`)
+    
   }
 
 

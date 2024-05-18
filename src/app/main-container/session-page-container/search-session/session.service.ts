@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Session } from './Session';
+import { environment } from 'src/environments/environment';
+import { map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +27,10 @@ export class SessionService {
     {corso: '', modulo: '', tipo: '', data: '', oraInizio: '', oraFine: '', durata: '', pausa: '', docente: ''} as Session,
     {corso: '', modulo: '', tipo: '', data: '', oraInizio: '', oraFine: '', durata: '', pausa: '', docente: ''} as Session,
   ]
-
+  private _pathCorsi = '/api/corso/list/nome'
   private sessionPaginated: Session[] = []
+
+  constructor(private _http:HttpClient){}
 
   getSessionPaginated(pagination: { page: number; size: number; }) {
     let startTime = performance.now()
@@ -65,6 +70,21 @@ export class SessionService {
     this.sessionPaginated = this.emptySession.slice(startIndex,startIndex+pagination.size)
     
     return pag
+  }
+
+  getCorsi() : Promise<{nome: string}[] | undefined>{
+    
+    let url = `${environment.http_server_host}${this._pathCorsi}`
+    console.log(`SessionService - url nome corsi: ${url}`)
+
+    return this._http.get(url).pipe(
+      map((response) => {
+        
+        // converto la response
+        const list = <{nome: string}[]>(response)
+        return list
+      })
+    ).toPromise()
   }
  
 }

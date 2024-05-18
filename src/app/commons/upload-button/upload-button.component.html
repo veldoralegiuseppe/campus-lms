@@ -1,4 +1,4 @@
-<input type="file" class="file-input"
+<input type="file" class="file-input" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf"
        (change)="onFileSelected($event)" #fileUpload>
 
 <div class="file-upload">
@@ -10,8 +10,8 @@
     </button>
  
     <div class="progress" [style]="{display: 'flex', alignItems:'center', marginLeft: '1rem'}">
-        <mat-progress-spinner class="progress-bar" mode="determinate" [value]="uploadProgress" [diameter]="22" *ngIf="upload"> </mat-progress-spinner>
-        <mat-icon class="cancel-upload" (click)="cancelUpload()" [style]="{transform: 'scale(0.8)', color: 'red'}" *ngIf="!upload && fileName">delete_forever</mat-icon>
+        <mat-progress-spinner class="progress-bar" mode="determinate" [value]="uploadProgress" [diameter]="22" *ngIf="uploadProgress"> </mat-progress-spinner>
+        <mat-icon class="cancel-upload" (click)="cancelUpload()" [style]="{transform: 'scale(0.8)', color: 'red', cursor: 'pointer'}" *ngIf="isCancelable && fileName">delete_forever</mat-icon>
     </div>
 
 </div>

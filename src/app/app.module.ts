@@ -64,7 +64,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatRadioModule} from '@angular/material/radio';
 import { LoginComponent } from './main-container/login/login.component';
-
+import {MatDatepickerModule} from '@angular/material/datepicker'
+import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
 
 import { ErrorInterceptor } from './commons/interceptors/error-interceptor';
 import { AuthInterceptor } from './commons/interceptors/auth-interceptor';
@@ -146,11 +147,14 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
     MatButtonModule,
     MatInputModule,
     MatRadioModule,
+    MatDatepickerModule,
   ],
   providers: [
     httpInterceptorProviders,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService
+    JwtHelperService,
+    {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
+    provideNativeDateAdapter(),
   ],
   bootstrap: [AppComponent]
 })

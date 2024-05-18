@@ -14,11 +14,15 @@
     grid-column: studenti-start/studenti-end;
 }
 
+.sessioni{
+    grid-column: sessioni-start/sessioni-end;
+}
+
 .loading-bar{
     height: 6px;
     display: flex;
     align-items: center;
-    grid-column: corso-start/studenti-end;
+    grid-column: 1/span 3;
 
     .wrapper{ width: 100%; }
 
