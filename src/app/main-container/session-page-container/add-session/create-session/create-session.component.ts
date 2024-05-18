@@ -1,5 +1,5 @@
 import { trigger, state, style } from '@angular/animations';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, QueryList, Type, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, Type, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PaginationComponent } from 'src/app/commons/pagination/pagination.component';
 import { Row } from 'src/app/commons/table-v2/Row';
@@ -11,6 +11,9 @@ import { StepperOrientation } from '@angular/cdk/stepper';
 import { Observable, map, of } from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import { UploadButtonComponent } from 'src/app/commons/upload-button/upload-button.component';
+import { CreateSessionService, SessioneDTO } from 'src/app/main-container/session-page-container/add-session/create-session/create-session.service';
+import { HttpEventType } from '@angular/common/http';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 interface Corsi {
   value: string;
@@ -118,6 +121,17 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
    */
   minDate: Date = new Date()
 
+  /**
+   * Prova scritta
+   */
+  private _file: File | null = null
+
+  /**
+   * Progressi nell'invio della request
+   */
+   uploadProgress : number | null = null
+  
+
  
   /**
    * Layout param
@@ -137,7 +151,7 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
 
   stepperOrientation!: Observable<StepperOrientation>;
   
-  constructor(private sessionService: SessionService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver,){
+  constructor(private sessionService: SessionService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver, private _service: CreateSessionService, private _changeDetector: ChangeDetectorRef, private _snackBar: MatSnackBar){
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({matches}) => (matches ? 'horizontal' : 'vertical')));
@@ -165,13 +179,17 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
 
   }
   
-  onFileUpload(fileName : string){
+  onFileUpload(file : File | null){
+    console.log(`onFileUpload: ${file}`)
     ++this.fileCaricati
+    this._file = file
     this.isStepComplete()
   }
 
-  onFileDelete(fileName : string){
+  onFileDelete(file : File | null){
+    console.log(`onFileDelete: ${file}`)
     if(this.fileCaricati > 0) --this.fileCaricati
+    this._file = file
     this.isStepComplete()
   }
 
@@ -184,11 +202,14 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
     let isStepCompleted = false 
 
     if(corso && tipo && data){
-      if(tipo.toLowerCase() == 'orale') isStepCompleted = true
+      if(tipo.toLowerCase() == 'orale') {
+        isStepCompleted = true
+        if(this.uploads?.first?.fileName) this.uploads?.first.reset()
+      }
       else if(fileName) isStepCompleted = true
     }
 
-    console.log(`file caricati: ${this.fileCaricati}, fileName: ${fileName},uploadButtons:${this.uploads?.length}, corsoSelezionato: ${corso}, tipoEsameSelezionato: ${tipo}, dataSelezionata: ${data} isStepComplete:${isStepCompleted}`)
+    //console.log(`file caricati: ${this.fileCaricati}, fileName: ${fileName},uploadButtons:${this.uploads?.length}, corsoSelezionato: ${corso}, tipoEsameSelezionato: ${tipo}, dataSelezionata: ${data} isStepComplete:${isStepCompleted}`)
     this.stepOneCompleted = isStepCompleted
     
   }
@@ -279,10 +300,52 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
     let corso = <String>this.courseFilter.get('corso')?.value
     let tipo = <String>this.courseFilter.get('tipo')?.value
     let data = new Date(this.courseFilter.get("data")?.value)
+    let fileName = this.uploads?.first?.fileName ? <String> this.uploads?.first?.fileName : null
 
-    console.log(`file caricati: ${this.fileCaricati}, uploads:${this.uploads?.length}, corsoSelezionato: ${corso}, tipoEsameSelezionato: ${tipo}, dataSelezionata: ${data}`)
+    console.log(`file caricati: ${this.fileCaricati}, fileName: ${fileName},uploadButtons:${this.uploads?.length}, corsoSelezionato: ${corso}, tipoEsameSelezionato: ${tipo}, dataSelezionata: ${data}`)
+    
+    // invio al backend 
+    const sessione: SessioneDTO = {
+      nomeCorso: corso,
+      tipo: tipo,
+      data: data
+    }
+
+    // this._service.create(sessione, tipo == 'scritto' ? this._file : null).subscribe(
+    //   (event) => {
+    //     if (event.type == HttpEventType.UploadProgress){ 
+    //           this.uploadProgress = Math.round(100 * (event.loaded / event.total!));
+    //     }
+    //   },
+
+    //   (error) => {
+    //   },
+
+    //   () => {
+    //     this.uploadProgress = null
+    //     if(this.uploads?.first) this.uploads?.first.reset()
+    //     this.uploads?.first.reset()
+    //     this._changeDetector.detectChanges()
+    //   }
+    // )
+
+    // prova schermata caricamento
+    this.uploadProgress = 10
+
+    setTimeout(() => {
+      this.uploadProgress = null
+      console.log("Caricamento riuscito")
+      if(this.uploads?.first) this.uploads?.first.reset()
+      this.courseFilter.reset()
+      this.openSnackBar("Sessione creata", "Chiudi")
+      this._changeDetector.detectChanges()
+    }, 2000)
+
     
   }
 
+  private openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
+  }
 
 }

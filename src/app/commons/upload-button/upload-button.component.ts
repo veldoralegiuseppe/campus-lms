@@ -31,15 +31,17 @@ export class UploadButtonComponent {
 
   onFileSelected(event : any) {
     const file:File = <File> event.target.files[0];
-    console.log(file)
+   
     
 
     if (file) {
       // identifico il file
+      console.log(file)
       this.fileName = file.name;
       let fileType = file.type
       this._file = file
       this.isCancelable = true
+      this.onUploadComplete.emit(file)
       this.changeDetector.detectChanges()
     }
 
@@ -58,32 +60,20 @@ export class UploadButtonComponent {
     this.fileName = undefined;
     this.isCancelable = false
     this.uploadButton.nativeElement.value = null
-    this.onUploadDelete.emit(this.fileName)
+    this.onUploadDelete.emit(null)
     this.changeDetector.detectChanges()
   }
 
   sendFile(){
      
-      // invio del file al backend
-      if(!this._file) return
-      const formData = new FormData();
-      formData.append("thumbnail", this._file);
+    // invio del file al backend
      
-      const upload$ = this.http.post("/api/thumbnail-upload", formData, {
-        reportProgress: true,
-        observe: 'events'
-      }).pipe(
-        finalize(() => {
-          this.isCancelable = true
-          this.reset()
-        })
-     );
 
-     this.uploadSub = upload$.subscribe(event => {
-      if (event.type == HttpEventType.UploadProgress) {
-        this.uploadProgress = Math.round(100 * (event.loaded / event.total!));
-      }
-     })
+    //  this.uploadSub = upload$.subscribe(event => {
+    //   if (event.type == HttpEventType.UploadProgress) {
+    //     this.uploadProgress = Math.round(100 * (event.loaded / event.total!));
+    //   }
+    //  })
   }
 
 }

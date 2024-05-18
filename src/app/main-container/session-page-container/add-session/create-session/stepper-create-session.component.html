@@ -47,7 +47,7 @@
           </div>
 
         </div>
-        <div class="stepper-button-container"> <button mat-button matStepperNext [disabled]="!step1.completed">Crea</button> </div>
+        <div class="stepper-button-container"> <button mat-button matStepperNext (click)="onSubmit()" [disabled]="!step1.completed">Crea</button> </div>
       </form>
     </mat-step>
 
@@ -74,4 +74,7 @@
     </mat-step> -->
 
   </mat-stepper>
+
+  <!-- Progress spinner -->
+  <app-loading *ngIf="uploadProgress" [indeterminate]="true" [progress]="uploadProgress"></app-loading>
 </div>
