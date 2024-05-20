@@ -8,7 +8,7 @@
    <div 
       class="app-table-v2 table-container"
       [@openClose] = "hideTable ? 'close' : 'open'"
-      [columnsTemplate]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? ['Corso','2fr','Sessioni','1fr','Moduli','1fr'] : (authInfo?.payload?.role?.toString() == 'DOCENTE' ? ['Corso','2fr','Sessioni','1fr','Studenti','1fr']: ['Corso','2fr','Sessioni','1fr','Studenti','1fr'])"
+      [columnsTemplate]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? ['Corso','2fr','Sessioni','1fr','Moduli','1fr'] : (authInfo?.payload?.role?.toString() == 'DOCENTE' ? ['Corso','1.5fr','Sessioni','1fr','Studenti','1fr']: ['Corso','1.5fr','Sessioni','1fr','Studenti','1fr'])"
       [rowType]="rowType"
       [modelTableMapper]="courseTableMapper">
    </div>

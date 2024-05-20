@@ -38,11 +38,15 @@
     grid-column: docente-start/docente-end;
 }
 
+.studenti{
+    grid-column: studenti-start/studenti-end;
+}
+
 .loading-bar{
     height: 6px;
     display: flex;
     align-items: center;
-    grid-column: corso-start/docente-end;
+    grid-column: 1/span 5;
 
     .wrapper{ width: 100%; }
 

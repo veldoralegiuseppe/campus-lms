@@ -7,14 +7,41 @@
     <div class="course-form">
         <div class="form-title">Dati corso</div>
         <div class="form" [formGroup] = "courseFilter">
-            <div [ngStyle]="{'margin-right':'3rem'}" class="app-select-bar" [options]="['Corso']" formControlName="corso"></div>
-            <div class="app-select-bar" [options]="['CUP']" formControlName="sessione"></div>
-            <input [ngStyle]="{'transform':'translateX(3rem)'}" class="search-bar classe-associata" type="text" placeholder="Classe associata" disabled="true">
-            <input style="visibility: hidden;" class="search-bar" type="text">
+            <!-- <div [ngStyle]="{'margin-right':'3rem'}" class="app-select-bar" [options]="['Corso']" formControlName="corso"></div>
+            <div class="app-select-bar" [options]="['Tipo', 'Orale', 'Scritto']" formControlName="sessione"></div> -->
+            <!-- <app-datepicker class="date" [placeholder]="'Da'" formControlName="dataDa"></app-datepicker>
+            <app-datepicker class="date" [placeholder]="'A'" formControlName="dataA"></app-datepicker> -->
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Corsi disponibili</mat-label>
+                <mat-select class="custom-theme" formControlName="nomeCorso">
+                    @for (corso of corsi; track corso) {
+                    <mat-option class='not-empty-select' [value]="corso.value">{{corso.viewValue}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Tipo</mat-label>
+                <mat-select class="custom-theme" formControlName="tipo">
+                    <mat-option class='not-empty-select' value="scritto">Scritto</mat-option>
+                    <mat-option class='not-empty-select' value="orale">Orale</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Data da</mat-label>
+                <input matInput type="date-local" formControlName="dataDa" [matDatepicker]="pickerDa">
+                <mat-datepicker-toggle matIconSuffix [for]="pickerDa"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDa></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Data a</mat-label>
+                <input matInput type="date-local" formControlName="dataA" [matDatepicker]="pickerA">
+                <mat-datepicker-toggle matIconSuffix [for]="pickerA"></mat-datepicker-toggle>
+                <mat-datepicker #pickerA></mat-datepicker>
+            </mat-form-field>
         </div>
     </div>
 
-    <div class="activity-form">
+    <!-- <div class="activity-form">
         <div class="form-title">Dati attività</div>
         <div class="form" [formGroup] = "activityFilter">
             <input class="search-bar" type="text" placeholder="Attività" formControlName="attivita">
@@ -25,7 +52,7 @@
                 <app-checkbox-v2 class="checkbox" [label]="'DAD'" formControlName="dad"></app-checkbox-v2>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="control-button-container">
         <app-reset-filter-button [onClick]="resetFilter" [label]="'Azzera filtri'" class="reset-button-container"></app-reset-filter-button>
@@ -35,7 +62,7 @@
 
     <div class="app-table-v2 table" 
          [@openClose] = "hideTable ? 'close' : 'open'"
-         [columnsTemplate]="['corso','1fr','modulo','1fr','tipo','1fr','data','1fr','ora-inizio','1fr','ora-fine','1fr','durata','1fr','pausa','1fr','docente','1fr']" 
+         [columnsTemplate]="['corso','1fr','tipo','1fr','data','1fr','docente','1fr','studenti','1fr']" 
          [modelTableMapper]="sessionTableMapper"
          [rowType]="rowType"> 
     </div>

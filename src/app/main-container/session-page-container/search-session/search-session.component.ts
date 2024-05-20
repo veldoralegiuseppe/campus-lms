@@ -1,5 +1,5 @@
 import { trigger, state, style } from '@angular/animations';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, Type, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, LOCALE_ID, OnInit, Type, ViewChild } from '@angular/core';
 import { Session } from './Session';
 import { SessionTableRowComponent } from './session-table-row/session-table-row.component';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -7,9 +7,11 @@ import { PaginationComponent } from 'src/app/commons/pagination/pagination.compo
 import { ResetFilterButtonComponent } from 'src/app/commons/reset-filter-button/reset-filter-button.component';
 import { Row } from 'src/app/commons/table-v2/Row';
 import { TableV2Component } from 'src/app/commons/table-v2/table-v2.component';
-import { SessionService } from './session.service';
+import { SearchSessioniRequest, SessionService } from './session.service';
 import { SwitchButtonComponent } from 'src/app/commons/switch-button/switch-button.component';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
+import { formatDate } from '@angular/common';
+
 
 @Component({
   selector: '.app-search-session',
@@ -101,6 +103,11 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
    */
   @ViewChild(SwitchButtonComponent) switch? : SwitchButtonComponent
 
+  /** 
+   * Corsi
+   */
+  corsi: Corsi[] = [];
+
   private tableMarginTop: string = '8rem'
   private loadingBarMarginTop: string = '6rem'
 
@@ -111,36 +118,34 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
   }
   
   ngOnInit(): void {
-    // Inizializzazione form
-    this.courseFilter = new FormGroup({
-      'corso': new FormControl('Corso'),
-      'sessione': new FormControl("CUP")
+     // inizializzazione corsi
+     this.sessionService.getCorsi().then(c => {
+      this.corsi = c!.map(v => { return {value: v.nome, viewValue: v.nome}})
     })
 
-    this.activityFilter = new FormGroup({
-      'attivita': new FormControl(""),
-      'dataDa': new FormControl(undefined),
-      'dataA': new FormControl(undefined),
-      'fad': new FormControl(false),
-      'dad': new FormControl(false),
+    // Inizializzazione form
+    this.courseFilter = new FormGroup({
+      'nomeCorso': new FormControl(null),
+      'tipo': new FormControl(null),
+      'dataDa': new FormControl(null),
+      'dataA': new FormControl(null)
     })
 
    
     this.courseFilter.valueChanges.subscribe(value => {
-      if( JSON.stringify({corso: "Corso", sessione: "CUP"}) === JSON.stringify(value) && 
-          JSON.stringify({attivita: "", dataDa: null, dataA: null, fad: false, dad: false}) === JSON.stringify(this.activityFilter.value))
+      if(!this.courseFilter.dirty)
         this.resetFilterButton?.enable(false)
       else
         this.resetFilterButton?.enable(true)
     })
 
-    this.activityFilter.valueChanges.subscribe(value => {
-      if( JSON.stringify({attivita: "", dataDa: null, dataA: null, fad: false, dad: false}) === JSON.stringify(value) &&
-          JSON.stringify({corso: "Corso", sessione: "CUP"}) === JSON.stringify(this.courseFilter.value) )
-        this.resetFilterButton?.enable(false)
-      else
-        this.resetFilterButton?.enable(true)
-    })
+    // this.activityFilter.valueChanges.subscribe(value => {
+    //   if( JSON.stringify({attivita: "", dataDa: null, dataA: null, fad: false, dad: false}) === JSON.stringify(value) &&
+    //       JSON.stringify({corso: "Corso", sessione: "CUP"}) === JSON.stringify(this.courseFilter.value) )
+    //     this.resetFilterButton?.enable(false)
+    //   else
+    //     this.resetFilterButton?.enable(true)
+    // })
   }
   
   ngAfterViewInit(): void {
@@ -157,7 +162,7 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
     if(this.session.length <= 0) return {loading: true}
     
     if(index === 0)
-    return {session: {corso: 'Corso', modulo: 'Modulo', tipo: 'Tipo', data: 'Data', oraInizio: 'Ora inizio', oraFine: 'Ora fine', durata: 'Durata', pausa: 'Pausa', docente: 'Docente'}}
+    return {session: {corso: 'Corso', tipo: 'Tipo', data: 'Data', docente: 'Docente', studenti: 'Iscrizioni'}}
     else 
       return {session: this.session.at(index-1)}
   }
@@ -190,18 +195,15 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
    */
   resetFilter: () => void = () => {
     
-    this.courseFilter.reset({
-      'corso': 'Corso',
-      'sessione': "CUP"
-    })
+    this.courseFilter.reset()
 
-    this.activityFilter.reset({
-      'attivita': "",
-      'dataDa': null,
-      'dataA': null,
-      'fad': false,
-      'dad': false,
-    })
+    // this.activityFilter.reset({
+    //   'attivita': "",
+    //   'dataDa': null,
+    //   'dataA': null,
+    //   'fad': false,
+    //   'dad': false,
+    // })
 
     this.resetFilterButton?.enable(false)
   }
@@ -214,16 +216,29 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
     
     // Gestione delle form
     console.log(this.courseFilter.value)
-    console.log(this.activityFilter.value)
+    //console.log(this.activityFilter.value)
+
+    const nomeCorso = this.courseFilter.get('nomeCorso')?.value
+    const tipo = this.courseFilter.get('tipo')?.value
+    const dataDa = this.courseFilter.get('dataDa')?.value ? formatDate(this.courseFilter.get('dataDa')?.value, 'yyyy-MM-dd', 'it-IT') : null
+    const dataA = this.courseFilter.get('dataA')?.value ? formatDate(this.courseFilter.get('dataA')?.value, 'yyyy-MM-dd', 'it-IT') : null
+  
+
+    const filter: SearchSessioniRequest = {
+      nomeCorso: nomeCorso,
+      tipo : tipo,
+      dataDa: dataDa,
+      dataA: dataA
+    }
 
     this.tableDOM!.nativeElement.style.marginTop = this.loadingBarMarginTop
 
-    this.sessionService.getSessionPaginated(pagination).then(response => {
-      this.session = response.session
-      this.pages = response.pagination.totalPages
-      this.pageSize = response.pagination.size
+    this.sessionService.getSessionPaginated(filter, pagination).then(response => {
+      this.session = response!.sessioni
+      this.pages = response!.pagination.totalPages
+      this.pageSize = response!.pagination.size
 
-      if(response.execTime <= 500){
+      if(response!.execTime <= 500){
         setTimeout(() => {
           // Update table
           this.table!.size = this.session!.length + 1
@@ -237,7 +252,7 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
 
           //onEnd
           if(onEnd) onEnd()
-        }, 500 - response.execTime)
+        }, 500 - response!.execTime)
       }
       else {
         // Update table
@@ -263,4 +278,9 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
     this.table!.size = pagination.size + 1
   }
 
+}
+
+interface Corsi {
+  value: string;
+  viewValue: string;
 }

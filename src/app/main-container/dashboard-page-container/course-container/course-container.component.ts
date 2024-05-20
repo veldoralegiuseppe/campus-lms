@@ -95,10 +95,10 @@ export class CourseContainerComponent extends AuthenticationComponent implements
       this.header = {studenteCourse: {moduli: 'Moduli', corso: 'Corso', sessioni: 'Sessioni'}}
     }
     else if(this.role == "DOCENTE"){
-      this.header = {docenteCourse: {studenti: 'Studenti', corso: 'Corso', sessioni: 'Sessioni'}}
+      this.header = {docenteCourse: {studenti: 'Studenti totali', corso: 'Corso', sessioni: 'Sessioni'}}
     }
     else if(this.role == "ADMIN"){
-      this.header = {adminCourse: {studenti: 'Studenti', corso: 'Corso', sessioni: 'Sessioni'}}
+      this.header = {adminCourse: {studenti: 'Studenti totali', corso: 'Corso', sessioni: 'Sessioni'}}
     }
 
     // Inizializzazione form

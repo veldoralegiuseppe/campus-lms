@@ -224,7 +224,7 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
     if(this.session.length <= 0) return {loading: true}
     
     if(index === 0)
-    return {session: {corso: 'Corso', modulo: 'Modulo', tipo: 'Tipo', data: 'Data', oraInizio: 'Ora inizio', oraFine: 'Ora fine', durata: 'Durata', pausa: 'Pausa', docente: 'Docente'}}
+    return {session: {corso: 'Corso', tipo: 'Tipo', data: 'Data', docente: 'Docente', studenti: 'Studenti'}}
     else 
       return {session: this.session.at(index-1)}
   }
@@ -233,69 +233,69 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
    * Risponde al cambio di parametri della paginazione
    * @param pagination 
    */
-  handlePaginationChange(pagination: {page: number, size: number}){
+  // handlePaginationChange(pagination: {page: number, size: number}){
 
-    this.getSession(pagination, () => {
-      this.tableDOM!.nativeElement.style.marginTop = this.tableMarginTop
-      this.tableDOM?.nativeElement.scrollIntoView()
-    })
-  }
+  //   this.getSession(pagination, () => {
+  //     this.tableDOM!.nativeElement.style.marginTop = this.tableMarginTop
+  //     this.tableDOM?.nativeElement.scrollIntoView()
+  //   })
+  // }
 
   /**
    * Recupera gli utenti
    * @param pagination paginazione
    */
-  getSession(pagination: {page: number, size: number}, onEnd?: () => void){
+  // getSession(pagination: {page: number, size: number}, onEnd?: () => void){
     
-    // Gestione delle form
-    console.log(this.courseFilter.value)
+  //   // Gestione delle form
+  //   console.log(this.courseFilter.value)
     
-    this.tableDOM!.nativeElement.style.marginTop = this.loadingBarMarginTop
+  //   this.tableDOM!.nativeElement.style.marginTop = this.loadingBarMarginTop
 
-    this.sessionService.getSessionPaginated(pagination).then(response => {
-      this.session = response.session
-      this.pages = response.pagination.totalPages
-      this.pageSize = response.pagination.size
+  //   this.sessionService.getSessionPaginated(pagination).then(response => {
+  //     this.session = response!.sessioni
+  //     this.pages = response!.pagination.totalPages
+  //     this.pageSize = response!.pagination.size
 
-      if(response.execTime <= 500){
-        setTimeout(() => {
-          // Update table
-          this.table!.size = this.session!.length + 1
+  //     if(response!.execTime <= 500){
+  //       setTimeout(() => {
+  //         // Update table
+  //         this.table!.size = this.session!.length + 1
   
-          // Update pagination
-          this.pagination!.pages = this.pages
-          this.hidePagination = false
+  //         // Update pagination
+  //         this.pagination!.pages = this.pages
+  //         this.hidePagination = false
   
-          // Update buttons
-          this.hideOperationButton = false
+  //         // Update buttons
+  //         this.hideOperationButton = false
 
-          //onEnd
-          if(onEnd) onEnd()
-        }, 500 - response.execTime)
-      }
-      else {
-        // Update table
-        this.table!.size = this.session!.length + 1
+  //         //onEnd
+  //         if(onEnd) onEnd()
+  //       }, 500 - response!.execTime)
+  //     }
+  //     else {
+  //       // Update table
+  //       this.table!.size = this.session!.length + 1
   
-        // Update pagination
-        this.pagination!.pages = this.pages
-        this.hidePagination = false
+  //       // Update pagination
+  //       this.pagination!.pages = this.pages
+  //       this.hidePagination = false
 
-        // Update buttons
-        this.hideOperationButton = false
+  //       // Update buttons
+  //       this.hideOperationButton = false
 
-        //onEnd
-        if(onEnd) onEnd()
-      }
-    })
+  //       //onEnd
+  //       if(onEnd) onEnd()
+  //     }
+  //   })
 
-    // CODICE ASINCRONO: Gestione animazione
-    this.session = []
-    this.hideTable = false
-    this.hidePagination = true
-    this.hideOperationButton = true
-    this.table!.size = pagination.size + 1
-  }
+  //   // CODICE ASINCRONO: Gestione animazione
+  //   this.session = []
+  //   this.hideTable = false
+  //   this.hidePagination = true
+  //   this.hideOperationButton = true
+  //   this.table!.size = pagination.size + 1
+  // }
 
   onSubmit(){
     let corso = <String>this.courseFilter.get('corso')?.value
