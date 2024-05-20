@@ -27,7 +27,7 @@ export class SessionService {
     {corso: '', modulo: '', tipo: '', data: '', oraInizio: '', oraFine: '', durata: '', pausa: '', docente: ''} as Session,
     {corso: '', modulo: '', tipo: '', data: '', oraInizio: '', oraFine: '', durata: '', pausa: '', docente: ''} as Session,
   ]
-  private _pathCorsi = '/api/corso/list/nome'
+  private _pathCorsi = '/api/corso/list/docente/nome'
   private sessionPaginated: Session[] = []
 
   constructor(private _http:HttpClient){}

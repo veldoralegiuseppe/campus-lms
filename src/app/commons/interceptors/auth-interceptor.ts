@@ -16,13 +16,31 @@ export class AuthInterceptor implements HttpInterceptor {
         let userInfo: IAuthInfo = currentUser ? JSON.parse(currentUser) : undefined
         
         if(userInfo && !this.authService.isTokenExpired(userInfo.accessToken.toString())){
-            req = req.clone({
-                setHeaders: {
-                    'Content-Type' : 'application/json; charset=utf-8',
-                    'Accept'       : 'application/json',
-                    'Authorization': `Bearer ${userInfo.accessToken}`,
-                },
-            });
+
+            let contentType = req.headers.has('Content-Type') ? req.headers.get('Content-Type') : 'application/json; charset=utf-8'
+            if(contentType?.includes("multipart/form-data")){
+                console.log("rimuovo il content type")
+                req = req.clone({
+                    headers : req.headers.delete('Content-Type'),
+                    setHeaders: {
+                        'Accept'       : 'application/json',
+                        'Authorization': `Bearer ${userInfo.accessToken}`,
+                    },
+                });
+        
+                console.log(req)
+            }
+            else {
+                req = req.clone({
+                    setHeaders: {
+                        'Content-Type' : contentType!,
+                        'Accept'       : 'application/json',
+                        'Authorization': `Bearer ${userInfo.accessToken}`,
+                    },
+                });
+            }
+
+            console.log(req)
         }
         
         return next.handle(req);

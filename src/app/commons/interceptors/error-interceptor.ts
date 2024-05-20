@@ -23,7 +23,11 @@ export class ErrorInterceptor implements HttpInterceptor {
                     if(error.status == 403){ this.router.navigate(['login'])}
                 } else {
                     //console.log(`This is server side error: ${error.message}`);
-                    errorMsg = `Error Code: ${error.status},  Message: ${error?.message}`;
+                    
+                    let message = error.message
+                    if(error.status == 500 && error.message.includes("Http failure response")) message = "Errore interno"
+                    errorMsg = message
+                    
                     //console.log(errorMsg);
                     if(error.status == 403){ this.router.navigate(['login'])}
                 }

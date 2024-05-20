@@ -14,6 +14,7 @@ import { UploadButtonComponent } from 'src/app/commons/upload-button/upload-butt
 import { CreateSessionService, SessioneDTO } from 'src/app/main-container/session-page-container/add-session/create-session/create-session.service';
 import { HttpEventType } from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { DatePipe } from '@angular/common';
 
 interface Corsi {
   value: string;
@@ -299,7 +300,7 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
   onSubmit(){
     let corso = <String>this.courseFilter.get('corso')?.value
     let tipo = <String>this.courseFilter.get('tipo')?.value
-    let data = new Date(this.courseFilter.get("data")?.value)
+    let data = this.courseFilter.get("data")?.value
     let fileName = this.uploads?.first?.fileName ? <String> this.uploads?.first?.fileName : null
 
     console.log(`file caricati: ${this.fileCaricati}, fileName: ${fileName},uploadButtons:${this.uploads?.length}, corsoSelezionato: ${corso}, tipoEsameSelezionato: ${tipo}, dataSelezionata: ${data}`)
@@ -308,39 +309,33 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
     const sessione: SessioneDTO = {
       nomeCorso: corso,
       tipo: tipo,
-      data: data
+      data: data!
     }
 
-    // this._service.create(sessione, tipo == 'scritto' ? this._file : null).subscribe(
-    //   (event) => {
-    //     if (event.type == HttpEventType.UploadProgress){ 
-    //           this.uploadProgress = Math.round(100 * (event.loaded / event.total!));
-    //     }
-    //   },
+    this.uploadProgress = 0
+    this._service.create(sessione, tipo == 'scritto' ? this._file : null).subscribe(
+      (event) => {
+        if (event.type == HttpEventType.UploadProgress){ 
+          this.uploadProgress = Math.round(100 * (event.loaded / event.total!));
+          console.log('upload progress: ' + this.uploadProgress)
+          this._changeDetector.detectChanges()
+        }
+      },
 
-    //   (error) => {
-    //   },
+      (error) => {
+        this.uploadProgress = null
+        this.openSnackBar(error, "Chiudi")
+        this._changeDetector.detectChanges()
+      },
 
-    //   () => {
-    //     this.uploadProgress = null
-    //     if(this.uploads?.first) this.uploads?.first.reset()
-    //     this.uploads?.first.reset()
-    //     this._changeDetector.detectChanges()
-    //   }
-    // )
-
-    // prova schermata caricamento
-    this.uploadProgress = 10
-
-    setTimeout(() => {
-      this.uploadProgress = null
-      console.log("Caricamento riuscito")
-      if(this.uploads?.first) this.uploads?.first.reset()
-      this.courseFilter.reset()
-      this.openSnackBar("Sessione creata", "Chiudi")
-      this._changeDetector.detectChanges()
-    }, 2000)
-
+      () => {
+        this.uploadProgress = null
+        if(this.uploads?.first) this.uploads?.first.reset()
+        this.courseFilter.reset()
+        this.openSnackBar("Sessione creata con successo", "Chiudi")
+        this._changeDetector.detectChanges()
+      }
+    )
     
   }
 

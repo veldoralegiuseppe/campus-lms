@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
+import {  LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import * as it from '@angular/common/locales/it'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -71,6 +72,7 @@ import { ErrorInterceptor } from './commons/interceptors/error-interceptor';
 import { AuthInterceptor } from './commons/interceptors/auth-interceptor';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { LoadingComponent } from './commons/loading/loading.component';
+import { registerLocaleData } from '@angular/common';
 
 
 export const httpInterceptorProviders = [
@@ -133,6 +135,7 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         UploadButtonComponent,
     ],
     providers: [
+        { provide: LOCALE_ID, useValue: 'it-IT' },
         httpInterceptorProviders,
         { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
         JwtHelperService,
@@ -160,4 +163,8 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         LoadingComponent
     ]
 })
-export class AppModule { }
+export class AppModule {
+    constructor() {
+        registerLocaleData(it.default); //Then register the language
+      }
+ }

@@ -82,8 +82,8 @@ export class ActivityService {
         let activities: Activity[] = resp.content.map(s =>  {
 
           let activity: Activity = {
-            docenteActivity: role == UserRole.DOCENTE ? {corso: s.nomeCorso, data: s.dataOra, sessione: s.tipo, correzione: ""} : undefined,
-            studenteActivity: role == UserRole.STUDENTE ? {tipo: 'ESAME', corso: s.nomeCorso, data: s.dataOra, dettaglio: s.tipo} : undefined,
+            docenteActivity: role == UserRole.DOCENTE ? {corso: s.nomeCorso, data: s.data, sessione: s.tipo, correzione: ""} : undefined,
+            studenteActivity: role == UserRole.STUDENTE ? {tipo: 'ESAME', corso: s.nomeCorso, data: s.data, dettaglio: s.tipo} : undefined,
             adminActivity: undefined
           }
 
@@ -126,7 +126,7 @@ interface SessioneDTO{
     "content": [
       {
         "nomeCorso": String,
-        "dataOra": String,
+        "data": String,
         "tipo": String
       }
     ],

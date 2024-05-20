@@ -3,8 +3,8 @@
     <!-- Header -->
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE') && (index === 0 && !loading)">
         <div [ngClass]="['corso', 'header']">{{course?.studenteCourse?.corso}}</div>
-        <div [ngClass]="['moduli', 'header']">{{course?.studenteCourse?.moduli}}</div>
         <div [ngClass]="['sessioni', 'header']">{{course?.studenteCourse?.sessioni}}</div>
+        <div [ngClass]="['moduli', 'header']">{{course?.studenteCourse?.moduli}}</div>
     </ng-template>
 
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE') && (index === 0 && !loading)">
@@ -32,8 +32,8 @@
     <!-- Body -->
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE') && (index > 0 && (loading === undefined || !loading))">
         <div [ngClass]="['corso', 'body']">{{course?.studenteCourse?.corso}}</div>
-        <div [ngClass]="['moduli', 'body']">{{course?.studenteCourse?.moduli}}</div>
         <div [ngClass]="['sessioni', 'body']">{{course?.studenteCourse?.sessioni}}</div>
+        <div [ngClass]="['moduli', 'body']">{{course?.studenteCourse?.moduli}}</div>
     </ng-template>
 
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE') && (index > 0 && (loading === undefined || !loading))">

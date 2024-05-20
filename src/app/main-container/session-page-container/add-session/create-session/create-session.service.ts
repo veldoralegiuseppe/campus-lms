@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -17,16 +17,15 @@ export class CreateSessionService {
   create(sessione: SessioneDTO, file: File | null){
 
     let url = `${environment.http_server_host}${this._pathSessione}`
-    
-    if(file){
-      const formData = new FormData();
-      formData.append("thumbnail", file);
-      sessione.provaScritta = formData
-    }
-
-    return this._http.post(url, sessione, {
+  
+    const formData = new FormData();
+    formData.append("sessione", new Blob([JSON.stringify(sessione)], { type: 'application/json' }) )
+    if(file) formData.append("file", file)
+      
+    return this._http.post(url, formData, {
       reportProgress: true,
-      observe: 'events'
+      observe: 'events',
+      headers: new HttpHeaders({ "Content-Type": "multipart/form-data"})
     })
 
   }
@@ -37,5 +36,5 @@ export interface SessioneDTO{
   nomeCorso: String,
   data: Date, 
   tipo: String,
-  provaScritta?: FormData
+  provaScritta?: File
 }
