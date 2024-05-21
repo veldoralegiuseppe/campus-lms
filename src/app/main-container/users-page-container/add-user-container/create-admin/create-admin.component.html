@@ -1,1 +1,92 @@
-<p>create-admin works!</p>
+<div class="main-container" style="display: flex; flex-direction: column; margin-right: 2rem; row-gap: 3rem;">
+
+    <div class="title" style="flex-basis: 100%; margin-bottom: 4rem;">Utente - Crea utente</div>
+
+    <div class="form-container" style="display: flex; flex-direction: column; flex-basis: 100%; row-gap: 3rem;">
+        <div class="utente-form" [formGroup] = "utenteForm" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+            <div class="form-title">Dati utente</div>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Nome</mat-label>
+                <input matInput [errorStateMatcher]="matcher" formControlName="nome">
+                @if (this.utenteForm.get('nome')?.hasError('required')) {
+                <mat-error>Nome <strong>richiesto</strong></mat-error>
+                }
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Cognome</mat-label>
+                <input matInput [errorStateMatcher]="matcher" formControlName="cognome">
+                @if (this.utenteForm.get('cognome')?.hasError('required')) {
+                <mat-error>Cognome <strong>richiesto</strong></mat-error>
+                }
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Codice fiscale</mat-label>
+                <input matInput [errorStateMatcher]="matcher" formControlName="codiceFiscale" [maxlength]="16">
+                @if (this.utenteForm.get('codiceFiscale')?.hasError('required')) {
+                <mat-error>Codice fiscale <strong>richiesto</strong></mat-error>
+                }
+                @if (this.utenteForm.get('codiceFiscale')?.hasError('pattern')) {
+                    <mat-error>Codice fiscale <strong>errato</strong></mat-error>
+                }
+            </mat-form-field>
+    
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher"
+                    placeholder="Ex. pat@example.com">
+                @if (this.utenteForm.get('email')?.hasError('email') && !this.utenteForm.get('email')?.hasError('required')) {
+                <mat-error>Inserisci un indirizzo email valido</mat-error>
+                }
+                @if (this.utenteForm.get('email')?.hasError('required')) {
+                <mat-error>Email <strong>richiesta</strong></mat-error>
+                }
+            </mat-form-field>
+    
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Ruolo</mat-label>
+                <mat-select class="custom-theme" formControlName="ruolo">
+                    <mat-option class='not-empty-select' value="STUDENTE">STUDENTE</mat-option>
+                    <mat-option class='not-empty-select' value="DOCENTE">DOCENTE</mat-option>
+                    <mat-option class='not-empty-select' value="ADMIN">ADMIN</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    
+        <div *ngIf="this.utenteForm.get('ruolo')?.value == 'STUDENTE' || this.utenteForm.get('ruolo')?.value == 'DOCENTE'" class="corsi-form" [formGroup]="corsoForm">
+            <div class="form-title">{{this.utenteForm.get('ruolo')?.value == 'STUDENTE' ? "Iscrizione ai corsi" : "Cattedra dei corsi"}}</div>
+    
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Corsi disponibili</mat-label>
+                <mat-select class="custom-theme" formControlName="corsi" multiple>
+                    @if(this.utenteForm.get('ruolo')?.value == 'STUDENTE'){
+                        @if(corsi.length == 0){<mat-option>-- Nessuno --</mat-option>}
+                        @for (corso of corsi; track corso) {
+                            <mat-option class='not-empty-select' [value]="corso.value">{{corso.viewValue}}</mat-option>
+                        }
+                    }
+                    @else{
+                        @if(corsiCattedraLibera.length == 0){<mat-option>-- Nessuno --</mat-option>}
+                        @for (corso of corsiCattedraLibera; track corso) {
+                            <mat-option class='not-empty-select' [value]="corso.value">{{corso.viewValue}}</mat-option>
+                        }
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div style="flex-basis: 100%; display: flex; justify-content: flex-start;">
+        <button mat-button (click)="onSubmit()" 
+        [disabled]="!this.utenteForm.get('ruolo')?.value  || 
+                    !( this.utenteForm.get('ruolo')!.value == 'ADMIN' ? this.utenteForm.valid : (this.utenteForm.valid && this.corsoForm.valid) )">
+        Crea
+        </button> 
+    </div>
+
+    <!-- Progress spinner -->
+  <app-loading *ngIf="progress" [indeterminate]="true" [progress]="progress"></app-loading>
+</div>
+
