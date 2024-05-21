@@ -1,5 +1,5 @@
 <div class="session-page-container">
     <div class="app-session-help-container help-container"></div>
     <div class="app-search-session search-session-container"></div>
-    <div class="app-add-session add-session-container"></div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="app-add-session add-session-container"></div>
 </div>

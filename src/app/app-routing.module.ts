@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: 'session', component: SessionPageContainerComponent, canActivate: [AuthService]},
   {path: 'session/create', component: CreateSessionComponent, canActivate: [AuthService]},
   {path: 'users/create/student', component: CreateStudentComponent, canActivate: [AuthService]},
-  {path: 'users/create/admin', component: CreateAdminComponent, canActivate: [AuthService]},
+  {path: 'users/create', component: CreateAdminComponent, canActivate: [AuthService]},
   {path: 'users/create/office', component: CreateOfficeComponent, canActivate: [AuthService]},
 ];
 

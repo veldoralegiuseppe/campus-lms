@@ -73,6 +73,7 @@ import { AuthInterceptor } from './commons/interceptors/auth-interceptor';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { LoadingComponent } from './commons/loading/loading.component';
 import { registerLocaleData } from '@angular/common';
+import { CreateCourseContainerComponent } from "./main-container/dashboard-page-container/create-course-container/create-course-container.component";
 
 
 export const httpInterceptorProviders = [
@@ -133,6 +134,7 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         CreateAdminComponent,
         CreateOfficeComponent,
         UploadButtonComponent,
+        CreateCourseContainerComponent,
     ],
     providers: [
         { provide: LOCALE_ID, useValue: 'it-IT' },
@@ -150,6 +152,7 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         ReactiveFormsModule,
         FormsModule,
         HttpClientModule,
+        LoadingComponent,
         MatFormFieldModule,
         MatIconModule,
         MatProgressBarModule,
@@ -160,7 +163,6 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         MatInputModule,
         MatRadioModule,
         MatDatepickerModule,
-        LoadingComponent
     ]
 })
 export class AppModule {

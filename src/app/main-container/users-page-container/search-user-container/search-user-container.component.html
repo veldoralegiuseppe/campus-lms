@@ -38,8 +38,8 @@
     <app-pagination [@openClose] = "hidePagination ? 'close' : 'open'" class="pagination"  [pageSize]="pageSize" [pageSizeOptions]="[3,5,10]" (onPageChange)="handlePaginationChange($event)">
     </app-pagination>
 
-    <div #opButtons [@openClose] = "hideOperationButton? 'close' : 'open'" id="buttons" class="container">
+    <!-- <div #opButtons [@openClose] = "hideOperationButton? 'close' : 'open'" id="buttons" class="container">
         <app-detail-button [onClick]="detailUser" [label]="'Dettaglio'"></app-detail-button>
         <app-remove-button [onClick]="removeUser" [label]="'Rimuovi'"></app-remove-button>
-    </div>
+    </div> -->
 </div>

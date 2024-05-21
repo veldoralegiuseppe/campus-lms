@@ -165,5 +165,9 @@ export class CourseContainerComponent extends AuthenticationComponent implements
     else 
       return {course: this.courses.at(index-1), loading: false}
   }
+
+  refresh(){
+    this.getCoursesPaginated({page: this.pages, size: this.pageSize})
+  }
   
 }

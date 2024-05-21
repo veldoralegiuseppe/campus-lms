@@ -2,4 +2,5 @@
     <div class="app-welcome-container welcome-container"></div>
     <div class="app-course-container course-container"></div>
     <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() != 'ADMIN'" class="app-activity-container activity-container"></div>
+    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" (onCreationComplete)="refresh()" class="app-create-course-container activity-container"></div>
 </div>

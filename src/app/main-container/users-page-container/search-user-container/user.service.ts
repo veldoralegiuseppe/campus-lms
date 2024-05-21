@@ -47,9 +47,10 @@ export class UserService {
           return utente
         })
         for(let i=utenti.length; i<pagination.size; i++) utenti.push(this.getEmptyUtente())
-        console.log(`Utenti: ${JSON.stringify(utenti)}, sizeDesiderata: ${pagination.size}`)
+    
 
         let pag = {totalPages: resp.totalPages > 0 ? resp.totalPages : 1, currentPage: resp.pageable.pageNumber, size: pagination.size} 
+        console.log(`Utenti: ${JSON.stringify(utenti)}, sizeDesiderata: ${pagination.size}, paginazione: ${JSON.stringify(pag)}`)
 
         return {users: utenti, pagination: pag, execTime: performance.now() - startTime}
       })

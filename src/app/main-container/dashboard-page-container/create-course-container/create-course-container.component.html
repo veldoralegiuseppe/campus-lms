@@ -1,0 +1,45 @@
+<div class="main-container" style="display: flex; flex-direction: column; margin-right: 2rem; row-gap: 3rem; margin-left: 2rem;">
+
+    <div class="title" style="flex-basis: 100%; margin-bottom: 2.5rem;">Crea corso</div>
+
+    <div class="form-container" style="display: flex; flex-direction: column; flex-basis: 100%; row-gap: 3rem;">
+        <div class="corso-form" [formGroup] = "corsoForm" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+            <div class="form-title">Dati generali</div>
+    
+            <mat-form-field style="margin-bottom: 2rem;" appearance="outline">
+                <mat-label>Nome</mat-label>
+                <input matInput [errorStateMatcher]="matcher" formControlName="nome">
+                @if (this.corsoForm.get('nome')?.hasError('required')) {
+                <mat-error>Nome <strong>richiesto</strong></mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field style="margin-bottom: 2rem;" appearance="outline">
+                <mat-label>Descrizione</mat-label>
+                <input matInput [errorStateMatcher]="matcher" formControlName="descrizione">
+            </mat-form-field>
+
+            <mat-form-field style="margin-bottom: 2rem;" class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Docente</mat-label>
+                <mat-select class="custom-theme" formControlName="docente">
+                    @if(docenti.length == 0){<mat-option>-- Nessuno --</mat-option>}
+                    @for (docente of docenti; track docente) {
+                        <mat-option class='not-empty-select' [value]="docente.value">{{docente.viewValue}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+    </div>
+
+    <div style="flex-basis: 100%; display: flex; justify-content: flex-end;">
+        <button mat-button (click)="onSubmit()" 
+        [disabled]="!this.corsoForm.valid">
+        Crea
+        </button> 
+    </div>
+
+    <!-- Progress spinner -->
+  <app-loading *ngIf="progress" [indeterminate]="true" [progress]="progress"></app-loading>
+</div>
+

@@ -1,6 +1,6 @@
 .session-page-container{
     display: grid;
-    grid-template-rows: [help-container-start] 1fr [help-container-end add-session-container-start] 1fr [add-session-container-end search-session-container-start] auto [search-session-container-end];
+    grid-template-rows: [help-container-start] 1fr [help-container-end add-session-container-start] auto [add-session-container-end search-session-container-start] auto [search-session-container-end];
     grid-template-columns: [help-container-start add-session-container-start search-session-container-start] 1fr [help-container-end add-session-container-end search-session-container-end];
     padding: $padding;
     row-gap: $page-row-gap;
