@@ -1,1 +1,53 @@
-<p>course-page-container works!</p>
+<div *ngIf="progress == null" class="main-container" style="display: flex; flex-direction: column; margin-right: 2rem; row-gap: 3rem; margin-left: 2rem;">
+
+    <div class="title" style="flex-basis: 100%; margin-bottom: 2.5rem;">{{corso?.nome}}</div>
+    <div class="descrizione" style="flex-basis: 100%; margin-bottom: 2.5rem;">
+        <h2 style="flex-basis: 100%; margin-bottom: 1rem;">Descrizione:</h2>
+        <p style="color: #9b9b9b;">{{corso?.descrizione}}</p>
+    </div>
+
+    <div class="moduli-container">
+        @for (modulo of corso?.moduli; track modulo) {
+            <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="panel-title">MODULO {{$index+1}} - {{modulo.nome}}</mat-panel-title>
+                        <!-- <mat-panel-description>{{modulo.descrizione ? modulo.descrizione : ""}}</mat-panel-description> -->
+                    </mat-expansion-panel-header>
+                    <p style="color: #9b9b9b; margin: 1.5rem 0;">{{modulo.descrizione ? modulo.descrizione : ""}}</p>
+                    <mat-divider style="margin-bottom: 3rem;"></mat-divider>
+                    <div class="attivita-container" style="display: flex; width: 100%; height: 100%; column-gap: 5rem; flex-wrap: wrap;">
+                        @for(settimana of groupBySettimana(modulo) | keyvalue; track settimana){
+                            <div style="display: flex; align-items: flex-start;">
+                                <mat-list [ngStyle]="{'marginBottom': $last ? '0' : '1rem'}" role="list">
+                                    <h2 class="settimana-title">Settimana {{settimana.key}}</h2>
+                                    @for(attivita of settimana.value; track attivita){
+                                        <mat-list-item role="listitem">
+                                            <mat-icon matListItemIcon style="transform: scale(0.8); margin-left: 0; margin-right: 0.5rem;">insert_drive_file</mat-icon>
+                                            {{attivita.id}}
+                                        </mat-list-item>
+                                    }
+                                </mat-list>
+                            </div>
+                        } @empty {
+                            <p style="color: #9b9b9b">Nessuna attività presente</p>
+                        }
+                    </div>
+                    <mat-action-row *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'">
+                        <button class="add-activity-button" mat-button color="primary" (click)="openAttivitaDialog(modulo)"><mat-icon>add</mat-icon>Aggiungi attività</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+            </mat-accordion>
+        } @empty {
+            <p style="color: #9b9b9b">Non sono stati definiti moduli</p>
+        }
+    </div>
+
+    <div *ngIf="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE')">
+        <button mat-button (click)="openModuloDialog()" [disabled]="progress != null">Nuovo modulo</button> 
+    </div>
+    
+</div>
+
+ <!-- Progress spinner -->
+ <app-loading *ngIf="progress" [indeterminate]="true" [progress]="progress"></app-loading>

@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject, Observable, map, catchError} from 'rxjs';
@@ -9,13 +9,16 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements CanActivate {
+export class AuthService implements CanActivate, OnInit {
   private _path = '/api/login'
   private _loginUrl = `${environment.http_server_host}${this._path}`;
-  private stateItem: BehaviorSubject<IAuthInfo | null> = new BehaviorSubject<IAuthInfo | null>(null);
+  private stateItem: BehaviorSubject<IAuthInfo | null> = new BehaviorSubject<IAuthInfo | null>(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null);
   stateItem$: Observable<IAuthInfo | null> = this.stateItem.asObservable();
 
   constructor(private _http: HttpClient, private router: Router, private jwtService: JwtHelperService) {}
+  ngOnInit(): void {
+   console.log(`AuthService onInit`)
+  }
  
   login(username: string, password: string): Observable<any> {
    
@@ -81,7 +84,8 @@ export class AuthService implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if (this.stateItem.getValue() != null) {
+        
+    if (this.stateItem.getValue()) {
       return true;
     } else {
       this.router.navigate(['/login']);

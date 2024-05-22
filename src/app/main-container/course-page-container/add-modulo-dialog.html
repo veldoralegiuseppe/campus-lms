@@ -1,0 +1,10 @@
+<div class="main-container" style="display: flex; width: 100%; height: 100%; justify-content: center; flex-direction: column;">
+  <h1 mat-dialog-title style="font-size: 1.5rem;">Aggiungi modulo</h1>
+  <mat-dialog-content style="display: flex; flex-direction: column; row-gap: 2rem; margin-top: 1rem; justify-content: center;">
+   contenuto
+  </mat-dialog-content>
+  <mat-dialog-actions style="display: flex; width: 100%; justify-content: space-between;">
+    <button class="annulla-button" mat-button (click)="onNoClick()">Annulla</button>
+    <button mat-button [mat-dialog-close]="data.idCorso" cdkFocusInitial disabled>Crea</button>
+  </mat-dialog-actions>
+</div>

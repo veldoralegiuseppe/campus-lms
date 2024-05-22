@@ -13,7 +13,7 @@ import { VerticalNavbarComponent } from './commons/vertical-navbar/vertical-navb
 import { HamburgerButtonComponent } from './commons/hamburger-button/hamburger-button.component';
 import { SideNavbarComponent } from './commons/side-navbar/side-navbar.component';
 import { LogoComponent } from './commons/logo/logo.component';
-import { CoursePageContainerComponent } from './main-container/course-page-container/course-page-container.component';
+import { AddActivityDialogComponent, AddModuloDialogComponent, CoursePageContainerComponent } from './main-container/course-page-container/course-page-container.component';
 import { UsersPageContainerComponent } from './main-container/users-page-container/users-page-container.component';
 import { ReportPageContainerComponent } from './main-container/report-page-container/report-page-container.component';
 import { SessionPageContainerComponent } from './main-container/session-page-container/session-page-container.component';
@@ -67,6 +67,11 @@ import {MatRadioModule} from '@angular/material/radio';
 import { LoginComponent } from './main-container/login/login.component';
 import {MatDatepickerModule} from '@angular/material/datepicker'
 import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDialogModule} from '@angular/material/dialog'
+import {MatListModule} from '@angular/material/list';
+
+
 
 import { ErrorInterceptor } from './commons/interceptors/error-interceptor';
 import { AuthInterceptor } from './commons/interceptors/auth-interceptor';
@@ -133,8 +138,10 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         CreateStudentComponent,
         CreateAdminComponent,
         CreateOfficeComponent,
-        UploadButtonComponent,
         CreateCourseContainerComponent,
+        UploadButtonComponent,
+        AddActivityDialogComponent,
+        AddModuloDialogComponent,
     ],
     providers: [
         { provide: LOCALE_ID, useValue: 'it-IT' },
@@ -163,6 +170,9 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         MatInputModule,
         MatRadioModule,
         MatDatepickerModule,
+        MatExpansionModule,
+        MatDialogModule,
+        MatListModule,
     ]
 })
 export class AppModule {
