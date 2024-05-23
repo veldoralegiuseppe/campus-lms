@@ -2,8 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit }
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog,} from '@angular/material/dialog'
-import { UploadButtonComponent } from 'src/app/commons/upload-button/upload-button.component';
-import { AttivitaDetailsDTO, CorsoDetailsDTO, CorsoService, DocumentaleDTO, ModuloDetailsDTO } from './corso.service';
+import { AttivitaDetailsDTO, CorsoDetailsDTO, CorsoService, CreateAttivitaRequest, DocumentaleDTO, ModuloDetailsDTO } from './corso.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -45,18 +47,16 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
   };
   
 
-  constructor(private route: ActivatedRoute, public dialog: MatDialog, private _service: CorsoService, private _changeDetector: ChangeDetectorRef) {
+  constructor(private route: ActivatedRoute, public dialog: MatDialog, private _service: CorsoService, private _changeDetector: ChangeDetectorRef, private _snackBar: MatSnackBar) {
     super()
     this.idCorso = Number(this.route.snapshot.paramMap.get('id'))
   }
   
   ngOnInit(): void {
-    
-    //Inizializzo il dettaglio
     this._service.getDettaglioCorso(this.idCorso).subscribe(c => {
-        this.corso = c
-        this.progress = null
-        this._changeDetector.detectChanges()
+      this.corso = c
+      this.progress = null
+      this._changeDetector.detectChanges()
     })
   }
 
@@ -64,25 +64,32 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
     console.log('Creazione nuovo modulo')
   }
 
-  addActivity() {
-    console.log("Aggiungi attività")
-  }
-
   groupBySettimana(modulo: ModuloDetailsDTO): { [key: number] : Array<AttivitaDetailsDTO>}{
     return this.groupBy(modulo.attivita, 'settimanaProgrammata')
   }
 
-
   openAttivitaDialog(modulo: ModuloDetailsDTO): void {
     const dialogRef = this.dialog.open(AddActivityDialogComponent, {
-      data: {idCorso: this.idCorso, idModulo: modulo.id} as AttivitaData,
-      height: '25%',
-      width: '30%'
+      data: {idCorso: this.idCorso, idModulo: modulo.id, nomeModulo: modulo.nome, snackBar: this._snackBar} as AttivitaData,
+      height: '60%',
+      width: '60%'
     });
+
+    let subscription: Subscription 
+    
+    dialogRef.afterOpened().subscribe(() => {
+      subscription = dialogRef.componentInstance.creationActivityObserver.subscribe(isCreated => {
+        if(isCreated == false){
+          this.progress = 10;
+          this._changeDetector.detectChanges()
+        } 
+        else if(isCreated) return
+      })
+    })
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      //this.animal = result;
+      subscription.unsubscribe()
     });
   }
 
@@ -99,15 +106,16 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
     });
   }
 
-  download(file: DocumentaleDTO) {
-    console.log(`Download file: ${JSON.stringify(file)}`)
-    this._service.download(file).subscribe(file => {
-      const blob = new Blob([file!], { type: 'application/pdf' });
+  download(documentale: DocumentaleDTO) {
+    console.log(`Download file: ${JSON.stringify(documentale)}`)
+    this._service.download(documentale).subscribe(file => {
+      const blob = new Blob([file!], { type: documentale.contentType });
       const url= window.URL.createObjectURL(blob);
       window.open(url);
     })
     
   }
+
 }
 
 
@@ -117,17 +125,53 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
   styleUrls: ['./add-activity-dialog.scss']
 })
 export class AddActivityDialogComponent {
-  constructor(
-    public dialogRef: MatDialogRef<AddActivityDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AttivitaData,
-  ) {}
+  
+  attivitaForm: FormGroup;
+  private _file: File | null = null
+  private creation$: BehaviorSubject<boolean | null> = new BehaviorSubject<boolean | null>(null);
+  creationActivityObserver: Observable<boolean | null> = this.creation$.asObservable()
+  
+  constructor(public dialogRef: MatDialogRef<AddActivityDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: AttivitaData, private _service: CorsoService) {
+    this.attivitaForm = new FormGroup({
+      "tipo": new FormControl("STUDIO", [Validators.required]),
+      "settimanaProgrammata": new FormControl(1,[Validators.required])
+    })
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   onFileUpload(file: File){
+    this._file = file
+  }
+
+  onFileDelete(file: File){
+    this._file = file
+  }
+
+  create(){
     
+    const req: CreateAttivitaRequest = {
+      tipo: this.attivitaForm.get("tipo")?.value,
+      settimanaProgrammata: this.attivitaForm.get("settimanaProgrammata")?.value,
+      idModulo: this.data.idModulo,
+      idCorso: this.data.idCorso,
+    }
+    
+    this.creation$.next(true)
+    this._service.createAttivita(req, this._file!).subscribe(
+      (event) => { },
+      (error) =>{
+        this.data.snackBar.open(error, "Chiudi")
+        this.creation$.next(false)
+      },
+      () => { 
+        this.data.snackBar.open("Attività creata con successo", "Chiudi")
+        this.creation$.next(false) 
+      }
+    )
+   
   }
 }
 
@@ -151,7 +195,8 @@ export class AddModuloDialogComponent {
 export interface AttivitaData {
   idCorso: number,
   idModulo: number,
-  nomeModulo: string
+  nomeModulo: string,
+  snackBar: MatSnackBar
 }
 
 export interface ModuloData {

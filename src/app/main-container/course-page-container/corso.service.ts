@@ -41,6 +41,21 @@ export class CorsoService {
     )
 
   }
+
+  createAttivita(attivita: CreateAttivitaRequest, file: File){
+    let url =  `${environment.http_server_host}${this._pathCorso}/attivita`
+    
+    const formData = new FormData()
+    formData.append('attivita', new Blob([JSON.stringify(attivita)], {type: "application/json" }))
+    formData.append('file', file)
+
+    return this._http.post(url, formData, { headers: new HttpHeaders({ "Content-Type": "multipart/form-data"}), }).pipe(
+      map((response) => {
+        return response
+      })
+    )
+
+  }
 }
 
 export interface CorsoDetailsDTO{
@@ -74,3 +89,11 @@ export interface DocumentaleDTO{
   insertDate: string,
   updateDate: string
 }
+
+export interface CreateAttivitaRequest{
+  tipo: string,
+  settimanaProgrammata: string,
+  idModulo: number,
+  idCorso: number
+}
+

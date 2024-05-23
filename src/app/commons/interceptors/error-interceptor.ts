@@ -25,7 +25,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                     //console.log(`This is server side error: ${error.message}`);
                     
                     let message = error.message
-                    if(error.status == 500 && error.message.includes("Http failure response")) message = "Errore interno"
+                    if(error.message.includes("Http failure response")) message = "Errore interno"
                     errorMsg = message
                     
                     //console.log(errorMsg);
