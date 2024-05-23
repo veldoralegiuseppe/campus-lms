@@ -24,7 +24,7 @@
                                     @for(attivita of settimana.value; track attivita){
                                         <mat-list-item role="listitem">
                                             <mat-icon matListItemIcon style="transform: scale(0.8); margin-left: 0; margin-right: 0.5rem;">insert_drive_file</mat-icon>
-                                            {{attivita.id}}
+                                            <a (click)="download(attivita.file)">{{attivita.file.nome}}</a>
                                         </mat-list-item>
                                     }
                                 </mat-list>

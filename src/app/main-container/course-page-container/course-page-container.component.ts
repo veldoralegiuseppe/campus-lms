@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog,} from '@angular/material/dialog'
 import { UploadButtonComponent } from 'src/app/commons/upload-button/upload-button.component';
-import { AttivitaDTO, CorsoDetailsDTO, CorsoService, ModuloDetailsDTO } from './corso.service';
+import { AttivitaDetailsDTO, CorsoDetailsDTO, CorsoService, DocumentaleDTO, ModuloDetailsDTO } from './corso.service';
 
 
 @Component({
@@ -56,7 +56,6 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
     this._service.getDettaglioCorso(this.idCorso).subscribe(c => {
         this.corso = c
         this.progress = null
-        //console.log(this.groupBy(this.corso.moduli![0].attivita, 'settimanaProgrammata'))
         this._changeDetector.detectChanges()
     })
   }
@@ -69,7 +68,7 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
     console.log("Aggiungi attività")
   }
 
-  groupBySettimana(modulo: ModuloDetailsDTO): { [key: number] : Array<AttivitaDTO>}{
+  groupBySettimana(modulo: ModuloDetailsDTO): { [key: number] : Array<AttivitaDetailsDTO>}{
     return this.groupBy(modulo.attivita, 'settimanaProgrammata')
   }
 
@@ -98,6 +97,16 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
       console.log('The dialog was closed');
       //this.animal = result;
     });
+  }
+
+  download(file: DocumentaleDTO) {
+    console.log(`Download file: ${JSON.stringify(file)}`)
+    this._service.download(file).subscribe(file => {
+      const blob = new Blob([file!], { type: 'application/pdf' });
+      const url= window.URL.createObjectURL(blob);
+      window.open(url);
+    })
+    
   }
 }
 

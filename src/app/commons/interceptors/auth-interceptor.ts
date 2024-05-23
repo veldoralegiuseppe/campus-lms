@@ -23,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 req = req.clone({
                     headers : req.headers.delete('Content-Type'),
                     setHeaders: {
-                        'Accept'       : 'application/json',
+                        'Accept'       : req.headers.has('accept') ? req.headers.get('accept')! : 'application/json',
                         'Authorization': `Bearer ${userInfo.accessToken}`,
                     },
                 });

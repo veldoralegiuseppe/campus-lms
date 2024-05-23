@@ -46,3 +46,11 @@ button:not(.add-activity-button){
         color: #8A8A8A;
     }
 }
+
+a{
+    &:hover{
+        cursor:pointer;
+        text-decoration: underline;
+        color: $azzurro-scuro;
+    }
+}

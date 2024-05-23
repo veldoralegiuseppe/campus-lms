@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -9,11 +9,12 @@ import { environment } from 'src/environments/environment';
 export class CorsoService {
 
   private _pathCorso = '/api/corso'
+  private _pathDocumentale ='/api/documentale'
 
   constructor(private _http: HttpClient) { }
 
   getDettaglioCorso(id: number){
-    let url = `${environment.http_server_host}${this._pathCorso}/dettaglio/M_A/${id}`
+    let url = `${environment.http_server_host}${this._pathCorso}/dettaglio/M_A_F/${id}`
     console.log(url)
 
     return this._http.get(url).pipe(
@@ -22,26 +23,54 @@ export class CorsoService {
       })
     )
   }
+
+  download(file: DocumentaleDTO){
+    let url = `${environment.http_server_host}${this._pathDocumentale}/download`
+
+    const formData = new FormData()
+    formData.append("uuid", file.id)
+    
+
+    return this._http.post(url, formData, { 
+        headers: new HttpHeaders({ "Content-Type": "multipart/form-data", "accept":"*/*"}),
+        responseType: 'blob'
+    }).pipe(
+        map((response) => {
+          return response;
+        })
+    )
+
+  }
 }
 
 export interface CorsoDetailsDTO{
   id: String,
   nome: String,
   descrizione: String,
-  moduli: ModuloDetailsDTO[] | null,
+  moduli: ModuloDetailsDTO[],
 }
 
 export interface ModuloDetailsDTO{
   id: number,
   nome: string,
   descrizione: string | null,
-  attivita: AttivitaDTO[] | null
+  attivita: AttivitaDetailsDTO[]
 }
 
-export interface AttivitaDTO{
+export interface AttivitaDetailsDTO{
   descrizione: string | null,
   tipo: string,
   settimanaProgrammata: string,
   idModulo: number,
-  id: number
+  id: number,
+  file: DocumentaleDTO
+}
+
+export interface DocumentaleDTO{
+  id: string,
+  nome: string,
+  contentType: string,
+  data: Blob | null,
+  insertDate: string,
+  updateDate: string
 }
