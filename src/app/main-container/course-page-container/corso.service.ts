@@ -56,6 +56,17 @@ export class CorsoService {
     )
 
   }
+
+  createModulo(req: CreateModuloRequest){
+    let url =  `${environment.http_server_host}${this._pathCorso}/modulo`
+
+    return this._http.post(url,req).pipe(
+      map((response) => {
+        return response
+      })
+    )
+
+  }
 }
 
 export interface CorsoDetailsDTO{
@@ -95,5 +106,11 @@ export interface CreateAttivitaRequest{
   settimanaProgrammata: string,
   idModulo: number,
   idCorso: number
+}
+
+export interface CreateModuloRequest{
+  idCorso: number,
+  descrizione: string | null,
+  nome: string
 }
 

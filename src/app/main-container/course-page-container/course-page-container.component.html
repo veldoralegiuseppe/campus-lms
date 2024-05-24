@@ -6,7 +6,7 @@
         <p style="color: #9b9b9b;">{{corso?.descrizione}}</p>
     </div>
 
-    <div class="moduli-container">
+    <div class="moduli-container" style="display: flex; flex-direction: column; row-gap: 2rem;">
         @for (modulo of corso?.moduli; track modulo) {
             <mat-accordion>
                 <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
@@ -30,7 +30,7 @@
                                 </mat-list>
                             </div>
                         } @empty {
-                            <p style="color: #9b9b9b">Nessuna attività presente</p>
+                            <p style="color: #9b9b9b"></p>
                         }
                     </div>
                     <mat-action-row *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'">

@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit }
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog,} from '@angular/material/dialog'
-import { AttivitaDetailsDTO, CorsoDetailsDTO, CorsoService, CreateAttivitaRequest, DocumentaleDTO, ModuloDetailsDTO } from './corso.service';
+import { AttivitaDetailsDTO, CorsoDetailsDTO, CorsoService, CreateAttivitaRequest, CreateModuloRequest, DocumentaleDTO, ModuloDetailsDTO } from './corso.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MyErrorStateMatcher } from '../login/login.component';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 
 @Component({
@@ -35,6 +37,11 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
    * Progress 
    */
   progress: number | null = 10
+
+  /**
+    * Matcher
+    */
+  matcher = new MyErrorStateMatcher();
 
   /**
    * Utility function
@@ -95,14 +102,26 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
 
   openModuloDialog(): void{
     const dialogRef = this.dialog.open(AddModuloDialogComponent, {
-      data: {idCorso: this.idCorso} as ModuloData,
-      height: '25%',
-      width: '30%'
+      data: {idCorso: this.idCorso, matcher: this.matcher, snackBar: this._snackBar} as ModuloData,
+      height: '40%',
+      width: '40%'
     });
+
+    let subscription: Subscription 
+    
+    dialogRef.afterOpened().subscribe(() => {
+      subscription = dialogRef.componentInstance.creationModuloObserver.subscribe(isCreated => {
+        if(isCreated == false){
+          this.progress = 10;
+          this._changeDetector.detectChanges()
+        } 
+        else if(isCreated) return
+      })
+    })
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      //this.animal = result;
+      subscription.unsubscribe()
     });
   }
 
@@ -182,13 +201,47 @@ export class AddActivityDialogComponent {
   styleUrls: ['./add-activity-dialog.scss']
 })
 export class AddModuloDialogComponent {
-  constructor(
-    public dialogRef: MatDialogRef<AddModuloDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ModuloData,
-  ) {}
+  
+  moduloForm: FormGroup;
+  matcher: ErrorStateMatcher
+  private creation$: BehaviorSubject<boolean | null> = new BehaviorSubject<boolean | null>(null);
+  creationModuloObserver: Observable<boolean | null> = this.creation$.asObservable()
+
+  constructor(public dialogRef: MatDialogRef<AddModuloDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: ModuloData, private _service: CorsoService) {
+    
+    this.moduloForm = new FormGroup({
+      "nome": new FormControl(null, [Validators.required, Validators.minLength(5)]),
+      "descrizione": new FormControl(null, [Validators.required]),
+    })
+
+    this.matcher = data.matcher
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  create(){
+
+    const req: CreateModuloRequest = {
+      idCorso: this.data.idCorso,
+      nome: this.moduloForm.get("nome")?.value,
+      descrizione: this.moduloForm.get("descrizione")?.value
+    }
+
+    this.creation$.next(true)
+    this._service.createModulo(req).subscribe(
+      (event) => { },
+      (error) =>{
+        this.data.snackBar.open(error, "Chiudi")
+        this.creation$.next(false)
+      },
+      () => { 
+        this.data.snackBar.open("Modulo creato con successo", "Chiudi")
+        this.creation$.next(false) 
+      }
+    )
+
   }
 }
 
@@ -201,4 +254,6 @@ export interface AttivitaData {
 
 export interface ModuloData {
   idCorso: number,
+  matcher: ErrorStateMatcher,
+  snackBar: MatSnackBar
 }
