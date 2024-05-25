@@ -30,10 +30,11 @@
                 </mat-icon>
               </button>
                 {{node.name}} 
-                <mat-form-field class="voto-form-field" style="margin-left: 2rem;" appearance="fill">
-                    <mat-label>Voto</mat-label>
-                    <input matInput>
-                </mat-form-field>
+                <select (change)="onInserimentoVoto($event, node)" style="margin-left: 2rem;">
+                    <option value="">--Inserisci un voto--</option>
+                    <option *ngFor="let voto of createRangeVoto(16, 30)">{{voto}}</option>
+                    <option>30L</option>
+                </select>
             </mat-tree-node>
         </mat-tree>
     </div>

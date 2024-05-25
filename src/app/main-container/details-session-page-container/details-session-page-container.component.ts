@@ -30,7 +30,8 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
         this.dataSource.data = response.esami.map(e => {
             return <StudenteNode>{
               name: `${e.nomeStudente} ${e.cognomeStudente} - ${e.codiceFiscale}`,
-              children: [{name: "", file:`${e.nomeFileStudente}`}],
+              id: e.idStudente,
+              children: [{name: "", file:`${e.nomeFileStudente}`, id: e.idStudente}],
             }
         })
     }, 
@@ -46,6 +47,7 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
     return {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
+      id: node.id,
       level: level,
     };
   };
@@ -66,6 +68,15 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
+  onInserimentoVoto(event: any, node: any ) {
+    console.log(`node: ${JSON.stringify(node)}, voto: ${event.target.value}`)
+  }
+
+  createRangeVoto(min: number, max: number): any {
+    let range: number[] = []
+    for(let i=min; i<max; i++) range.push(i)
+    return range
+  }
 }
 
 /**
@@ -74,6 +85,7 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
  */
 interface StudenteNode {
   name: string;
+  id: number;
   file: string | null;
   children?: StudenteNode[];
 }
@@ -88,6 +100,7 @@ interface StudenteNode {
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
   expandable: boolean;
+  id: number;
   name: string;
   level: number;
 }
