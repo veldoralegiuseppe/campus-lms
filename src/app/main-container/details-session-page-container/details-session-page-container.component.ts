@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
+import { SessionDetailsService, SessioneDetailsResponse } from './session-details.service';
 
 @Component({
     selector: 'app-details-session-page-container',
@@ -13,16 +14,32 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
 
   progress: number | null = null
   private _idSessione: number
+  sessionDetails: SessioneDetailsResponse | null = null
   
-  constructor(private _route: ActivatedRoute){
+  constructor(private _route: ActivatedRoute, private _service: SessionDetailsService){
     super()
     this._idSessione = Number(this._route.snapshot.paramMap.get('id'))
-    this.dataSource.data = TREE_DATA;
+    //this.dataSource.data = TREE_DATA;
   }
 
   ngOnInit(): void {
     // inizializzo l'albero
-    
+    this._service.getDetails(this._idSessione).subscribe(
+      response => {
+        this.sessionDetails = response
+        this.dataSource.data = response.esami.map(e => {
+            return <StudenteNode>{
+              name: `${e.nomeStudente} ${e.cognomeStudente} - ${e.codiceFiscale}`,
+              children: [{name: "", file:`${e.nomeFileStudente}`}],
+            }
+        })
+    }, 
+
+    (error) =>{}, 
+
+    () =>{}
+  )
+
   }
 
   private _transformer = (node: StudenteNode, level: number) => {
@@ -57,28 +74,16 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
  */
 interface StudenteNode {
   name: string;
+  file: string | null;
   children?: StudenteNode[];
 }
 
-const TREE_DATA: StudenteNode[] = [
-  {
-    name: 'Fruit',
-    children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
-  },
-  {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
-      },
-      {
-        name: 'Orange',
-        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
-      },
-    ],
-  },
-];
+// const TREE_DATA: StudenteNode[] = [
+//   {
+//     name: 'Mario Rossi',
+//     children: [{name: 'Prova scritta'}],
+//   },
+// ];
 
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {

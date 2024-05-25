@@ -103,7 +103,7 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
   openModuloDialog(): void{
     const dialogRef = this.dialog.open(AddModuloDialogComponent, {
       data: {idCorso: this.idCorso, matcher: this.matcher, snackBar: this._snackBar} as ModuloData,
-      height: '40%',
+      height: '50%',
       width: '40%'
     });
 

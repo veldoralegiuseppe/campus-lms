@@ -15,8 +15,7 @@ export class CorsoService {
 
   getDettaglioCorso(id: number){
     let url = `${environment.http_server_host}${this._pathCorso}/dettaglio/M_A_F/${id}`
-    console.log(url)
-
+  
     return this._http.get(url).pipe(
       map((response) => {
         return <CorsoDetailsDTO> response
