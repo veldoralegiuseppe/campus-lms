@@ -9,6 +9,7 @@ $form-title-height: 2rem;
     .title{
         grid-row: title-start/title-end;
         grid-column: title-start/title-end;
+        margin-bottom: 2rem;
     }
 
     .course-form, .activity-form{

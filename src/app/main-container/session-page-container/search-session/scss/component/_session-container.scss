@@ -3,3 +3,14 @@
         border-bottom: 1px solid $azzurro-scuro;
     }
 }
+
+button{
+    padding: 1.5rem;
+    background-color: #43a7e7;
+    color: white;
+
+    &[disabled="true"]{
+        background-color: #EDEDED;
+        color: #8A8A8A;
+    }
+}

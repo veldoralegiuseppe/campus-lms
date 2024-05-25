@@ -42,11 +42,15 @@
     grid-column: studenti-start/studenti-end;
 }
 
+.selector{
+    grid-column: selector-start/selector-end;
+}
+
 .loading-bar{
     height: 6px;
     display: flex;
     align-items: center;
-    grid-column: 1/span 5;
+    grid-column: 1/span 6;
 
     .wrapper{ width: 100%; }
 

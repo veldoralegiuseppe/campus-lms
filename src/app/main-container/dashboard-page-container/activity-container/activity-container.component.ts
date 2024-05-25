@@ -144,6 +144,9 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     })
 
     this.activeFilter.subscribe(f => {
+      this.pages = 1;
+      this.pageSize = 3;
+      
       if(f == 'studio') this.getActivitiesPaginated({page: this.pages, size: this.pageSize})
       else if(f == 'sessioni') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
       else if(f == 'daCorreggere') this.getSessioniPaginated({page: this.pages, size: this.pageSize})

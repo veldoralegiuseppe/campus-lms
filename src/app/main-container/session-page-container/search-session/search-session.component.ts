@@ -1,5 +1,5 @@
 import { trigger, state, style } from '@angular/animations';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, LOCALE_ID, OnInit, Type, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, LOCALE_ID, OnInit, Type, ViewChild } from '@angular/core';
 import { Session } from './Session';
 import { SessionTableRowComponent } from './session-table-row/session-table-row.component';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -11,6 +11,7 @@ import { SearchSessioniRequest, SessionService } from './session.service';
 import { SwitchButtonComponent } from 'src/app/commons/switch-button/switch-button.component';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 import { formatDate } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -108,26 +109,38 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
    */
   corsi: Corsi[] = [];
 
+  /**
+   * Data minima 
+   */
+  minDate: Date = new Date()
+
+  /**
+   * Riga attualmente selezionata
+   */
+  rowSelected:SessionTableRowComponent | null = null
+
   private tableMarginTop: string = '8rem'
   private loadingBarMarginTop: string = '6rem'
 
 
 
-  constructor(private sessionService: SessionService){
+  constructor(private sessionService: SessionService, private _changeDetector: ChangeDetectorRef, private _snackBar: MatSnackBar){
     super()
+    this.minDate.setDate(new Date().getDate() + 1)
   }
   
   ngOnInit(): void {
      // inizializzazione corsi
-     this.sessionService.getCorsi().then(c => {
-      this.corsi = c!.map(v => { return {value: v.nome, viewValue: v.nome}})
+     this.sessionService.getCorsi(this.authInfo?.payload?.role!).then(c => {
+      let result: Corsi[] = c!.map(v => { return <Corsi>{value: v.nome, viewValue: v.nome}})
+      this.corsi.push({value: 'tutti', viewValue: 'Tutti'}, ...result)
     })
 
     // Inizializzazione form
     this.courseFilter = new FormGroup({
-      'nomeCorso': new FormControl(null),
-      'tipo': new FormControl(null),
-      'dataDa': new FormControl(null),
+      'nomeCorso': new FormControl('tutti'),
+      'tipo': new FormControl('tutti'),
+      'dataDa': new FormControl(this.minDate),
       'dataA': new FormControl(null)
     })
 
@@ -162,7 +175,7 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
     if(this.session.length <= 0) return {loading: true}
     
     if(index === 0)
-    return {session: {corso: 'Corso', tipo: 'Tipo', data: 'Data', docente: 'Docente', studenti: 'Iscrizioni'}}
+    return {session: {id: -1, corso: 'Corso', tipo: 'Tipo', data: 'Data', docente: 'Docente', studenti: 'Iscrizioni'}}
     else 
       return {session: this.session.at(index-1)}
   }
@@ -195,21 +208,20 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
    */
   resetFilter: () => void = () => {
     
-    this.courseFilter.reset()
+    //this.courseFilter.reset()
 
-    // this.activityFilter.reset({
-    //   'attivita': "",
-    //   'dataDa': null,
-    //   'dataA': null,
-    //   'fad': false,
-    //   'dad': false,
-    // })
+    this.courseFilter.reset({
+      'nomeCorso': new FormControl('tutti'),
+      'tipo': new FormControl('tutti'),
+      'dataDa': new FormControl(this.minDate),
+      'dataA': new FormControl(null)
+    })
 
     this.resetFilterButton?.enable(false)
   }
   
    /**
-   * Recupera gli utenti
+   * Recupera le sessioni
    * @param pagination paginazione
    */
    getSession(pagination: {page: number, size: number}, onEnd?: () => void){
@@ -218,8 +230,8 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
     console.log(this.courseFilter.value)
     //console.log(this.activityFilter.value)
 
-    const nomeCorso = this.courseFilter.get('nomeCorso')?.value
-    const tipo = this.courseFilter.get('tipo')?.value
+    const nomeCorso = this.courseFilter.get('nomeCorso')?.value == 'tutti' ? null : this.courseFilter.get('nomeCorso')?.value
+    const tipo = this.courseFilter.get('tipo')?.value?.value == 'tutti' ? null : this.courseFilter.get('tipo')?.value?.value
     const dataDa = this.courseFilter.get('dataDa')?.value ? formatDate(this.courseFilter.get('dataDa')?.value, 'yyyy-MM-dd', 'it-IT') : null
     const dataA = this.courseFilter.get('dataA')?.value ? formatDate(this.courseFilter.get('dataA')?.value, 'yyyy-MM-dd', 'it-IT') : null
   
@@ -278,9 +290,53 @@ export class SearchSessionComponent extends AuthenticationComponent implements O
     this.table!.size = pagination.size + 1
   }
 
+  /**
+   * Callback richiamato al click della checkbox
+   * @param observable 
+   * @param row 
+   */
+  onSelectedRow: (observable: {index: number, selected: boolean}, instance: Row) => any = (observable, row) => {
+    
+    if(observable.selected) {
+      if(this.rowSelected != null && this.rowSelected != row){  this.rowSelected!.toggle() }
+      this.rowSelected = <SessionTableRowComponent>row
+    }
+    else if(!observable.selected) {
+      if(this.rowSelected != row) return
+      this.rowSelected = null
+    }
+
+    this._changeDetector.detectChanges()
+  }
+
+  iscrizioneSessione(){
+    const sessione = <Session>this.rowSelected?.session
+    const row = this.rowSelected
+    this.rowSelected = null
+
+    this.sessionService.iscrizioneSessione(sessione).subscribe(
+      (event) => {},
+
+      (error) => {
+        this.rowSelected = row
+        this.openSnackBar(error, "Chiudi")
+      },
+
+      () => {
+        this.openSnackBar("Iscrizione effettuata", "Chiudi")
+        this.submitForms()
+      }
+    )
+    
+  }
+
+  private openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
+  }
+
 }
 
 interface Corsi {
-  value: string;
+  value: string | null;
   viewValue: string;
 }

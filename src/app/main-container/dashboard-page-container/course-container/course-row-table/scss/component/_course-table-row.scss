@@ -42,3 +42,11 @@
         animation-direction: alternate;
     }
 }
+
+.body.corso{
+    &:hover{
+        text-decoration: underline;
+        color: $dark-blue;
+    }
+}
+

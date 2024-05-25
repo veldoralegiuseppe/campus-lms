@@ -92,13 +92,13 @@ export class CourseContainerComponent extends AuthenticationComponent implements
 
     // Inizializzazione elementi condizionali
     if(this.role == "STUDENTE"){
-      this.header = {studenteCourse: {moduli: 'Moduli', corso: 'Corso', sessioni: 'Sessioni'}}
+      this.header = {studenteCourse: {id: -1, moduli: 'Moduli', corso: 'Corso', sessioni: 'Sessioni'}}
     }
     else if(this.role == "DOCENTE"){
-      this.header = {docenteCourse: {studenti: 'Studenti totali', corso: 'Corso', sessioni: 'Sessioni'}}
+      this.header = {docenteCourse: {id: -1, studenti: 'Studenti totali', corso: 'Corso', sessioni: 'Sessioni'}}
     }
     else if(this.role == "ADMIN"){
-      this.header = {adminCourse: {studenti: 'Studenti totali', corso: 'Corso', sessioni: 'Sessioni'}}
+      this.header = {adminCourse: {id: -1, studenti: 'Studenti totali', corso: 'Corso', sessioni: 'Sessioni'}}
     }
 
     // Inizializzazione form

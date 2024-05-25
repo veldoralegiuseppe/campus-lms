@@ -31,19 +31,19 @@
 
     <!-- Body -->
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE') && (index > 0 && (loading === undefined || !loading))">
-        <div [ngClass]="['corso', 'body']">{{course?.studenteCourse?.corso}}</div>
+        <div [ngStyle]="{'pointerEvents': course?.studenteCourse!.id < 1 ? 'none' : 'auto'}" routerLink="course/{{course?.studenteCourse?.id}}" [ngClass]="['corso', 'body']">{{course?.studenteCourse?.corso}}</div>
         <div [ngClass]="['sessioni', 'body']">{{course?.studenteCourse?.sessioni}}</div>
         <div [ngClass]="['moduli', 'body']">{{course?.studenteCourse?.moduli}}</div>
     </ng-template>
 
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE') && (index > 0 && (loading === undefined || !loading))">
-        <div [ngClass]="['corso', 'body']">{{course?.docenteCourse?.corso}}</div>
+        <div [ngStyle]="{'pointerEvents': course?.docenteCourse!.id < 1 ? 'none' : 'auto'}" routerLink="course/{{course?.docenteCourse?.id}}" [ngClass]="['corso', 'body']">{{course?.docenteCourse?.corso}}</div>
         <div [ngClass]="['sessioni', 'body']">{{course?.docenteCourse?.sessioni}}</div>
         <div [ngClass]="['studenti', 'body']">{{course?.docenteCourse?.studenti}}</div>
     </ng-template>
 
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN') && (index > 0 && (loading === undefined || !loading))">
-        <div [ngClass]="['corso', 'body']">{{course?.adminCourse?.corso}}</div>
+        <div [ngStyle]="{'pointerEvents': course?.adminCourse!.id < 1 ? 'none' : 'auto'}" routerLink="course/{{course?.adminCourse?.id}}" [ngClass]="['corso', 'body']">{{course?.adminCourse?.corso}}</div>
         <div [ngClass]="['sessioni', 'body']">{{course?.adminCourse?.sessioni}}</div>
         <div [ngClass]="['studenti', 'body']">{{course?.adminCourse?.studenti}}</div>
     </ng-template>

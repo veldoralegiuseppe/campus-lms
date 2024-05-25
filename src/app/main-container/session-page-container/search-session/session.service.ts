@@ -10,23 +10,15 @@ import { IAuthInfo, UserRole } from 'src/app/commons/authentication/auth.service
 })
 export class SessionService {
   
-  private session: Session[] = [
-    {corso: 'corso1', tipo: 'tipo1', data: 'data1', docente: 'docente1', studenti: 'studenti1'} as Session,
-  ]
-  private emptySession: Session[] = [
-    {corso: '', tipo: '', data: '', docente: '', studenti: ''} as Session,
-  ]
-  private _pathCorsi = '/api/corso/list/docente/nome'
-  private _pathSessioni = '/api/sessione/search'
-  private sessionPaginated: Session[] = []
-
+  private _pathCorso = '/api/corso'
+  private _pathSessione = '/api/sessione'
+  
   constructor(private _http:HttpClient){}
 
   getSessionPaginated(filtri: SearchSessioniRequest, pagination: { page: number; size: number; }) : Promise<{sessioni: Session[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined> {
     let startTime = performance.now()
-    let url = `${environment.http_server_host}${this._pathSessioni}/${pagination.size > 0 ? pagination.size : 100}/${pagination.page-1}`
-    let pag = this.paginate(pagination)
-
+    let url = `${environment.http_server_host}${this._pathSessione}/search/${pagination.size > 0 ? pagination.size : 100}/${pagination.page-1}`
+    
    return this._http.post(url, filtri).pipe(
       map((response) => {
         // recupero le informazioni sull'utente
@@ -46,7 +38,8 @@ export class SessionService {
             tipo: s.tipo.toLocaleUpperCase(),
             data: s.data,
             docente: s.nomeDocente.toUpperCase() + " " + s.cognomeDocente.toUpperCase(),
-            studenti: s.numeroStudenti
+            studenti: s.numeroStudenti,
+            id: s.idSessione
           }
 
           return sessione
@@ -55,7 +48,7 @@ export class SessionService {
         else if(sessioni.length < minTableSize) for(let i=sessioni.length; i<minTableSize; i++) sessioni.push(this.getEmptyElement())
         //console.log(`Course: ${JSON.stringify(courses)}, sizeDesiderata: ${pagination.size}`)
 
-        let pag = {totalPages: resp.totalPages, currentPage: resp.pageable.pageNumber, size: pagination.size} 
+        let pag = {totalPages: resp.totalPages > 0 ? resp.totalPages : 1, currentPage: resp.pageable.pageNumber, size: pagination.size} 
 
         return {sessioni: sessioni, pagination: pag, execTime: performance.now() - startTime}
       })
@@ -68,43 +61,20 @@ export class SessionService {
       tipo: "",
       data: "",
       docente: "",
-      studenti: ""
+      studenti: "",
+      id: -1
     }
   }
 
-  private paginate(pagination: {page: number, size:number}): {totalPages: number, currentPage: number, size: number}{
-    // CODICE DI BACKEND
-    let pag = {totalPages: Math.ceil(this.session.length/pagination.size), currentPage: pagination.page, size: pagination.size} 
-    let offset = 0
-    let startIndex = ((pagination.page-1)*pagination.size) + offset
-    this.sessionPaginated = this.session.slice(startIndex,startIndex+pagination.size)
+  getCorsi(ruolo: UserRole) : Promise<{nome: string}[] | undefined>{
     
-    return pag
-  }
+    let path = ""
 
-  getEmptySessionPaginated(pagination: { page: number; size: number; }){
-    let startTime = performance.now()
-    let pag = this.emptyPaginate(pagination)
-    return new Promise<any>((resolve, error) =>{
-      setTimeout(() => {
-        resolve({session: this.sessionPaginated, pagination: pag, execTime: performance.now() - startTime})
-      }, 0)
-    })
-  }
+    if(ruolo == UserRole.STUDENTE) path = "list/studente"
+    else if(ruolo == UserRole.DOCENTE) path = "list/docente/nome"
+    else if(ruolo == UserRole.ADMIN) path = "list/nome"
 
-  private emptyPaginate(pagination: {page: number, size:number}): {totalPages: number, currentPage: number, size: number}{
-    // CODICE DI BACKEND
-    let pag = {totalPages: Math.ceil(this.emptySession.length/pagination.size), currentPage: pagination.page, size: pagination.size} 
-    let offset = 0
-    let startIndex = ((pagination.page-1)*pagination.size) + offset
-    this.sessionPaginated = this.emptySession.slice(startIndex,startIndex+pagination.size)
-    
-    return pag
-  }
-
-  getCorsi() : Promise<{nome: string}[] | undefined>{
-    
-    let url = `${environment.http_server_host}${this._pathCorsi}`
+    let url = `${environment.http_server_host}${this._pathCorso}/${path}`
     console.log(`SessionService - url nome corsi: ${url}`)
 
     return this._http.get(url).pipe(
@@ -115,6 +85,16 @@ export class SessionService {
         return list
       })
     ).toPromise()
+  }
+
+  iscrizioneSessione(sessione: Session){
+    let url = `${environment.http_server_host}${this._pathSessione}/${sessione.id}/iscrizione`
+
+    return this._http.get(url).pipe(
+      map((response) => {
+        return response
+      })
+    )
   }
  
 }
@@ -127,7 +107,8 @@ export interface SearchSessioneResponse{
   nomeDocente: String,
   cognomeDocente: String,
   emailDocente: String,
-  numeroStudenti: String
+  numeroStudenti: String,
+  idSessione: number
 }
 
 interface SessioneDTOPaginated{

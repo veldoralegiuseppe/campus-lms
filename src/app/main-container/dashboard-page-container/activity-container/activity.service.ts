@@ -66,6 +66,7 @@ export class ActivityService {
 
   getSessioniPaginated(pagination: {page: number, size:number}):  Promise<{activities: Activity[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined>{
     let startTime = performance.now()
+    console.log(pagination)
     let url = `${environment.http_server_host}${this._pathSessioni}/${pagination.size}/${pagination.page-1}`
     console.log(`ActivityService - url sessioni: ${url}`)
 
@@ -77,7 +78,7 @@ export class ActivityService {
         let role = userInfo.payload!.role
         
         // converto la response
-        const resp = <SessioneDTO>(response)
+        const resp = <SessioneDTOPaginated>(response)
        
         let activities: Activity[] = resp.content.map(s =>  {
 
@@ -118,50 +119,6 @@ export class ActivityService {
   }
 }
 
-interface SessioneDTO{
-  
-    "totalPages": number,
-    "totalElements": number,
-    "size": number,
-    "content": [
-      {
-        "nomeCorso": String,
-        "data": String,
-        "tipo": String
-      }
-    ],
-    "number": number,
-    "sort": [
-      {
-        "direction": String,
-        "nullHandling": String,
-        "ascending": Boolean,
-        "property": String,
-        "ignoreCase": Boolean
-      }
-    ],
-    "pageable": {
-      "offset": number,
-      "sort": [
-        {
-          "direction": String,
-          "nullHandling": String,
-          "ascending": Boolean,
-          "property": String,
-          "ignoreCase": Boolean
-        }
-      ],
-      "paged": Boolean,
-      "unpaged": Boolean,
-      "pageNumber": number,
-      "pageSize": number
-    },
-    "numberOfElements": number,
-    "first": Boolean,
-    "last": Boolean,
-    "empty": Boolean
-  
-}
 
 interface AttivitaSummaryResponse{
   "summaries": {
@@ -206,4 +163,53 @@ interface AttivitaSummaryResponse{
     "last": Boolean,
     "empty": Boolean
   }
+}
+
+interface SessioneDTOPaginated{
+  "totalPages": number,
+    "totalElements": number,
+    "size": number,
+    "content": [SearchSessioneResponse],
+    "number": number,
+    "sort": [
+      {
+        "direction": String,
+        "nullHandling": String,
+        "ascending": Boolean,
+        "property": String,
+        "ignoreCase": Boolean
+      }
+    ],
+    "pageable": {
+      "offset": number,
+      "sort": [
+        {
+          "direction": String,
+          "nullHandling": String,
+          "ascending": Boolean,
+          "property": String,
+          "ignoreCase": Boolean
+        }
+      ],
+      "paged": Boolean,
+      "unpaged": Boolean,
+      "pageNumber": number,
+      "pageSize": number
+    },
+    "numberOfElements": number,
+    "first": Boolean,
+    "last": Boolean,
+    "empty": Boolean
+}
+
+export interface SearchSessioneResponse{
+  [key: string]: any
+  nomeCorso: String,
+  data: String, 
+  tipo: String,
+  nomeDocente: String,
+  cognomeDocente: String,
+  emailDocente: String,
+  numeroStudenti: String,
+  idSessione: number
 }

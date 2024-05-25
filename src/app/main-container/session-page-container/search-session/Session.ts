@@ -3,5 +3,6 @@ export interface Session {
     tipo: String,
     data: String,
     docente: String,
-    studenti: String
+    studenti: String,
+    id: number
 }

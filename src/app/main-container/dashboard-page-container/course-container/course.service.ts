@@ -10,15 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class CourseService{
 
-  private courses : Course[] = [
-    {studenteCourse: {corso: "corso1", sessioni:"1", moduli: "1"}, docenteCourse: {corso: "corso1", sessioni:"1", studenti: "1" }, adminCourse: {corso: "corso1", sessioni:"1", studenti: "1" }},
-    {studenteCourse: {corso: "corso2", sessioni:"2", moduli: "2"}, docenteCourse: {corso: "corso2", sessioni:"2", studenti: "2" }, adminCourse: {corso: "corso2", sessioni:"2", studenti: "2" }},
-    {studenteCourse: {corso: "corso3", sessioni:"3", moduli: "3"}, docenteCourse: {corso: "corso2", sessioni:"3", studenti: "3" }, adminCourse: {corso: "corso3", sessioni:"3", studenti: "3" }},
-    {studenteCourse: {corso: "corso4", sessioni:"4", moduli: "4"}, docenteCourse: {corso: "corso2", sessioni:"4", studenti: "4" }, adminCourse: {corso: "corso4", sessioni:"4", studenti: "4" }},
-  ]
-  
-  private coursesPaginated: Course[] = []
-  
+
   private _path = '/api/corso/summary'
 
   constructor(private _http: HttpClient) { }
@@ -44,9 +36,9 @@ export class CourseService{
         let courses: Course[] = resp.summaries.content.map(c =>  {
 
           let course: Course = {
-            docenteCourse: role == UserRole.DOCENTE ? {corso: c.nomeCorso, sessioni: c.sessioni.toLocaleString(), studenti: c.studenti.toLocaleString()} : undefined,
-            studenteCourse: role == UserRole.STUDENTE ? {corso: c.nomeCorso, sessioni: c.sessioni.toLocaleString(), moduli: c.moduli.toLocaleString()} : undefined,
-            adminCourse: role == UserRole.ADMIN ? {corso: c.nomeCorso, sessioni: c.sessioni.toLocaleString(), studenti: c.studenti.toLocaleString()} : undefined
+            docenteCourse: role == UserRole.DOCENTE ? {id: c.id ,corso: c.nomeCorso, sessioni: c.sessioni.toLocaleString(), studenti: c.studenti.toLocaleString()} : undefined,
+            studenteCourse: role == UserRole.STUDENTE ? {id: c.id ,corso: c.nomeCorso, sessioni: c.sessioni.toLocaleString(), moduli: c.moduli.toLocaleString()} : undefined,
+            adminCourse: role == UserRole.ADMIN ? {id: c.id ,corso: c.nomeCorso, sessioni: c.sessioni.toLocaleString(), studenti: c.studenti.toLocaleString()} : undefined
           }
 
           return course
@@ -63,18 +55,8 @@ export class CourseService{
    
   }
 
-  private paginate(pagination: {page: number, size:number}): {totalPages: number, currentPage: number, size: number}{
-    // CODICE DI BACKEND
-    let pag = {totalPages: Math.ceil(this.courses.length/pagination.size), currentPage: pagination.page, size: pagination.size} 
-    let offset = 0
-    let startIndex = ((pagination.page-1)*pagination.size) + offset
-    this.coursesPaginated = this.courses.slice(startIndex,startIndex+pagination.size)
-    
-    return pag
-  }
-
   private getEmptyElement() : Course {
-    return {studenteCourse: {corso: "", sessioni:"", moduli: ""}, docenteCourse: {corso: "", sessioni:"", studenti: "" }, adminCourse: {corso: "", sessioni:"", studenti: "" }}
+    return {studenteCourse: {id: -1, corso: "", sessioni:"", moduli: ""}, docenteCourse: {id: -1, corso: "", sessioni:"", studenti: "" }, adminCourse: {id: 0, corso: "", sessioni:"", studenti: "" }}
   }
 }
 
@@ -85,6 +67,7 @@ interface UtenteSummaryResponse{
       "size": number,
       "content": [
         {
+          "id": number,
           "nomeCorso": String,
           "moduli": Number,
           "sessioni": Number,

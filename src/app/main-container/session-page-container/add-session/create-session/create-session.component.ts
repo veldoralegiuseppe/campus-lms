@@ -15,6 +15,7 @@ import { CreateSessionService, SessioneDTO } from 'src/app/main-container/sessio
 import { HttpEventType } from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
+import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 
 interface Corsi {
   value: string;
@@ -39,7 +40,7 @@ interface Corsi {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateSessionComponent implements OnInit, AfterViewInit{
+export class CreateSessionComponent extends AuthenticationComponent implements OnInit, AfterViewInit{
 
   /**
    * Model
@@ -153,6 +154,7 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
   stepperOrientation!: Observable<StepperOrientation>;
   
   constructor(private sessionService: SessionService, private _formBuilder: FormBuilder, breakpointObserver: BreakpointObserver, private _service: CreateSessionService, private _changeDetector: ChangeDetectorRef, private _snackBar: MatSnackBar){
+    super()
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({matches}) => (matches ? 'horizontal' : 'vertical')));
@@ -160,7 +162,7 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
 
   ngOnInit(): void {
     // inizializzazione corsi
-    this.sessionService.getCorsi().then(c => {
+    this.sessionService.getCorsi(this.authInfo?.payload?.role!).then(c => {
       this.corsi = c!.map(v => { return {value: v.nome, viewValue: v.nome}})
     })
 
@@ -224,7 +226,7 @@ export class CreateSessionComponent implements OnInit, AfterViewInit{
     if(this.session.length <= 0) return {loading: true}
     
     if(index === 0)
-    return {session: {corso: 'Corso', tipo: 'Tipo', data: 'Data', docente: 'Docente', studenti: 'Studenti'}}
+    return {session: {id: -1, corso: 'Corso', tipo: 'Tipo', data: 'Data', docente: 'Docente', studenti: 'Studenti'}}
     else 
       return {session: this.session.at(index-1)}
   }

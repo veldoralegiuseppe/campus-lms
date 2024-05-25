@@ -22,13 +22,14 @@
             <mat-form-field class="form-input-field" appearance="outline">
                 <mat-label class="form-input-label">Tipo</mat-label>
                 <mat-select class="custom-theme" formControlName="tipo">
+                    <mat-option class='not-empty-select' value="tutti">Tutti</mat-option>
                     <mat-option class='not-empty-select' value="scritto">Scritto</mat-option>
                     <mat-option class='not-empty-select' value="orale">Orale</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field class="form-input-field" appearance="outline">
                 <mat-label class="form-input-label">Data da</mat-label>
-                <input matInput type="date-local" formControlName="dataDa" [matDatepicker]="pickerDa">
+                <input matInput [min]="minDate" type="date-local" formControlName="dataDa" [matDatepicker]="pickerDa">
                 <mat-datepicker-toggle matIconSuffix [for]="pickerDa"></mat-datepicker-toggle>
                 <mat-datepicker #pickerDa></mat-datepicker>
             </mat-form-field>
@@ -41,73 +42,24 @@
         </div>
     </div>
 
-    <!-- <div class="activity-form">
-        <div class="form-title">Dati attività</div>
-        <div class="form" [formGroup] = "activityFilter">
-            <input class="search-bar" type="text" placeholder="Attività" formControlName="attivita">
-            <app-datepicker class="date" [placeholder]="'Da'" formControlName="dataDa"></app-datepicker>
-            <app-datepicker class="date" [placeholder]="'A'" formControlName="dataA"></app-datepicker>
-            <div class="checkbox-wrapper">
-                <app-checkbox-v2 class="checkbox" [label]="'FAD'" formControlName="fad"></app-checkbox-v2>
-                <app-checkbox-v2 class="checkbox" [label]="'DAD'" formControlName="dad"></app-checkbox-v2>
-            </div>
-        </div>
-    </div> -->
-
     <div class="control-button-container">
         <app-reset-filter-button [onClick]="resetFilter" [label]="'Azzera filtri'" class="reset-button-container"></app-reset-filter-button>
         <app-search-button [onClick]="submitForms" [label]="'Cerca'" class="search-button-container"></app-search-button>
     </div>
 
-
     <div class="app-table-v2 table" 
          [@openClose] = "hideTable ? 'close' : 'open'"
-         [columnsTemplate]="['corso','1fr','tipo','1fr','data','1fr','docente','1fr','studenti','1fr']" 
+         [columnsTemplate]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? ['selector','.5fr','corso','1fr','tipo','1fr','data','1fr','docente','1fr','studenti','1fr'] : ['corso','1fr','tipo','1fr','data','1fr','docente','1fr','studenti','1fr']" 
          [modelTableMapper]="sessionTableMapper"
-         [rowType]="rowType"> 
+         [rowType]="rowType"
+         [onEvent]="onSelectedRow"> 
     </div>
 
     <app-pagination [@openClose] = "hidePagination ? 'close' : 'open'" class="pagination"  [pageSize]="pageSize" [pageSizeOptions]="[3,5,10]" (onPageChange)="handlePaginationChange($event)">
     </app-pagination>
 
-    <div #opButtons [@openClose] = "hideOperationButton? 'close' : 'open'" id="buttons" class="container">
-        <!-- <div class="switch" [ngStyle]="{'display':'flex', 'align-items':'center'}">
-            <app-switch-button class="switch-button"></app-switch-button>
-            <p [ngStyle]="{'margin-left':'8px'}">Aggiungi un'attività alla sessione</p>
-        </div>
-
-        
-        <div [@openClose] = "switch?.isOff ? 'close' : 'open'" class="add-activity-modal">
-          
-            <div class="form-title">Dati attivita</div>
-
-            <form class="time-section">
-                <app-datepicker class="date" [placeholder]="'Data'" formControlName="dataNuovaAttivita"></app-datepicker>
-            
-                <div class="oraInizio">
-                    <label for="oraInizioAttivita">Ora inizio</label>
-                    <input type="time" placeholder="Ora inizio" id="oraInizioAttivita">
-                </div>
-                
-                <div class="oraFine">
-                    <label for="oraFineAttivita">Ora fine</label>
-                    <input type="time" placeholder="Ora fine" id="oraFineAttivita">
-                </div>
-            </form>
-                
-            <form class="pausa-section">
-                <div>
-                    <label for="pausaAttivita">Ora pausa</label>
-                    <input type="time" id="pausaAttivita">
-                </div>
-                <app-checkbox-v2 class="checkbox" [label]="'PAUSA'" formControlName="fad"></app-checkbox-v2>
-            </form>
-
-            <form class="activity-section">
-                <input class="search-bar" type="text" placeholder="Docente">
-                <div class="app-select-bar" [options]="['Modulo']"></div>
-            </form>
-           
-        </div>  -->
+    <div class="container" *ngIf="authInfo?.payload?.role?.toString() == 'STUDENTE' && !hideTable" style="display: flex; justify-content: center; align-items: center; margin: 2rem 0 1rem 0;">
+        <button mat-button (click)="iscrizioneSessione()" [disabled]="!(this.rowSelected != null && !hideTable)" style="max-width: 3rem; color: white;">Iscriviti</button>
     </div>
+
 </div>
