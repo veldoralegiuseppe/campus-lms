@@ -70,6 +70,7 @@ import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core'
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatListModule} from '@angular/material/list';
+import {MatTreeModule} from '@angular/material/tree';
 
 
 
@@ -79,6 +80,7 @@ import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { LoadingComponent } from './commons/loading/loading.component';
 import { registerLocaleData } from '@angular/common';
 import { CreateCourseContainerComponent } from "./main-container/dashboard-page-container/create-course-container/create-course-container.component";
+import { DetailsSessionComponent } from './main-container/details-session-page-container/details-session-page-container.component';
 
 
 export const httpInterceptorProviders = [
@@ -142,6 +144,7 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         UploadButtonComponent,
         AddActivityDialogComponent,
         AddModuloDialogComponent,
+        DetailsSessionComponent
     ],
     providers: [
         { provide: LOCALE_ID, useValue: 'it-IT' },
@@ -173,6 +176,7 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         MatExpansionModule,
         MatDialogModule,
         MatListModule,
+        MatTreeModule
     ]
 })
 export class AppModule {

@@ -12,6 +12,7 @@ import { LoginComponent } from './main-container/login/login.component';
 import { AuthService } from './commons/authentication/auth.service';
 import { CourseContainerComponent } from './main-container/dashboard-page-container/course-container/course-container.component';
 import { CoursePageContainerComponent } from './main-container/course-page-container/course-page-container.component';
+import { DetailsSessionComponent } from './main-container/details-session-page-container/details-session-page-container.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path: 'users/create', component: CreateAdminComponent, canActivate: [AuthService]},
   {path: 'users/create/office', component: CreateOfficeComponent, canActivate: [AuthService]},
   {path: 'course/:id', component: CoursePageContainerComponent, canActivate: [AuthService]},
+  {path: 'session/:id', component: DetailsSessionComponent, canActivate: [AuthService]},
 ];
 
 @NgModule({
