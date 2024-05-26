@@ -67,10 +67,6 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
     })
   }
 
-  createModulo() {
-    console.log('Creazione nuovo modulo')
-  }
-
   groupBySettimana(modulo: ModuloDetailsDTO): { [key: number] : Array<AttivitaDetailsDTO>}{
     return this.groupBy(modulo.attivita, 'settimanaProgrammata')
   }
@@ -128,9 +124,15 @@ export class CoursePageContainerComponent extends AuthenticationComponent implem
   download(documentale: DocumentaleDTO) {
     console.log(`Download file: ${JSON.stringify(documentale)}`)
     this._service.download(documentale).subscribe(file => {
+      let a = window.document.createElement('a');
       const blob = new Blob([file!], { type: documentale.contentType });
-      const url= window.URL.createObjectURL(blob);
-      window.open(url);
+      a.href = window.URL.createObjectURL(blob);
+      a.download = documentale.nome;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      //const url= window.URL.createObjectURL(blob);
+      //window.open(url);
     })
     
   }

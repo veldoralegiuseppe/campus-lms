@@ -1,13 +1,21 @@
 <div *ngIf="progress == null" class="main-container" style="display: flex; flex-direction: column; margin-right: 2rem; row-gap: 3rem; margin-left: 2rem;">
 
-    <div class="title" style="flex-basis: 100%; margin-bottom: 2.5rem;">{{sessionDetails?.nomeCorso}} - Sessione del {{sessionDetails?.dataSessione}}</div>
-    <div class="info" style="flex-basis: 100%; margin-bottom: 2.5rem; display: flex;  column-gap: 2rem; flex-wrap: wrap;">
+    <div class="title" style="flex-basis: 100%; margin-bottom: 2.5rem;">{{sessionDetails?.nomeCorso}} - {{sessionDetails?.tipoSessione?.toUpperCase()}} del {{sessionDetails?.dataSessione}}</div>
+    <div class="info" style="flex-basis: 100%; margin-bottom: 2.5rem; display: flex; column-gap: 2rem; flex-wrap: wrap; flex-direction: column;">
         <div style="display: flex; align-items: center;"><h2 style="margin-right: 1rem;">Partecipanti:</h2> {{sessionDetails?.numeroIscritti}}</div>
+        <div style="display: flex; align-items: center;" *ngIf="sessionDetails?.tipoSessione == 'scritto'">
+            <h2 style="margin-right: 1rem;">Traccia d'esame:</h2>
+            <a (click)="download(sessionDetails?.idProvaSomministrata!, sessionDetails?.nomeProvaSomministrata!, sessionDetails?.contentType!)">{{sessionDetails?.nomeProvaSomministrata}}</a>
+        </div>
     </div>
 
     <div class="upload-container" *ngIf="(isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE')">
-        upload prova
-    </div>
+        @if(esameConsegnato){
+            Esame consegnato con successo
+        }@else {
+            <app-upload-button #uploadBtn (onUploadComplete)="onFileUpload($event)" (onUploadDelete)="onFileDelete($event)" class="upload-btn" default="Carica la prova d'esame svolta"></app-upload-button>
+        }
+        </div>
 
     <div class="prove-tree-container" *ngIf="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE')">
         <mat-tree style="background-color: transparent;" [dataSource]="dataSource" [treeControl]="treeControl">
@@ -15,8 +23,10 @@
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
               <!-- use a disabled button to provide padding for tree leaf -->
               <button mat-icon-button disabled></button>
-              @if(node.file){
-                <mat-icon style="transform: scale(0.8); margin-left: 0; margin-right: 0.5rem;">insert_drive_file</mat-icon>{{node.file}}
+              @if(node.nomeFile){
+                <a (click)="download(node.idFile, node.nomeFile, node.contentType)" style="display: flex; align-items: center; cursor: pointer;">
+                    <mat-icon style="transform: scale(0.8); margin-left: 0; margin-right: 0.5rem;">insert_drive_file</mat-icon>{{node.nomeFile}}
+                </a>
               } @else {
                 <p style="color: #9b9b9b">Nessun allegato presente</p>
               }
@@ -30,17 +40,24 @@
                 </mat-icon>
               </button>
                 {{node.name}} 
-                <select (change)="onInserimentoVoto($event, node)" style="margin-left: 2rem;">
-                    <option value="">--Inserisci un voto--</option>
-                    <option *ngFor="let voto of createRangeVoto(16, 30)">{{voto}}</option>
-                    <option>30L</option>
+                <select [disabled]="node.esito" (change)="onInserimentoVoto($event, node)" style="margin-left: 2rem;">
+                    <option *ngIf="!node.esito" [selected]="!node.esito" value="">--Inserisci un voto--</option>
+                    <ng-container *ngFor="let voto of createRangeVoto(16, 30)">
+                        <option [selected]="node.esito == voto">{{voto}}</option>
+                    </ng-container>
+                    <option [selected]="node.esito == '30L'">30L</option>
                 </select>
             </mat-tree-node>
         </mat-tree>
     </div>
 
-    <div class="correzione-container" *ngIf="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE')">
-        <button mat-button  disabled>Termina esame</button> 
+    <div class="correzione-container" style="display: flex; flex-direction: row; column-gap: 2rem; margin-top: 2rem;" *ngIf="(isAuthenticated && authInfo?.payload?.role?.toString() != 'ADMIN')">
+        <button mat-button 
+        [disabled]="authInfo?.payload?.role?.toString() == 'DOCENTE' ? this.esitiMancanti.size == 0 : (this.esameConsegnato || !this.file)" 
+        (click)="authInfo?.payload?.role?.toString() == 'DOCENTE' ? salvaStato() : uploadEsame()">
+           {{authInfo?.payload?.role?.toString() == 'DOCENTE' ? 'Salva stato' : 'Completa esame'}}
+        </button> 
+        <!-- <button mat-button  (click)="chiudiSessione()" [disabled]="!(!this.esitiMancanti || this.esitiMancanti.size == 0)">Termina sessione</button>  -->
     </div>
     
 </div>
