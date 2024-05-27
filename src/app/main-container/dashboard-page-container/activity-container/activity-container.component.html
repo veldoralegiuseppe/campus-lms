@@ -11,14 +11,14 @@
             <!-- <app-checkbox-v2 #check1 class='dad' [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'" formControlName="dad" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'"></app-checkbox-v2>
             <app-checkbox-v2 #check2 [label]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONE' : 'CORRETTE'" [formControlName]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'"></app-checkbox-v2> -->
             <mat-radio-group aria-label="Select an option" formControlName="tipoOptions">
-                <mat-radio-button  [value]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'">{{authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'}}</mat-radio-button>
+                <mat-radio-button style="margin-right: 2rem;" [value]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'studio' : 'daCorreggere'">{{authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'STUDIO' : 'DA CORREGGERE'}}</mat-radio-button>
                 <mat-radio-button  [value]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'sessioni' : 'corrette'">{{authInfo?.payload?.role?.toString() == 'STUDENTE' ? 'SESSIONE' : 'CORRETTE'}}</mat-radio-button>
             </mat-radio-group>
         </div>
     </div>
     <div class="app-table-v2 table-container"
          [@openClose] = "hideTable ? 'close' : 'open'"
-         [columnsTemplate]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? ['Tipo','1fr','Corso','1fr','Data','1fr','Dettaglio','1fr'] : ['Corso','1fr','Sessione', '1fr', 'Data','1fr','Correzione','1fr']"
+         [columnsTemplate]="authInfo?.payload?.role?.toString() == 'STUDENTE' ? ['Tipo','1fr','Corso','1fr','Data','1fr','Dettaglio','1fr'] : ['Corso','1fr','Sessione', '1fr', 'Data','1fr','Correzione','1.5fr']"
          [rowType]="rowType"
          [modelTableMapper]="activityTableMapper">
     </div>

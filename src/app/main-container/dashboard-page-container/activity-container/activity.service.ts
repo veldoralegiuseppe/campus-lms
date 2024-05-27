@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Column } from 'src/app/commons/table/table-column';
 import { Activity, StudenteActivity } from './activity-table-row/Activity';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -11,18 +9,6 @@ import { map } from 'rxjs';
   providedIn: 'root'
 })
 export class ActivityService {
-
-  private activities : Activity[] = [
-    {studenteActivity: {tipo: "tipo1", corso:"corso1", data:"data1", dettaglio:"dettaglio1"}, docenteActivity: {corso: "corso1", sessione:"sessione1", correzione:"correzione1", data:"data1"}} as Activity,
-    {studenteActivity: {tipo: "tipo2", corso:"corso2", data:"data2", dettaglio:"dettaglio2"}, docenteActivity: {corso: "corso1", sessione:"sessione1", correzione:"correzione1", data:"data1"}} as Activity,
-    {studenteActivity: {tipo: "tipo3", corso:"corso3", data:"data3", dettaglio:"dettaglio3"}, docenteActivity: {corso: "corso1", sessione:"sessione1", correzione:"correzione1", data:"data1"}} as Activity,
-    {studenteActivity: {tipo: "tipo4", corso:"corso4", data:"data4", dettaglio:"dettaglio4"}, docenteActivity: {corso: "corso1", sessione:"sessione1", correzione:"correzione1", data:"data1"}} as Activity,
-    {studenteActivity: {tipo: "tipo5", corso:"corso5", data:"data5", dettaglio:"dettaglio5"}, docenteActivity: {corso: "corso1", sessione:"sessione1", correzione:"correzione1", data:"data1"}} as Activity,
-    {studenteActivity: {tipo: "tipo6", corso:"corso6", data:"data6", dettaglio:"dettaglio6"}, docenteActivity: {corso: "corso1", sessione:"sessione1", correzione:"correzione1", data:"data1"}} as Activity,
-  
-  ]
-  
-  private activitiesPaginated: Activity[] = []
 
   private _pathAttivita = '/api/attivita'
   private _pathSessioni = '/api/sessione'
@@ -64,10 +50,10 @@ export class ActivityService {
     ).toPromise()
   }
 
-  getSessioniPaginated(pagination: {page: number, size:number}):  Promise<{activities: Activity[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined>{
+  getSessioniPaginated(pagination: {page: number, size:number}, corrette?: boolean):  Promise<{activities: Activity[], pagination: {totalPages: number, currentPage: number, size: number}, execTime: number} | undefined>{
     let startTime = performance.now()
     console.log(pagination)
-    let url = `${environment.http_server_host}${this._pathSessioni}/${pagination.size}/${pagination.page-1}`
+    let url = `${environment.http_server_host}${this._pathSessioni}/${pagination.size}/${pagination.page-1}` + (corrette!=undefined ? `?corrette=${corrette}` : "")
     console.log(`ActivityService - url sessioni: ${url}`)
 
     return this._http.get(url).pipe(
@@ -83,8 +69,8 @@ export class ActivityService {
         let activities: Activity[] = resp.content.map(s =>  {
 
           let activity: Activity = {
-            docenteActivity: role == UserRole.DOCENTE ? {corso: s.nomeCorso, data: s.data, sessione: s.tipo, correzione: ""} : undefined,
-            studenteActivity: role == UserRole.STUDENTE ? {tipo: 'ESAME', corso: s.nomeCorso, data: s.data, dettaglio: s.tipo} : undefined,
+            docenteActivity: role == UserRole.DOCENTE ? {corso: s.nomeCorso, data: s.data, idSessione: s.idSessione, sessione: s.tipo, daCorreggere: ''+(s.proveConsegnate-s.proveCorrette)} : undefined,
+            studenteActivity: role == UserRole.STUDENTE ? {tipo: 'ESAME', corso: s.nomeCorso, idSessione: s.idSessione, data: s.data, dettaglio: s.tipo} : undefined,
             adminActivity: undefined
           }
 
@@ -100,20 +86,10 @@ export class ActivityService {
     ).toPromise()
   }
 
-  private paginate(pagination: {page: number, size:number}): {totalPages: number, currentPage: number, size: number}{
-    // CODICE DI BACKEND
-    let pag = {totalPages: Math.ceil(this.activities.length/pagination.size), currentPage: pagination.page, size: pagination.size} 
-    let offset = 0
-    let startIndex = ((pagination.page-1)*pagination.size) + offset
-    this.activitiesPaginated = this.activities.slice(startIndex,startIndex+pagination.size)
-    
-    return pag
-  }
-
   private getEmptyActivity() : Activity {
     return {
-      studenteActivity: {tipo: "", corso: "", data:"", dettaglio: ""}, 
-      docenteActivity: {corso: "", sessione:"", correzione: "", data: ""}, 
+      studenteActivity: {tipo: "", corso: "", data:"", dettaglio: "", idSessione: -1}, 
+      docenteActivity: {corso: "", sessione:"", daCorreggere: "", data: "", idSessione: -1}, 
   }
 
   }
@@ -211,5 +187,7 @@ export interface SearchSessioneResponse{
   cognomeDocente: String,
   emailDocente: String,
   numeroStudenti: String,
-  idSessione: number
+  idSessione: number,
+  proveConsegnate: number,
+  proveCorrette: number,
 }

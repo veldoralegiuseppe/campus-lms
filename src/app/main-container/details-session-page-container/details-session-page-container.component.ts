@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
 import { SessionDetailsService, SessioneDetailsResponse, UpdateEsitoRequest } from './session-details.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DatePipe, formatDate } from '@angular/common';
 
 @Component({
     selector: 'app-details-session-page-container',
@@ -20,6 +21,7 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
   file: File | null = null
   esameConsegnato: boolean = false
   esitiMancanti: Map<number, string|null> = new Map()
+  today: string = formatDate(new Date(), 'dd/MM/yyyy', 'it');
   
   
   constructor(private _route: ActivatedRoute, private _service: SessionDetailsService, private _snackBar: MatSnackBar, private _changeDetector: ChangeDetectorRef){

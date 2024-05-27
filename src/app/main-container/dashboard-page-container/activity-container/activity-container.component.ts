@@ -116,7 +116,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
       this.dropdownList = [
         new DropdownOption('Corso'),
       ]
-      this.header = {studenteActivity: {tipo: 'Tipo', corso: 'Corso', data: 'Data', dettaglio: 'Dettaglio'}}
+      this.header = {studenteActivity: {tipo: 'Tipo', corso: 'Corso', data: 'Data', dettaglio: 'Dettaglio', idSessione: -1}}
       this.activityFilter = this.formBuilder.group({
         tipoOptions: ['studio'],
       })
@@ -127,7 +127,7 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
         new DropdownOption('Corso'),
         new DropdownOption('Sessione'),
       ]
-      this.header = {docenteActivity: {sessione: 'Sessione', corso: 'Corso', data: 'Data', correzione: 'Correzione'}}
+      this.header = {docenteActivity: {sessione: 'Sessione', corso: 'Corso', data: 'Data', daCorreggere: 'Correzioni rimanenti', idSessione: -1}}
       this.activityFilter = this.formBuilder.group({
         tipoOptions: ['daCorreggere'],
       })
@@ -138,25 +138,27 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
     }
    
     this.activityFilter?.valueChanges.subscribe(value => {
-      //console.log(value)
       if(value.tipoOptions == 'studio') this.activeFilter.next('studio')
       else if(value.tipoOptions =='sessioni') this.activeFilter.next('sessioni')
+      else if(value.tipoOptions =='daCorreggere') this.activeFilter.next('daCorreggere')
+      else if(value.tipoOptions =='corrette') this.activeFilter.next('corrette')
     })
 
     this.activeFilter.subscribe(f => {
+      console.log(f)
       this.pages = 1;
       this.pageSize = 3;
       
       if(f == 'studio') this.getActivitiesPaginated({page: this.pages, size: this.pageSize})
       else if(f == 'sessioni') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
-      else if(f == 'daCorreggere') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
-      else if(f == 'corrette') this.getSessioniPaginated({page: this.pages, size: this.pageSize})
+      else if(f == 'daCorreggere') this.getSessioniPaginated({page: this.pages, size: this.pageSize}, false)
+      else if(f == 'corrette') this.getSessioniPaginated({page: this.pages, size: this.pageSize}, true)
     })
   }
 
   ngAfterViewInit(): void {
     if(this.role == "STUDENTE") this.getActivitiesPaginated({page: this.pages, size: this.pageSize})
-    else if(this.role == "DOCENTE") this.getSessioniPaginated({page: this.pages, size: this.pageSize})
+    else if(this.role == "DOCENTE") this.getSessioniPaginated({page: this.pages, size: this.pageSize}, false)
   }
 
   /**
@@ -230,10 +232,10 @@ export class ActivityContainerComponent extends AuthenticationComponent implemen
    * @param pagination Paginazione
    * @param onEnd Callbak
    */
-  private getSessioniPaginated(pagination: {page: number, size: number}, onEnd?: () => void){
+  private getSessioniPaginated(pagination: {page: number, size: number}, corrette?: boolean, onEnd?: () => void){
     
     if(this.tableDOM?.nativeElement) this.tableDOM!.nativeElement.style.marginTop = '6rem'
-    this.activityService.getSessioniPaginated(pagination).then(response => {
+    this.activityService.getSessioniPaginated(pagination, corrette).then(response => {
       
       this.activities = response!.activities
       this.pages = response!.pagination.totalPages

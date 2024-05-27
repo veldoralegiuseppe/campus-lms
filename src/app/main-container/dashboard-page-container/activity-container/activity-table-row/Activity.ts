@@ -8,14 +8,16 @@ export interface StudenteActivity{
     tipo: String,
     corso: String,
     data: String,
-    dettaglio: String
+    dettaglio: String,
+    idSessione?: number
 }
 
 export interface DocenteActivity{
     corso: String,
     sessione: String,
     data: String,
-    correzione: String
+    daCorreggere: String,
+    idSessione: number
 }
 
 export interface AdminActivity{

@@ -12,7 +12,7 @@
         <div [ngClass]="['corso','header']">{{activity?.docenteActivity?.corso}}</div>
         <div [ngClass]="['sessione', 'header']">{{activity?.docenteActivity?.sessione}}</div>
         <div [ngClass]="['data', 'header']">{{activity?.docenteActivity?.data}}</div>
-        <div [ngClass]="['correzione', 'header']">{{activity?.docenteActivity?.correzione}}</div>
+        <div [ngClass]="['correzione', 'header']">{{activity?.docenteActivity?.daCorreggere}}</div>
     </ng-template>
 
     <!-- Animazione di caricamento -->
@@ -26,7 +26,11 @@
 
     <!-- Body -->
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'STUDENTE') && (index > 0 && (loading === undefined || !loading))">
-        <div [ngStyle]="{'border-bottom-left-radius': isLastRow! ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['tipo','body']">{{activity?.studenteActivity?.tipo}}</div>
+        @if(activity?.studenteActivity?.tipo == 'STUDIO'){
+            <div [ngStyle]="{'border-bottom-left-radius': isLastRow! ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6',}" [ngClass]="['tipo','body']">{{activity?.studenteActivity?.tipo}}</div>
+        }@else {
+            <a routerLink="/session/{{activity?.studenteActivity?.idSessione}}" [ngStyle]="{'border-bottom-left-radius': isLastRow! ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6', 'pointerEvents': (activity?.studenteActivity?.idSessione! < 1 || activity?.studenteActivity?.tipo == 'STUDIO') ? 'none' : 'auto'}" [ngClass]="['tipo','body']">{{activity?.studenteActivity?.tipo}}</a>
+        }
         <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['corso', 'body']">{{activity?.studenteActivity?.corso}}</div>
         <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['data', 'body']">{{activity?.studenteActivity?.data}}</div>
         <div [ngStyle]="{'border-bottom-right-radius': isLastRow! == true ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['dettaglio', 'body']">{{activity?.studenteActivity?.dettaglio}}</div>
@@ -34,9 +38,10 @@
 
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE') && (index > 0 && (loading === undefined || !loading))">
         <div [ngStyle]="{'border-bottom-left-radius': isLastRow! ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['corso','body']">{{activity?.docenteActivity?.corso}}</div>
-        <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['sessione', 'body']">{{activity?.docenteActivity?.sessione}}</div>
+        <a routerLink="/session/{{activity?.docenteActivity?.idSessione}}" [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6', 'pointerEvents': activity?.docenteActivity?.idSessione! < 1 ? 'none' : 'auto'}" [ngClass]="['sessione', 'body']">{{activity?.docenteActivity?.sessione?.toUpperCase()}}</a>
         <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['data', 'body']">{{activity?.docenteActivity?.data}}</div>
-        <div [ngStyle]="{'border-bottom-right-radius': isLastRow! == true ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['correzione', 'body']">{{activity?.docenteActivity?.correzione}}</div>
+        <div [ngStyle]="{'border-bottom-right-radius': isLastRow! == true ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['correzione', 'body']">{{activity?.docenteActivity?.daCorreggere}}</div>
     </ng-template>
 
 </ng-container>
+
