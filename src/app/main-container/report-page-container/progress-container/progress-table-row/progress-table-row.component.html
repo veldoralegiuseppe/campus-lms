@@ -2,16 +2,13 @@
 
     <!-- Header -->
     <ng-template [ngIf]="index === 0 && !loading">
-        <div class="header selector"></div>
         <div [ngClass]="['nome','header']">{{progress?.nome}}</div>
         <div [ngClass]="['cognome','header']">{{progress?.cognome}}</div>
         <div [ngClass]="['codice-fiscale','header']">{{progress?.codiceFiscale}}</div>
-        <div [ngClass]="['attivita', 'header']">{{progress?.attivita}}</div>
         <div [ngClass]="['tipo','header']">{{progress?.tipo}}</div>
         <div [ngClass]="['data', 'header']">{{progress?.data}}</div>
-        <div [ngClass]="['ora-inizio', 'header']">{{progress?.oraInizio}}</div>
-        <div [ngClass]="['ora-fine', 'header']">{{progress?.oraFine}}</div>
-        <div [ngClass]="['completata', 'header']">{{progress?.completata}}</div>
+        <div [ngClass]="['corso', 'header']">{{progress?.corso}}</div>
+        <div [ngClass]="['esito', 'header']">{{progress?.esito}}</div>
     </ng-template>
 
     <!-- Animazione di caricamento -->
@@ -25,16 +22,13 @@
 
     <!-- Body -->
     <ng-template [ngIf]="index > 0 && (loading === undefined || !loading)">
-        <app-checkbox-v2 (checkedEventEmitter)="onChecked()" [ngClass]="['body', 'selector']"></app-checkbox-v2>
         <div [ngClass]="['nome','body']">{{progress?.nome}}</div>
         <div [ngClass]="['cognome','body']">{{progress?.cognome}}</div>
         <div [ngClass]="['codice-fiscale','body']">{{progress?.codiceFiscale}}</div>
-        <div [ngClass]="['attivita', 'body']">{{progress?.attivita}}</div>
         <div [ngClass]="['tipo','body']">{{progress?.tipo}}</div>
         <div [ngClass]="['data', 'body']">{{progress?.data}}</div>
-        <div [ngClass]="['ora-inizio', 'body']">{{progress?.oraInizio}}</div>
-        <div [ngClass]="['ora-fine', 'body']">{{progress?.oraFine}}</div>
-        <div [ngClass]="['completata', 'body']">{{progress?.completata}}</div>
+        <div [ngClass]="['corso', 'body']">{{progress?.corso}}</div>
+        <div [ngClass]="['esito', 'body']">{{progress?.esito}}</div>
     </ng-template>
 
 </ng-container>

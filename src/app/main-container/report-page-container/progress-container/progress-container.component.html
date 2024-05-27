@@ -14,22 +14,35 @@
     <div class="course-form">
         <div class="form-title">Dati corso</div>
         <div class="form" [formGroup] = "courseFilter">
-            <div [ngStyle]="{'margin-right':'3rem'}" class="app-select-bar" [options]="['Corso']" formControlName="corso"></div>
-            <div class="app-select-bar" [options]="['CUP']" formControlName="sessione"></div>
-            <input [ngStyle]="{'transform':'translateX(3rem)'}" class="search-bar classe-associata disabled" type="text" placeholder="Classe associata" disabled="true">
-            <input style="visibility: hidden;" class="search-bar" type="text">
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Corsi</mat-label>
+                <mat-select class="custom-theme" formControlName="nomeCorso">
+                    @for (corso of corsi; track corso) {
+                    <mat-option class='not-empty-select' [value]="corso.value">{{corso.viewValue}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
         </div>
     </div>
 
     <div class="activity-form">
-        <div class="form-title">Dati attività</div>
+        <div class="form-title">Dati sessione</div>
         <div class="form" [formGroup] = "activityFilter">
-            <input class="search-bar" type="text" placeholder="Attività" formControlName="attivita">
-            <app-datepicker class="date" [placeholder]="'Da'" formControlName="dataDa"></app-datepicker>
-            <app-datepicker class="date" [placeholder]="'A'" formControlName="dataA"></app-datepicker>
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Data da</mat-label>
+                <input [readonly]="true" matInput type="date-local" formControlName="dataDa" [matDatepicker]="pickerDa">
+                <mat-datepicker-toggle style="color: #e0aab4;" matIconSuffix [for]="pickerDa"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDa></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="form-input-field" appearance="outline">
+                <mat-label class="form-input-label">Data a</mat-label>
+                <input matInput [readonly]="true" formControlName="dataA"  [matDatepickerFilter]="myFilter" [matDatepicker]="pickerA">
+                <mat-datepicker-toggle style="color: #e0aab4;" [disabled]="this.activityFilter.get('dataDa')?.value == null"  matIconSuffix [for]="pickerA"></mat-datepicker-toggle>
+                <mat-datepicker #pickerA></mat-datepicker>
+            </mat-form-field>
             <div class="checkbox-wrapper">
-                <app-checkbox-v2 class="checkbox" [label]="'FAD'" formControlName="fad"></app-checkbox-v2>
-                <app-checkbox-v2 class="checkbox" [label]="'DAD'" formControlName="dad"></app-checkbox-v2>
+                <app-checkbox-v2 class="checkbox" [label]="'ORALE'" formControlName="orale"></app-checkbox-v2>
+                <app-checkbox-v2 class="checkbox" [label]="'SCRITTO'" formControlName="scritto"></app-checkbox-v2>
             </div>
         </div>
     </div>
@@ -42,7 +55,7 @@
 
     <div class="app-table-v2 table" 
          [@openClose] = "hideTable ? 'close' : 'open'"
-         [columnsTemplate]="['selector','.5fr','nome','1fr','cognome','1fr','codice-fiscale','1fr','attivita','1fr','tipo','1fr','data','1fr','ora-inizio','1fr','ora-fine','1fr','completata','1fr']" 
+         [columnsTemplate]="['nome','1fr','cognome','1fr','codice-fiscale','1fr','tipo','1fr','data','1fr','corso','1fr','esito','1fr']" 
          [modelTableMapper]="progressTableMapper"
          [rowType]="rowType"
          [onEvent]="onSelectedRow"> 
@@ -51,7 +64,7 @@
     <app-pagination [@openClose] = "hidePagination ? 'close' : 'open'" class="pagination"  [pageSize]="pageSize" [pageSizeOptions]="[3,5,10]" (onPageChange)="handlePaginationChange($event)">
     </app-pagination>
 
-    <div #opButtons [@openClose] = "hideOperationButton? 'close' : 'open'" id="buttons" class="container">
+    <!-- <div #opButtons [@openClose] = "hideOperationButton? 'close' : 'open'" id="buttons" class="container">
         <button (click)="getCustomReport()" [ngClass]="rowSelected.length > 0 ? 'enable' : 'disable'" class="report-btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 28">
                 <path d="M0.5 0.285645V27.7142H24.5V13.9999H10.7857V0.285645H0.5ZM14.2143 0.285645V10.5714H24.5L14.2143 0.285645Z"/>
@@ -67,5 +80,5 @@
         <button (click)="applicaTutoraggio()" [ngClass]="rowSelected.length > 0 ? 'enable' : 'disable'" class="report-btn applica-tutoraggio">
             <p>Applica tutoraggio</p>
         </button>
-    </div>
+    </div> -->
 </div>

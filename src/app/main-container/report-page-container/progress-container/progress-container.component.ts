@@ -7,8 +7,9 @@ import { ProgressTableRowComponent } from './progress-table-row/progress-table-r
 import { PaginationComponent } from 'src/app/commons/pagination/pagination.component';
 import { ResetFilterButtonComponent } from 'src/app/commons/reset-filter-button/reset-filter-button.component';
 import { TableV2Component } from 'src/app/commons/table-v2/table-v2.component';
-import { ProgressService } from './progress.service';
+import { ProgressService, SearchProgressiRequest } from './progress.service';
 import { AuthenticationComponent } from 'src/app/commons/authentication/authentication.component';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: '.app-progress-container',
@@ -30,7 +31,7 @@ import { AuthenticationComponent } from 'src/app/commons/authentication/authenti
 })
 export class ProgressContainerComponent extends AuthenticationComponent implements OnInit, AfterViewInit {
 
-  /**
+  /** 
    * Model
    */
   private progress: Progress[] = []
@@ -105,14 +106,29 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
    */
   activityFilter!: FormGroup
 
+
+  corsi: Corsi[] = [];
+
+  myFilter = (d: Date | null): boolean => {
+    if(!this.activityFilter.get('dataDa')?.value) return true
+    else if(!d) return true
+    else return this.activityFilter.get('dataDa')?.value <= d
+  };
+
   private tableMarginTop: string = '8rem'
   private loadingBarMarginTop: string = '6rem'
 
-  constructor(private progressService: ProgressService){
+  constructor(private _service: ProgressService){
     super()
   }
   
   ngOnInit(): void {
+     // inizializzazione corsi
+     this._service.getCorsi(this.authInfo?.payload?.role!).then(c => {
+      let result: Corsi[] = c!.map(v => { return <Corsi>{value: v.nome, viewValue: v.nome}})
+      this.corsi.push({value: 'tutti', viewValue: 'Tutti'}, ...result)
+    })
+
     // Inizializzazione form
     this.userFilter = new FormGroup({
       'nome': (this.authInfo?.payload?.nome && this.authInfo.payload.role == 'STUDENTE') ? new FormControl(this.authInfo?.payload?.nome) : new FormControl(""),
@@ -121,43 +137,45 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
     })
 
     this.courseFilter = new FormGroup({
-      'corso': new FormControl('Corso'),
-      'sessione': new FormControl("CUP")
+      'nomeCorso': new FormControl('tutti'),
     })
 
     this.activityFilter = new FormGroup({
-      'attivita': new FormControl(""),
-      'dataDa': new FormControl(undefined),
-      'dataA': new FormControl(undefined),
-      'fad': new FormControl(false),
-      'dad': new FormControl(false),
+      'dataDa': new FormControl(null),
+      'dataA': new FormControl(null),
+      'orale': new FormControl(false),
+      'scritto': new FormControl(false),
     })
 
     this.userFilter.valueChanges.subscribe(value => {
       if( JSON.stringify({nome: "", cognome: "", codiceFiscale: ""}) === JSON.stringify(value) &&
-          JSON.stringify({corso: "Corso", sessione: "CUP"}) === JSON.stringify(this.courseFilter.value) &&
-          JSON.stringify({attivita: "", dataDa: null, dataA: null, fad: false, dad: false}) === JSON.stringify(this.activityFilter.value))
+          JSON.stringify({nomeCorso: "tutti",}) === JSON.stringify(this.courseFilter.value) &&
+          JSON.stringify({ dataDa: null, dataA: null, orale: false, scritto: false}) === JSON.stringify(this.activityFilter.value))
         this.resetFilterButton?.enable(false)
       else
         this.resetFilterButton?.enable(true)
     })
 
     this.courseFilter.valueChanges.subscribe(value => {
-      if( JSON.stringify({corso: "Corso", sessione: "CUP"}) === JSON.stringify(value) && 
+      if( JSON.stringify({nomeCorso: "tutti",}) === JSON.stringify(value) && 
           JSON.stringify({nome: "", cognome: "", codiceFiscale: ""}) === JSON.stringify(this.userFilter.value) &&
-          JSON.stringify({attivita: "", dataDa: null, dataA: null, fad: false, dad: false}) === JSON.stringify(this.activityFilter.value))
+          JSON.stringify({dataDa: null, dataA: null, orale: false, scritto: false}) === JSON.stringify(this.activityFilter.value))
         this.resetFilterButton?.enable(false)
       else
         this.resetFilterButton?.enable(true)
     })
 
     this.activityFilter.valueChanges.subscribe(value => {
-      if( JSON.stringify({attivita: "", dataDa: null, dataA: null, fad: false, dad: false}) === JSON.stringify(value) &&
-          JSON.stringify({corso: "Corso", sessione: "CUP"}) === JSON.stringify(this.courseFilter.value) && 
+      if( JSON.stringify({dataDa: null, dataA: null, orale: false, scritto: false}) === JSON.stringify(value) &&
+          JSON.stringify({nomeCorso: "tutti",}) === JSON.stringify(this.courseFilter.value) && 
           JSON.stringify({nome: "", cognome: "", codiceFiscale: ""}) === JSON.stringify(this.userFilter.value))
         this.resetFilterButton?.enable(false)
       else
         this.resetFilterButton?.enable(true)
+    })
+
+    this.activityFilter.get('dataDa')?.valueChanges.subscribe(v => {
+      if(v > this.activityFilter.get('dataA')?.value) this.activityFilter.get('dataA')?.setValue(null)
     })
   }
   
@@ -175,7 +193,7 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
     if(this.progress.length <= 0) return {loading: true}
     
     if(index === 0)
-    return {progress: {nome: 'Nome', cognome: 'Cognome', codiceFiscale: 'CF', attivita: 'Attività', tipo: 'Tipo', data: 'Data', oraInizio: 'Ora inizio', oraFine: 'Ora fine', completata: 'Completata'}}
+    return {progress: {nome: 'Nome', cognome: 'Cognome', codiceFiscale: 'CF', tipo: 'Tipo', data: 'Data', esito: "Esito", corso: "Corso"}}
     else 
       return {progress: this.progress.at(index-1)}
   }
@@ -231,16 +249,14 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
     })
 
     this.courseFilter.reset({
-      'corso': 'Corso',
-      'sessione': "CUP"
+      'nomeCorso': 'tutti',
     })
 
     this.activityFilter.reset({
-      'attivita': "",
       'dataDa': null,
       'dataA': null,
-      'fad': false,
-      'dad': false,
+      'orale': false,
+      'scritto': false,
     })
 
     this.resetFilterButton?.enable(false)
@@ -253,18 +269,40 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
    getProgress(pagination: {page: number, size: number}, onEnd?: () => void){
     
     // Gestione delle form
-    console.log(this.userFilter.value)
-    console.log(this.courseFilter.value)
-    console.log(this.activityFilter.value)
+    // console.log(this.userFilter.value)
+    // console.log(this.courseFilter.value)
+    // console.log(this.activityFilter.value)
 
+    let tipoSessione: string | null = null
+
+    if(this.activityFilter.get('orale')?.value && this.activityFilter.get('scritto')?.value) tipoSessione = null
+    else if(!this.activityFilter.get('orale')?.value && !this.activityFilter.get('scritto')?.value) tipoSessione = null
+    else if(this.activityFilter.get('orale')?.value && !this.activityFilter.get('scritto')?.value) tipoSessione = 'orale'
+    else if(this.activityFilter.get('scritto')?.value && !this.activityFilter.get('orale')?.value) tipoSessione = 'scritto'
+
+    const dataDa = this.activityFilter.get('dataDa')?.value ? formatDate(this.activityFilter.get('dataDa')?.value, 'yyyy-MM-dd', 'it-IT') : null
+    const dataA = this.activityFilter.get('dataA')?.value ? formatDate(this.activityFilter.get('dataA')?.value, 'yyyy-MM-dd', 'it-IT') : null
+  
+
+    const req: SearchProgressiRequest = {
+      nome: this.userFilter.get('nome')?.value ? this.userFilter.get('nome')?.value : null,
+      cognome: this.userFilter.get('cognome')?.value ? this.userFilter.get('cognome')?.value : null,
+      codiceFiscale: this.userFilter.get('codiceFiscale')?.value ? this.userFilter.get('codiceFiscale')?.value : null,
+      tipoSessione: tipoSessione,
+      nomeCorso: this.courseFilter.get('nomeCorso')?.value != 'tutti'  ? this.courseFilter.get('nomeCorso')?.value : null,
+      dataA: dataA,
+      dataDa: dataDa
+    }
+
+    //console.log(req)
     this.tableDOM!.nativeElement.style.marginTop = this.loadingBarMarginTop
 
-    this.progressService.getProgressPaginated(pagination).then(response => {
-      this.progress = response.progress
-      this.pages = response.pagination.totalPages
-      this.pageSize = response.pagination.size
+    this._service.getProgressPaginated(pagination, req).then(response => {
+      this.progress = response!.progressi
+      this.pages = response!.pagination.totalPages
+      this.pageSize = response!.pagination.size
 
-      if(response.execTime <= 500){
+      if(response!.execTime <= 500){
         setTimeout(() => {
           // Update table
           this.table!.size = this.progress!.length + 1
@@ -278,7 +316,7 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
 
           //onEnd
           if(onEnd) onEnd()
-        }, 500 - response.execTime)
+        }, 500 - response!.execTime)
       }
       else {
         // Update table
@@ -304,28 +342,10 @@ export class ProgressContainerComponent extends AuthenticationComponent implemen
     this.table!.size = pagination.size + 1
   }
 
-  /**
-   * Applica il tutoraggio agli utenti selezionati nella tabella
-   */
-  applicaTutoraggio() {
-    if(!this.rowSelected || this.rowSelected.length == 0) return 
-    console.log(`Applico tutoraggio`)
-  }
+ 
+}
 
-  /**
-   * Scrica il report giornaliero per tutti gli utenti
-   */
-  getDailyReport() {
-    if(!this.rowSelected || this.rowSelected.length == 0) return 
-    console.log(`Report giornaliero`)
-  }
-
-  /**
-   * Scarica il report per gli utenti selezionati
-   */
-  getCustomReport() {
-    if(!this.rowSelected || this.rowSelected.length == 0) return 
-    console.log(`Custom report`)
-  }
-
+interface Corsi {
+  value: string | null;
+  viewValue: string;
 }
