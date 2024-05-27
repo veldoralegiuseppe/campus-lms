@@ -1,3 +1,26 @@
-.header{
-    min-height: 3rem;
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// **Be sure that you only ever include this mixin once!**
+@include mat.core();
+$toolbar-palette-primary: mat.define-palette(mat.$light-blue-palette);
+$toolbar-palette-accent: mat.define-palette(mat.$light-blue-palette);
+$toolbar-palette-warn: mat.define-palette(mat.$light-blue-palette);
+
+$theme: mat.define-light-theme((
+  color: (
+    primary: $toolbar-palette-primary,
+    accent: $toolbar-palette-accent,
+    warn: $toolbar-palette-warn,
+  ),
+  density: -4,
+));
+
+// Include the alternative theme styles inside of a block with a CSS class. You can make this
+// CSS class whatever you want. In this example, any component inside of an element with
+// `.unicorn-dark-theme` will be affected by this alternate dark theme instead of the default theme.
+.unicorn-dark-theme {
+  @include mat.toolbar-color($theme);
 }

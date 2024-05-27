@@ -21,7 +21,9 @@ export class LoginComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
-  private previousUrl: String | undefined
+  submit: boolean = false
+  loginError: boolean = false
+  
 
   constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {
     //this.previousUrl = router.getCurrentNavigation()?.extras?.state?.['previousUrl'];
@@ -29,18 +31,25 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    this.loginError = false 
+    
     if (this.emailFormControl.valid && this.passwordFormControl.valid) {
-      
+      this.submit = true
       const email = this.emailFormControl.value!;
       const password = this.passwordFormControl.value!;
 
       this.auth.login(email, password).subscribe(value => {
         if(value){
-          if(this.previousUrl) this.router.navigateByUrl(this.previousUrl.toString())
-          else this.router.navigate(['/dashboard'])
-        } 
-        // else gestire credenziali errate
-      })
+          this.submit = false
+          this.loginError = false
+          this.router.navigate(['/dashboard'])
+        }
+        },
+        (error) => {
+          this.submit = false
+          this.loginError = true
+        }
+        )
      
       //this.auth.fakeLogin(email, password)
       

@@ -72,7 +72,9 @@ export class AuthService implements CanActivate, OnInit {
  }
 
   logout(){
+    localStorage.removeItem('user')
     this.stateItem.next(null)
+    this.router.navigate(['/login']);
   }
 
   isTokenExpired(token: String): boolean{

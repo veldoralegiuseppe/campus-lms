@@ -71,6 +71,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatListModule} from '@angular/material/list';
 import {MatTreeModule} from '@angular/material/tree';
+import {MatToolbarModule} from '@angular/material/toolbar'
 
 
 
@@ -176,7 +177,8 @@ export const JwtServiceProvider = {provide: JWT_OPTIONS, useValue: JWT_OPTIONS, 
         MatExpansionModule,
         MatDialogModule,
         MatListModule,
-        MatTreeModule
+        MatTreeModule,
+        MatToolbarModule
     ]
 })
 export class AppModule {

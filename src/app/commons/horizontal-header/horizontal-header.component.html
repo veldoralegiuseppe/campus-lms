@@ -1,3 +1,8 @@
-<div class="header">
-
+<div *ngIf="isAuthenticated" class="header" style=" min-height: 5rem; width: 100%; background-color: transparent; display: flex; justify-content: flex-end; align-items: center; column-gap: 3rem;">
+  <div style="color: black; font-weight: 400;">
+    {{this.authInfo?.payload?.role?.toUpperCase()}}
+  </div>
+  <button (click)="logout()" mat-icon-button class="example-icon favorite-icon" >
+    <mat-icon style="color: red; transform: scale(0.8);">logout</mat-icon>
+  </button>
 </div>

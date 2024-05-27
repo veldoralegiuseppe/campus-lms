@@ -23,6 +23,9 @@
                 </mat-form-field>
 
                 <button style="margin-top: 10px;" type="submit" mat-flat-button color="primary">Accedi</button>
+
+                @if(submit){ <mat-spinner style="transform: scale(0.5); margin-top: 2rem;"></mat-spinner> }
+                @if(loginError){ <h2 style="color: red; font-size: 1rem; margin-top: 2rem;">Password o credenziali errate</h2> }
             </div>
         </form>
 </div>

@@ -27,12 +27,13 @@
         display: flex;
         position: fixed;
         top: 3rem;
-        height: 95%;
+        height: 96%;
         grid-row: body-start/body-end;
         grid-column: vertical-nav-start/vertical-nav-end;
     }
 
     .page-content{
+        // margin-top: 7rem;
         grid-row: body-start/body-end;
         grid-column: content-start/content-end;
         

@@ -4,7 +4,7 @@
    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE'" class="title-container">I miei corsi</div>
    <div *ngIf="isAuthenticated && authInfo?.payload?.role?.toString() == 'ADMIN'" class="title-container">Tutti i corsi</div>
    
-   <app-search-bar formControlName="like" [ngClass]="'course-search-bar'"></app-search-bar>
+   <!-- <app-search-bar formControlName="like" [ngClass]="'course-search-bar'"></app-search-bar> -->
    <div 
       class="app-table-v2 table-container"
       [@openClose] = "hideTable ? 'close' : 'open'"

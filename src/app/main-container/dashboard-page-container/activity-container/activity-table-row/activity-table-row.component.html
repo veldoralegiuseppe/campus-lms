@@ -32,8 +32,8 @@
             <a routerLink="/session/{{activity?.studenteActivity?.idSessione}}" [ngStyle]="{'border-bottom-left-radius': isLastRow! ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6', 'pointerEvents': (activity?.studenteActivity?.idSessione! < 1 || activity?.studenteActivity?.tipo == 'STUDIO') ? 'none' : 'auto'}" [ngClass]="['tipo','body']">{{activity?.studenteActivity?.tipo}}</a>
         }
         <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['corso', 'body']">{{activity?.studenteActivity?.corso}}</div>
-        <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['data', 'body']">{{activity?.studenteActivity?.data}}</div>
-        <div [ngStyle]="{'border-bottom-right-radius': isLastRow! == true ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['dettaglio', 'body']">{{activity?.studenteActivity?.dettaglio}}</div>
+        <div [ngStyle]="{'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['data', 'body']">{{activity?.studenteActivity?.data ? "Settimana " + activity?.studenteActivity?.data: ""}}</div>
+        <div [ngStyle]="{'border-bottom-right-radius': isLastRow! == true ? '8px' : '0', 'border-bottom': isLastRow == true ? 'none' : '1px solid #E6E6E6'}" [ngClass]="['dettaglio', 'body']">{{activity?.studenteActivity?.dettaglio == 'STUDIO' ? 'Hai una nuova attività' : activity?.studenteActivity?.dettaglio}}</div>
     </ng-template>
 
     <ng-template [ngIf]="(isAuthenticated && authInfo?.payload?.role?.toString() == 'DOCENTE') && (index > 0 && (loading === undefined || !loading))">

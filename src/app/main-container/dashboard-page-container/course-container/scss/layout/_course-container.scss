@@ -1,6 +1,6 @@
 .course-container{
     display: grid;
-    grid-template-rows: [title-area-start] 1fr [title-area-end search-area-start] 1fr [search-area-end table-area-start] auto [table-area-end];
+    grid-template-rows: [title-area-start] 1fr [title-area-end search-area-start] auto [search-area-end table-area-start] auto [table-area-end];
     grid-template-columns: [title-area-start search-area-start table-area-start] 1fr [title-area-end search-area-end table-area-end];
     row-gap: $page-containers-row-gap;
  

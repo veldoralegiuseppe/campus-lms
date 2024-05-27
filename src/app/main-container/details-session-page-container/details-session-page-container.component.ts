@@ -167,6 +167,13 @@ export class DetailsSessionComponent extends AuthenticationComponent implements 
     )
   }
 
+  dateIsValid(date: string): boolean{
+    let t = this.today.split("/")
+    let d = date.split("/")
+
+    return (t.at(0)! >= d!.at(0)!) && (t.at(1)! >= d!.at(1)!) && (t.at(2)! >= d!.at(2)!)
+  }
+
   private openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
   }

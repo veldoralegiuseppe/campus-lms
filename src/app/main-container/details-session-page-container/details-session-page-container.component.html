@@ -2,7 +2,7 @@
 
     <div class="title" style="flex-basis: 100%; margin-bottom: 2.5rem;">{{sessionDetails?.nomeCorso}} - {{sessionDetails?.tipoSessione?.toUpperCase()}} del {{sessionDetails?.dataSessione}}</div>
     
-    @if (today < sessionDetails?.dataSessione!) {
+    @if (!dateIsValid(sessionDetails?.dataSessione!)) {
         Potrai accedere alla sessione in data {{sessionDetails?.dataSessione}}
     } @else {
         <div class="info" style="flex-basis: 100%; margin-bottom: 2.5rem; display: flex; column-gap: 2rem; flex-wrap: wrap; flex-direction: column;">
