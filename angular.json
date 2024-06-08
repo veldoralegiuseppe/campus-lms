@@ -34,6 +34,12 @@
             ],
             "scripts": [
               "src/assets/scripts/navbar.js"
+            ],
+            "fileReplacements": [
+              {
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.prod.ts"
+              }
             ]
           },
           "configurations": {
